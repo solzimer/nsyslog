@@ -1,0 +1,28 @@
+{
+  "name": "nsyslog",
+  "version": "0.0.1",
+  "description": "Modular new generation syslog server and relay",
+  "author": "David Gómez Matarrodona <solzimer@gmail.com>",
+  "url": "https://github.com/owner/project/issues",
+  "email": "solzimer@gmail.com",
+  "main": "main.js",
+  "license": "MIT",
+  "repository": "solzimer/nsyslog",
+  "keywords": [
+    "syslog",
+    "server",
+    "modular",
+    "transport",
+    "RFC 3164",
+    "RFC 5424",
+    "bsd"
+  ],
+  "dependencies": {
+    "commander": "^2.9.0",
+    "dgram": "^1.0.1",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.15.1",
+    "nsyslog-parser": "^0.2.5",
+    "q": "^1.5.0"
+  }
+}

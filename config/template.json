@@ -1,0 +1,74 @@
+{
+	"include" : [
+		"processors.json"
+	],
+	"servers" : {
+		"udp" : {
+			"protocol" : "udp4",
+			"interface" : "0.0.0.0",
+			"port" : "514"
+		},
+		"tcp" : {
+			"protocol" : "tcp4",
+			"interface" : "0.0.0.0",
+			"port" : "514"
+		}
+	},
+
+	"filters" : {
+		"filter1" : "(${host}=='mymachine' || ${host}=='yourmachine') && ${appName}=='su'",
+		"filter2" : "${client.address}=='192.168.134.49'",
+		"fromUDP" : "${server.protocol}=='udp4'"
+	},
+
+	"filterGroups" : {
+		"group1" : ["filter1","filter2"]
+	},
+
+	"transporters" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"format" : "${originalMessage}",
+				"path" : "/var/log/${host}/${appName}/file.log"
+			}
+		},
+		"debug" : {
+			"type" : "console",
+			"config" : {
+				"level" : "log"
+			}
+		},
+		"mongo" : {
+			"type" : "mongo",
+			"config" : {
+				"host" : "localhost:27017",
+				"db" : "syslog",
+				"collection" : "${appName}",
+				"schema" : {
+					"host" : "${host}"
+				}
+			}
+		}
+	},
+
+	"transporterGroups" : {
+		"group1" : {"mode":"and", "filters":["file","mongo"]},
+		"group2" : {"mode":"or", "filters":["file","mongo"]}
+	},
+
+	"processors" : {
+		"changeHeader" : {
+			"type" : "replacer",
+			"config" : {
+				"host" : "${server.host}"
+			}
+		}
+	},
+
+	"flows" : [
+		{"from":["filter1","$group1"], "transporter":["file","$group1"]},
+		{"from":"DEFAULT", "transporter":["file"]},
+		{"from":"*","transporter":["console"]}
+	]
+}

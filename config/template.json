@@ -22,7 +22,8 @@
 	},
 
 	"filterGroups" : {
-		"group1" : ["filter1","filter2"]
+		"group1" : ["filter1","filter2"],
+		"group2" : ["fromUDP","$group1"]
 	},
 
 	"transporters" : {
@@ -67,7 +68,7 @@
 	},
 
 	"flows" : [
-		{"from":["filter1","$group1"], "transporter":["file","$group1"]},
+		{"from":["filter1","$group2"], "transporter":["file","$group1"]},
 		{"from":"DEFAULT", "transporter":["file"]},
 		{"from":"*","transporter":["console"]}
 	]

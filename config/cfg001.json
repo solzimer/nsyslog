@@ -11,7 +11,10 @@
 	},
 
 	"filters" : {
-		"fromUDP" : "${server.protocol}=='udp4'"
+		"fromUDP" : "${server.protocol}=='udp4'",
+		"httpOk" : "!${message}.match(/ 404/)",
+		"httpRed" : "!${message}.match(/ 302/)",
+		"httpErr" : "${message}.match(/ 404/)"
 	},
 
 	"filterGroups" : {
@@ -22,15 +25,20 @@
 			"type" : "file",
 			"config" : {
 				"format" : "${originalMessage}",
-				"path" : "/var/log/nsyslog/${host}/${appName}/file.log"
+				"path" : "/var/log/nsyslog/${host}/${appName}.log"
 			}
 		},
 		"debug" : {
 			"type" : "console",
-			"config" : {
-				"format" : "${message}",
-				"level" : "log"
-			}
+			"config" : {"format" : "${message}", "level" : "log"}
+		},
+		"warn" : {
+			"type" : "console",
+			"config" : {"format" : "${message}", "level" : "warn"}
+		},
+		"error" : {
+			"type" : "console",
+			"config" : {"format" : "${message}", "level" : "error"}
 		}
 	},
 
@@ -41,6 +49,9 @@
 	},
 
 	"flows" : [
-		{"from":"fromUDP", "transporter":"debug"}
+		{"from":["httpOk"], "transporter":"debug"},
+		{"from":["httpRed"], "transporter":"warn"},
+		{"from":["httpErr"], "transporter":"error"},
+		{"from":["fromUDP"], "transporter":"file"}
 	]
 }

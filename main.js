@@ -97,9 +97,8 @@ configure("./config/cfg001.json",(err,cfg)=>{
 	console.log(cfg);
 	initUDP("0.0.0.0",514,"udp4",entry=>{
 		cfg.flows.forEach(flow=>{
-			var from = flow.from;
-			var fn = cfg.filters[from];
-			if(fn(entry)) {
+			var from = flow.from(entry);
+			if(from) {
 				var tr = cfg.transporters[flow.transporter];
 				tr.send(entry);
 			}

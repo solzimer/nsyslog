@@ -23,7 +23,7 @@
     "dgram": "^1.0.1",
     "mkdirp": "^0.5.1",
     "moment": "^2.15.1",
-    "nsyslog-parser": "^0.2.5",
+    "nsyslog-parser": "*",
     "q": "^1.5.0"
   }
 }

@@ -28,6 +28,7 @@
 		"debug" : {
 			"type" : "console",
 			"config" : {
+				"format" : "${message}",
 				"level" : "log"
 			}
 		}
@@ -40,6 +41,6 @@
 	},
 
 	"flows" : [
-		{"from":"fromUDP", "transporter":"file"}
+		{"from":"fromUDP", "transporter":"debug"}
 	]
 }

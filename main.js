@@ -4,14 +4,21 @@ const
 	net = require('net'),
 	program = require("commander"),
 	slparser = require("nsyslog-parser"),
+	configure = require("./lib/config.js"),
 	moment = require("moment");
 
-function initUDP(host,port,protocol) {
+function initUDP(host,port,protocol,callback) {
 	var server = dgram.createSocket(protocol);
+	var eserver = {protocol : protocol, port : port, interface : host};
+
 	server.on('listening', ()=>{var address = server.address()});
 	server.on('message', (message, remote)=>{
 		var entry = slparser(message.toString());
-		console.log(entry);
+		entry.server = eserver;
+		entry.client = {
+			address : remote.address
+		}
+		callback(entry);
 	});
 	server.on("error", err => {server.close()});
 	server.bind(port, host);
@@ -86,4 +93,16 @@ function initTCP(host,port,protocol) {
 }
 */
 
-initUDP("0.0.0.0",514,"udp4");
+configure("./config/cfg001.json",(err,cfg)=>{
+	console.log(cfg);
+	initUDP("0.0.0.0",514,"udp4",entry=>{
+		cfg.flows.forEach(flow=>{
+			var from = flow.from;
+			var fn = cfg.filters[from];
+			if(fn(entry)) {
+				var tr = cfg.transporters[flow.transporter];
+				tr.send(entry);
+			}
+		});
+	});
+});

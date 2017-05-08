@@ -17,7 +17,7 @@
 
 	"filters" : {
 		"filter1" : "(${host}=='mymachine' || ${host}=='yourmachine') && ${appName}=='su'",
-		"filter2" : "${client.address}=='192.168.134.49'",
+		"filter2" : "${client.address}=='192.168.135.49'",
 		"fromUDP" : "${server.protocol}=='udp4'"
 	},
 

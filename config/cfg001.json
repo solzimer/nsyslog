@@ -1,0 +1,45 @@
+{
+	"include" : [
+		"processors.json"
+	],
+	"servers" : {
+		"udp" : {
+			"protocol" : "udp4",
+			"interface" : "0.0.0.0",
+			"port" : "514"
+		}
+	},
+
+	"filters" : {
+		"fromUDP" : "${server.protocol}=='udp4'"
+	},
+
+	"filterGroups" : {
+	},
+
+	"transporters" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"format" : "${originalMessage}",
+				"path" : "/var/log/nsyslog/${host}/${appName}/file.log"
+			}
+		},
+		"debug" : {
+			"type" : "console",
+			"config" : {
+				"level" : "log"
+			}
+		}
+	},
+
+	"transporterGroups" : {
+	},
+
+	"processors" : {
+	},
+
+	"flows" : [
+		{"from":"fromUDP", "transporter":"file"}
+	]
+}

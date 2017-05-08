@@ -12,9 +12,9 @@
 
 	"filters" : {
 		"fromUDP" : "${server.protocol}=='udp4'",
-		"httpOk" : "!${message}.match(/ 404/)",
-		"httpRed" : "!${message}.match(/ 302/)",
-		"httpErr" : "${message}.match(/ 404/)"
+		"httpOk" : "${message}.match(/ 200/)",
+		"httpRed" : "${message}.match(/ 302/)",
+		"httpErr" : "${message}.match(/ (404|500)/)"
 	},
 
 	"filterGroups" : {

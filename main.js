@@ -36,7 +36,7 @@ configure("./config/cfg001.json",(err,cfg)=>{
 			cfg.flows.forEach(flow=>{
 				var from = flow.from(entry);
 				if(from) {
-					var tr = cfg.transporters[flow.transporter];
+					var tr = flow.transporters[0];
 					tr.send(entry);
 				}
 			});

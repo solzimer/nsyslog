@@ -54,8 +54,8 @@
 	},
 
 	"transporterGroups" : {
-		"group1" : {"mode":"and", "filters":["file","mongo"]},
-		"group2" : {"mode":"or", "filters":["file","mongo"]}
+		"group1" : {"mode":"parallel", "transporters":["file","mongo"]},
+		"group2" : {"mode":"serial", "transporters":["file","mongo"]}
 	},
 
 	"processors" : {
@@ -68,8 +68,8 @@
 	},
 
 	"flows" : [
-		{"from":["filter1","$group2"], "transporter":["file","$group1"]},
-		{"from":"DEFAULT", "transporter":["file"]},
-		{"from":"*","transporter":["console"]}
+		{"from":["filter1","$group2"], "transporters":["file","$group1"]},
+		{"from":"DEFAULT", "transporters":["file"]},
+		{"from":"*","transporters":["console"]}
 	]
 }

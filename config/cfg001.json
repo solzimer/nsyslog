@@ -36,19 +36,19 @@
 			}
 		},
 		"log" : {
-			"type" : "null",
+			"type" : "console",
 			"config" : {"format" : "${message}", "level" : "log"}
 		},
 		"debug" : {
-			"type" : "null",
+			"type" : "console",
 			"config" : {"format" : "${message}", "level" : "debug"}
 		},
 		"warn" : {
-			"type" : "null",
+			"type" : "console",
 			"config" : {"format" : "${message}", "level" : "warn"}
 		},
 		"error" : {
-			"type" : "null",
+			"type" : "console",
 			"config" : {"format" : "${message}", "level" : "error"}
 		}
 	},
@@ -64,6 +64,6 @@
 		{"from":["httpOk"], "transporters":"log", "mode":"serial"},
 		{"from":["httpRed"], "transporters":"warn", "mode":"parallel"},
 		{"from":["httpErr"], "transporters":"error", "mode":"serial"},
-		{"from":"*", "transporters":["file1","debug","$files"]}
+		{"from":"*", "transporters":["debug"]}
 	]
 }

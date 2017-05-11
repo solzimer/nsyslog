@@ -24,7 +24,7 @@
 		"file1" : {
 			"type" : "file",
 			"config" : {
-				"format" : "${originalMessage}",
+				"format" : "${message}",
 				"path" : "/var/log/nsyslog/${host}/${appName}.log"
 			}
 		},
@@ -36,19 +36,19 @@
 			}
 		},
 		"log" : {
-			"type" : "console",
+			"type" : "null",
 			"config" : {"format" : "${message}", "level" : "log"}
 		},
 		"debug" : {
-			"type" : "console",
+			"type" : "null",
 			"config" : {"format" : "${message}", "level" : "debug"}
 		},
 		"warn" : {
-			"type" : "console",
+			"type" : "null",
 			"config" : {"format" : "${message}", "level" : "warn"}
 		},
 		"error" : {
-			"type" : "console",
+			"type" : "null",
 			"config" : {"format" : "${message}", "level" : "error"}
 		}
 	},
@@ -64,6 +64,6 @@
 		{"from":["httpOk"], "transporters":"log", "mode":"serial"},
 		{"from":["httpRed"], "transporters":"warn", "mode":"parallel"},
 		{"from":["httpErr"], "transporters":"error", "mode":"serial"},
-		{"from":"*", "transporters":["debug","$files"]}
+		{"from":"*", "transporters":["file1","debug","$files"]}
 	]
 }

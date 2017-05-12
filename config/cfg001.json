@@ -4,14 +4,19 @@
 	],
 	"servers" : {
 		"udp" : {
-			"protocol" : "udp4",
-			"interface" : "0.0.0.0",
-			"port" : "514"
+			"type" : "udp",
+			"config" : {
+				"protocol" : "udp4",
+				"interface" : "0.0.0.0",
+				"port" : "514"
+			}
 		}
 	},
 
 	"filters" : {
 		"fromUDP" : "${server.protocol}=='udp4'",
+		"localhost" : "${client.address}=='127.0.0.1'",
+		"interface" : "${client.address}!='127.0.0.1'",
 		"httpOk" : "${message}.match(/ 200/)",
 		"httpRed" : "${message}.match(/ 302/)",
 		"httpErr" : "${message}.match(/ (404|500)/)"
@@ -24,32 +29,32 @@
 		"file1" : {
 			"type" : "file",
 			"config" : {
-				"format" : "${message}",
+				"format" : "${originalMessage}",
 				"path" : "/var/log/nsyslog/${host}/${appName}.log"
 			}
 		},
 		"file2" : {
 			"type" : "file",
 			"config" : {
-				"format" : "${ts} ${message}",
+				"format" : "${timestamp} ${originalMessage}",
 				"path" : "/var/log/nsyslog/${host}/${appName}_${prival}.log"
 			}
 		},
 		"log" : {
 			"type" : "console",
-			"config" : {"format" : "${message}", "level" : "log"}
+			"config" : {"format" : "${originalMessage}", "level" : "log"}
 		},
 		"debug" : {
 			"type" : "console",
-			"config" : {"format" : "${message}", "level" : "debug"}
+			"config" : {"format" : "${originalMessage}", "level" : "debug"}
 		},
 		"warn" : {
 			"type" : "console",
-			"config" : {"format" : "${message}", "level" : "warn"}
+			"config" : {"format" : "${originalMessage}", "level" : "warn"}
 		},
 		"error" : {
 			"type" : "console",
-			"config" : {"format" : "${message}", "level" : "error"}
+			"config" : {"format" : "${originalMessage}", "level" : "error"}
 		}
 	},
 
@@ -61,9 +66,10 @@
 	},
 
 	"flows" : [
-		{"from":["httpOk"], "transporters":"log", "mode":"serial"},
-		{"from":["httpRed"], "transporters":"warn", "mode":"parallel"},
-		{"from":["httpErr"], "transporters":"error", "mode":"serial"},
-		{"from":"*", "transporters":["debug"]}
+		{"from":"localhost", "when":["httpOk"], "transporters":"log", "mode":"serial"},
+		{"from":"localhost", "when":["httpRed"], "transporters":"log", "mode":"parallel"},
+		{"from":"localhost", "when":["httpErr"], "transporters":"log", "mode":"serial"},
+		{"from":"interface", "parse":true, "transporters":["debug","$files"], "mode":"serial"},
+		{"from":"*", "parse":false, "transporters":["warn"]}
 	]
 }

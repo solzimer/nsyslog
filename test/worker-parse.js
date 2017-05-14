@@ -1,4 +1,4 @@
-const worker = require("./worker.js");
+const worker = require("../worker.js");
 
 const MSGS = [
 	"<34>Oct 11 22:14:15 mymachine su: 'su root' failed for lonvick on /dev/pts/8",

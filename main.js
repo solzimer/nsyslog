@@ -4,7 +4,7 @@ const
 	program = require("commander"),
 	extend = require("extend"),
 	AsyncStream = require("promise-stream-queue"),
-	slparser = require("./lib/syslog-parser"),
+	worker = require("./worker.js"),
 	configure = require("./lib/config.js"),
 	UDPServer = require("./lib/server/udp.js"),
 	moment = require("moment");
@@ -70,7 +70,7 @@ function collectEntry(entry) {
 	parserStream.push(new Promise((resolve,reject)=>{
 		var flows = cfg.flows.filter(flow=>flow.from(entry));
 		if(flows.find(flow=>flow.parse)) {
-			slparser(entry,rentry=>resolve({entry:extend(entry,rentry),flows:flows}));
+			worker.parse(entry,rentry=>resolve({entry:extend(entry,rentry),flows:flows}));
 		}
 		else {
 			resolve({entry:entry,flows:flows});

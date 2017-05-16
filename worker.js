@@ -28,8 +28,8 @@ if(!isModule) {
 
 	function start(cfg) {
 		self.onmessage = function(event) {
-			if(event.command==CMD.parse) parseEntry(event);
-			else if(event.command=CMD.process) processEntry(event);
+			if(event.data.command==CMD.parse) parseEntry(event);
+			else if(event.data.command==CMD.process) processEntry(event);
 			else error(event);
 		}
 	}
@@ -37,7 +37,8 @@ if(!isModule) {
 	function parseEntry(event) {
 		var entry = event.data.entry;
 		var id = event.data.id;
-		entry = extend(entry,parser(entry.originalMessage));
+		var res = parser(entry.originalMessage);
+		entry = extend(entry,res);
 		postMessage({id:id,entry:entry});
 	}
 

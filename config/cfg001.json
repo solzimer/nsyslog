@@ -46,7 +46,7 @@
 		},
 		"debug" : {
 			"type" : "console",
-			"config" : {"format" : "${originalMessage}", "level" : "debug"}
+			"config" : {"format" : "${JSON}", "level" : "debug"}
 		},
 		"warn" : {
 			"type" : "console",

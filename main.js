@@ -16,7 +16,7 @@ var seq = 0;
 function initialize() {
 	configure("./config/cfg001.json",(err,res)=>{
 		cfg = res;
-		console.log(JSON.stringify(cfg));
+		console.log(JSON.stringify(cfg,0,2));
 		startParserStream();
 		startServers();
 	});
@@ -32,34 +32,25 @@ function startParserStream() {
 }
 
 function transport(entry,transporters) {
+	function newPromise(tr) {
+		if(tr.write)
+			return new Promise((res,rej)=>{tr.write(entry,()=>res(entry))});
+		else
+			return transport(entry,tr);
+	}
+
 	return new Promise((resolve,reject)=>{
 		if(transporters.mode=="serial") {
 			var pr = Promise.resolve(entry);
 			transporters.list.forEach(tr=>{
-				if(tr.send) {
-					var npr = new Promise((res,rej)=>{
-						tr.send(entry,()=>res(entry))
-					});
-				}
-				else {
-					var npr = transport(entry,tr);
-				}
+				var npr = newPromise(tr);
 				pr.then(npr);
 				pr = npr;
 			});
 			pr.then(resolve);
 		}
 		else if(transporters.mode=="parallel") {
-			var pr = transporters.list.map(tr=>{
-				if(tr.send) {
-					return new Promise((res,rej)=>{
-						tr.send(entry,()=>res(entry));
-					});
-				}
-				else {
-					return transport(entry,tr);
-				}
-			});
+			var pr = transporters.list.map(tr=>newPromise(tr));
 			Promise.all(pr).then(resolve);
 		}
 	});

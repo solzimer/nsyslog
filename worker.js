@@ -51,9 +51,7 @@ if(!isModule) {
 	initialize(()=>{});
 }
 else {
-	const
-		Pool = require("./lib/worker-pool"),
-		Semaphore = require('semaphore');
+	const	Pool = require("./lib/worker-pool");
 
 	var workers = [];
 	var rr = 0;

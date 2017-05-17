@@ -7,6 +7,7 @@ const
 	worker = require("./worker.js"),
 	configure = require("./lib/config.js"),
 	UDPServer = require("./lib/server/udp.js"),
+	NullTransporter = require('./lib/transporter/null.js'),
 	moment = require("moment");
 
 var parserStream = new AsyncStream();
@@ -18,6 +19,7 @@ function initialize() {
 		cfg = res;
 		console.log(JSON.stringify(cfg,0,2));
 		startParserStream();
+		startTransportStreams();
 		startServers();
 	});
 }
@@ -27,32 +29,35 @@ function startParserStream() {
 		var entry = item.entry;
 		item.flows.
 			filter(flow=>flow.when(entry)).
-			forEach(flow=>transport(entry,flow.transporters));
+			forEach(flow=>flow.stream.write(entry));
 	});
 }
 
-function transport(entry,transporters) {
-	function newPromise(tr) {
-		if(tr.write)
-			return new Promise((res,rej)=>{tr.write(entry,()=>res(entry))});
-		else
-			return transport(entry,tr);
+function startTransportStreams() {
+	function walk(trs) {
+		if(trs.write) {
+			return trs;
+		}
+		else if(trs.mode=="serial") {
+			var from = stream = new NullTransporter();
+			trs.list.forEach(tr=>{
+				stream = stream.pipe(walk(tr));
+			});
+			return from;
+		}
+		else if(trs.mode=="parallel") {
+			var stream = new NullTransporter();
+			trs.list.forEach(tr=>{
+				stream.pipe(walk(tr));
+			});
+			return stream;
+		}
 	}
 
-	return new Promise((resolve,reject)=>{
-		if(transporters.mode=="serial") {
-			var pr = Promise.resolve(entry);
-			transporters.list.forEach(tr=>{
-				var npr = newPromise(tr);
-				pr.then(npr);
-				pr = npr;
-			});
-			pr.then(resolve);
-		}
-		else if(transporters.mode=="parallel") {
-			var pr = transporters.list.map(tr=>newPromise(tr));
-			Promise.all(pr).then(resolve);
-		}
+	cfg.flows.forEach(flow=>{
+		var ntr = new NullTransporter();
+		var trs = flow.transporters;
+		flow.stream = walk(trs);
 	});
 }
 

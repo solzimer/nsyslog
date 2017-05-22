@@ -27,9 +27,11 @@ function parseEntry(message) {
 
 function processEntry(message) {
 	var entry = message.entry;
+	var idproc = message.extra.idproc;
 	var id = message.id;
-	entry = extend(entry,{processed:true});
-	process.send({id:id,entry:entry});
+	cfg.processors[idproc].transform(entry,(err,res)=>{
+		process.send({id:id,entry:res});
+	});
 }
 
 module.exports = {

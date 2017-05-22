@@ -10,6 +10,14 @@
 				"interface" : "0.0.0.0",
 				"port" : "514"
 			}
+		},
+		"tcp" : {
+			"type" : "tcp",
+			"config" : {
+				"protocol" : "tcp",
+				"interface" : "0.0.0.0",
+				"port" : "514"
+			}
 		}
 	},
 

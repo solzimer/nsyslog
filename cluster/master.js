@@ -33,13 +33,13 @@ function init() {
 	});
 }
 
-function sendEntry(cmd,entry,callback) {
+function sendEntry(cmd,entry,extra,callback) {
 	callback = callback || voidfn;
 
 	var id = rr++;
 	var w = workers[id%SIZE];
 	pending[id] = {cb:callback,w:w};
-	w.send({id:id,command:cmd,entry:entry});
+	w.send({id:id,command:cmd,entry:entry,extra:extra});
 }
 
 function resolveEntry(message) {
@@ -55,6 +55,6 @@ init();
 
 module.exports = {
 	configure : function(config) {cfg = config},
-	parse : function(entry,callback){return sendEntry(CMD.parse,entry,callback)},
-	process : function(entry,callback){return sendEntry(CMD.process,entry,callback)},
+	parse : function(entry,extra,callback){return sendEntry(CMD.parse,entry,extra,callback)},
+	process : function(entry,extra,callback){return sendEntry(CMD.process,entry,extra,callback)},
 }

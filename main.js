@@ -5,8 +5,8 @@ const
 	extend = require("extend"),
 	AsyncStream = require("promise-stream-queue"),
 	configure = require("./lib/config.js"),
-	NullTransporter = require('./lib/transporter/null.js');
-
+	NullTransporter = require('./lib/transporter/null.js'),
+	EndTransporter = require('./lib/transporter/end.js');
 
 function initialize() {
 	configure("./config/cfg001.json",(err,cfg)=>{
@@ -40,6 +40,7 @@ function Master(cfg) {
 			item.flows.
 				filter(flow=>flow.when(entry)).
 				forEach(flow=>flow.stream.write(entry));
+			//item.flows.forEach(f=>f.stream.flush());
 		});
 	}
 
@@ -53,12 +54,13 @@ function Master(cfg) {
 				trs.list.forEach(tr=>{
 					stream = stream.pipe(walk(tr));
 				});
+				stream.pipe(new EndTransporter());
 				return from;
 			}
 			else if(trs.mode=="parallel") {
 				var stream = new NullTransporter();
 				trs.list.forEach(tr=>{
-					stream.pipe(walk(tr));
+					stream.pipe(walk(tr)).pipe(new EndTransporter());
 				});
 				return stream;
 			}
@@ -76,7 +78,7 @@ function Master(cfg) {
 		parserStream.push(new Promise((resolve,reject)=>{
 			var flows = cfg.flows.filter(flow=>flow.from(entry));
 			if(flows.find(flow=>flow.parse)) {
-				master.parse(entry,rentry=>resolve({entry:extend(entry,rentry),flows:flows}));
+				master.parse(entry,null,rentry=>resolve({entry:extend(entry,rentry),flows:flows}));
 			}
 			else {
 				resolve({entry:entry,flows:flows});

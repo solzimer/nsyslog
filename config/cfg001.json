@@ -94,10 +94,10 @@
 	},
 
 	"flows" : [
-		{"from":"localhost", "disabled":true, "when":["httpOk"], "transporters":"log", "mode":"serial"},
-		{"from":"localhost", "disabled":true, "when":["httpRed"], "transporters":"log", "mode":"parallel"},
-		{"from":"localhost", "disabled":true, "when":["httpErr"], "transporters":"log", "mode":"serial"},
+		{"from":"localhost", "disabled":false, "when":["httpOk"], "transporters":"log", "mode":"serial"},
+		{"from":"localhost", "disabled":false, "when":["httpRed"], "transporters":"warn", "mode":"parallel"},
+		{"from":"localhost", "disabled":false, "when":["httpErr"], "transporters":"error", "mode":"serial"},
 		{"from":"interface", "disabled":false, "parse":true, "processors":["$pgroup1"], "transporters":["debug"], "mode":"serial"},
-		{"from":"*", "disabled":true, "parse":false, "transporters":["$files","debug"]}
+		{"from":"*", "disabled":false, "parse":false, "transporters":["$files","debug"]}
 	]
 }

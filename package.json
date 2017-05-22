@@ -24,13 +24,14 @@
     "extend": "^3.0.1",
     "mkdirp": "^0.5.1",
     "moment": "^2.15.1",
+    "mongodb": "^2.2.27",
     "nsyslog-parser": "*",
     "promise-stream-queue": "*",
     "q": "^1.5.0",
     "semaphore": "^1.0.5",
     "tiny-worker": "^2.1.1"
   },
-	"devDependencies" : {
-		"line-reader": "^0.4.0"
-	}
+  "devDependencies": {
+    "line-reader": "^0.4.0"
+  }
 }

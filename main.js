@@ -4,17 +4,16 @@ const
 	program = require("commander"),
 	extend = require("extend"),
 	AsyncStream = require("promise-stream-queue"),
-	configure = require("./lib/config.js"),
+	Config = require("./lib/config/config.js"),
 	stream = require('stream'),
+	Transporters = Config.Transporters,
 	Transform = stream.Transform,
 	PassThrough = stream.PassThrough,
-	NullTransporter = require('./lib/transporter/null.js'),
 	NullProcessor = require('./lib/processor/null.js'),
-	EndTransporter = require('./lib/transporter/end.js'),
 	EndProcessor = require('./lib/processor/end.js');
 
 function initialize() {
-	configure("./config/cfg001.json",(err,cfg)=>{
+	Config.read("./config/cfg001.json",(err,cfg)=>{
 		if(cluster.isMaster) {
 			console.log(cfg);
 			var master = new Master(cfg);
@@ -78,24 +77,24 @@ function Master(cfg) {
 				return trs;
 			}
 			else if(trs.mode=="serial") {
-				var from = stream = new NullTransporter();
+				var from = stream = Transporters.Null();
 				trs.list.forEach(tr=>{
 					stream = stream.pipe(walk(tr));
 				});
-				stream.pipe(new EndTransporter());
+				stream.pipe(Transporters.End());
 				return from;
 			}
 			else if(trs.mode=="parallel") {
-				var stream = new NullTransporter();
+				var stream = Transporters.Null();
 				trs.list.forEach(tr=>{
-					stream.pipe(walk(tr)).pipe(new EndTransporter());
+					stream.pipe(walk(tr)).pipe(Transporters.End());
 				});
 				return stream;
 			}
 		}
 
 		cfg.flows.forEach(flow=>{
-			var ntr = new NullTransporter();
+			var ntr = Transporters.Null();
 			var trs = flow.transporters;
 			flow.tstream = walk(trs);
 		});

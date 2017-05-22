@@ -29,7 +29,7 @@ function processEntry(message) {
 	var entry = message.entry;
 	var idproc = message.extra.idproc;
 	var id = message.id;
-	cfg.processors[idproc].transform(entry,(err,res)=>{
+	cfg.processors[idproc].process(entry,(err,res)=>{
 		process.send({id:id,entry:res});
 	});
 }

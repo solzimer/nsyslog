@@ -71,23 +71,33 @@
 	},
 
 	"processors" : {
-		"host" : {
+		"host1" : {
 			"type" : "properties",
 			"config" : {
-				"host" : "${host}/${server.host}"
+				"set" : {
+					"extra" : {"test1":"${type}"}
+				}
+			}
+		},
+		"host2" : {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"extra" : {"test2":"${facility}"}
+				}
 			}
 		}
 	},
 
 	"processorGroups" : {
-		"pgroup1" : ["host","host"]
+		"pgroup1" : ["host1","host2"]
 	},
 
 	"flows" : [
-		{"from":"localhost", "when":["httpOk"], "transporters":"log", "mode":"serial"},
-		{"from":"localhost", "when":["httpRed"], "transporters":"log", "mode":"parallel"},
-		{"from":"localhost", "when":["httpErr"], "transporters":"log", "mode":"serial"},
-		{"from":"interface", "parse":true, "transporters":["debug","$files"], "mode":"serial"},
-		{"from":"*", "parse":false, "processors":["host","$pgroup1"], "transporters":["warn"]}
+		{"from":"localhost", "disabled":true, "when":["httpOk"], "transporters":"log", "mode":"serial"},
+		{"from":"localhost", "disabled":true, "when":["httpRed"], "transporters":"log", "mode":"parallel"},
+		{"from":"localhost", "disabled":true, "when":["httpErr"], "transporters":"log", "mode":"serial"},
+		{"from":"interface", "disabled":false, "parse":true, "processors":["$pgroup1"], "transporters":["debug"], "mode":"serial"},
+		{"from":"*", "disabled":true, "parse":false, "transporters":["$files","debug"]}
 	]
 }

@@ -5,8 +5,13 @@ const
 	extend = require("extend"),
 	AsyncStream = require("promise-stream-queue"),
 	configure = require("./lib/config.js"),
+	stream = require('stream'),
+	Transform = stream.Transform,
+	PassThrough = stream.PassThrough,
 	NullTransporter = require('./lib/transporter/null.js'),
-	EndTransporter = require('./lib/transporter/end.js');
+	NullProcessor = require('./lib/processor/null.js'),
+	EndTransporter = require('./lib/transporter/end.js'),
+	EndProcessor = require('./lib/processor/end.js');
 
 function initialize() {
 	configure("./config/cfg001.json",(err,cfg)=>{
@@ -30,21 +35,44 @@ function Master(cfg) {
 	this.start = function() {
 		master.configure(cfg);
 		startParserStream();
-		startTransportStreams();
+		startProcessorStream();
+		startTransportStream();
+		startFlowStream();
 		startServers();
 	}
 
 	function startParserStream() {
 		parserStream.forEach((err,item,ex)=>{
+			if(err) console.log(err);
 			var entry = item.entry;
+			entry.flows = item.flows.map(f=>f.id);
 			item.flows.
 				filter(flow=>flow.when(entry)).
 				forEach(flow=>flow.stream.write(entry));
-			//item.flows.forEach(f=>f.stream.flush());
 		});
 	}
 
-	function startTransportStreams() {
+	function startProcessorStream() {
+		cfg.flows.forEach(f=>{
+			var to = from = new PassThrough({objectMode:true});
+			f.processors.map(proc=>{
+				return new Transform({
+					objectMode : true,
+					transform : function(entry,encoding,callback) {
+						master.process(entry,{idproc:proc.id},res=>{
+							callback(null,res);
+						});
+					}
+				});
+			}).forEach(p=>{
+				to = to.pipe(p);
+			});
+			to.pipe(new EndProcessor());
+			f.pstream = {start:from,end:to};
+		});
+	}
+
+	function startTransportStream() {
 		function walk(trs) {
 			if(trs.write) {
 				return trs;
@@ -69,14 +97,21 @@ function Master(cfg) {
 		cfg.flows.forEach(flow=>{
 			var ntr = new NullTransporter();
 			var trs = flow.transporters;
-			flow.stream = walk(trs);
+			flow.tstream = walk(trs);
 		});
+	}
+
+	function startFlowStream() {
+		cfg.flows.forEach(f=>{
+			f.stream = f.pstream.start;
+			f.pstream.end.pipe(f.tstream);
+		})
 	}
 
 	function collectEntry(entry) {
 		entry.seq = seq++;
 		parserStream.push(new Promise((resolve,reject)=>{
-			var flows = cfg.flows.filter(flow=>flow.from(entry));
+			var flows = cfg.flows.filter(f=>!f.disabled).filter(f=>f.from(entry));
 			if(flows.find(flow=>flow.parse)) {
 				master.parse(entry,null,rentry=>resolve({entry:extend(entry,rentry),flows:flows}));
 			}

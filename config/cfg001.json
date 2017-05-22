@@ -63,6 +63,16 @@
 	},
 
 	"processors" : {
+		"host" : {
+			"type" : "properties",
+			"config" : {
+				"host" : "${host}/${server.host}"
+			}
+		}
+	},
+
+	"processorGroups" : {
+		"pgroup1" : ["host","host"]
 	},
 
 	"flows" : [
@@ -70,6 +80,6 @@
 		{"from":"localhost", "when":["httpRed"], "transporters":"log", "mode":"parallel"},
 		{"from":"localhost", "when":["httpErr"], "transporters":"log", "mode":"serial"},
 		{"from":"interface", "parse":true, "transporters":["debug","$files"], "mode":"serial"},
-		{"from":"*", "parse":false, "transporters":["warn"]}
+		{"from":"*", "parse":false, "processors":["host","$pgroup1"], "transporters":["warn"]}
 	]
 }

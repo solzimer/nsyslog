@@ -107,7 +107,9 @@ function Master(cfg) {
 		parserStream.push(new Promise((resolve,reject)=>{
 			var flows = cfg.flows.filter(f=>!f.disabled).filter(f=>f.from(entry));
 			if(flows.find(flow=>flow.parse)) {
-				master.parse(entry,null,rentry=>resolve({entry:extend(entry,rentry),flows:flows}));
+				master.parse(entry,null,rentry=>{
+					resolve({entry:extend(entry,rentry),flows:flows})
+				});
 			}
 			else {
 				resolve({entry:entry,flows:flows});

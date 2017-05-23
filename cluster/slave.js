@@ -27,11 +27,15 @@ function parseEntry(message) {
 
 function processEntry(message) {
 	var entry = message.entry;
-	var idproc = message.extra.idproc;
+	var idproc = message.options.idproc;
+	var idflow = message.options.idflow;
 	var id = message.id;
-	cfg.processors[idproc].process(entry,(err,res)=>{
-		process.send({id:id,entry:res});
-	});
+	cfg.
+		flows.find(f=>f.id==idflow).
+		processors.find(p=>p.id==idproc).
+		process(entry,(err,res)=>{
+			process.send({id:id,entry:res});
+		});
 }
 
 module.exports = {

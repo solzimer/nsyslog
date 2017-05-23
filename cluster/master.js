@@ -1,4 +1,5 @@
 const cluster = require('cluster');
+const Transform = require('stream').Transform;
 const os = require("os");
 const SIZE = os.cpus().length;
 const CMD = {
@@ -7,9 +8,10 @@ const CMD = {
 }
 
 var workers = [];
-var rr = 0;
+var pid = wid = 0;
 var pending = {};
 var cfg = {};
+var sticky = {};
 
 function voidfn(){}
 
@@ -33,13 +35,25 @@ function init() {
 	});
 }
 
-function sendEntry(cmd,entry,extra,callback) {
-	callback = callback || voidfn;
+function getId(sid) {
+	if(sid) {
+		if(isNaN(sticky[sid])) sticky[sid] = (wid++)%SIZE;
+		return sticky[sid];
+	}
+	else {
+		return (wid++)%SIZE;
+	}
+}
 
-	var id = rr++;
-	var w = workers[id%SIZE];
+function sendEntry(cmd,entry,options,callback) {
+	callback = callback || voidfn;
+	options = options || {};
+
+	var id = pid++;
+	var wid = getId(options.sid);
+	var w = workers[wid];
 	pending[id] = {cb:callback,w:w};
-	w.send({id:id,command:cmd,entry:entry,extra:extra});
+	w.send({id:id,command:cmd,entry:entry,options:options});
 }
 
 function resolveEntry(message) {
@@ -54,7 +68,18 @@ function resolveEntry(message) {
 init();
 
 module.exports = {
+	CMD : CMD,
 	configure : function(config) {cfg = config},
-	parse : function(entry,extra,callback){return sendEntry(CMD.parse,entry,extra,callback)},
-	process : function(entry,extra,callback){return sendEntry(CMD.process,entry,extra,callback)},
+	parse : function(entry,options,callback){return sendEntry(CMD.parse,entry,options,callback)},
+	process : function(entry,options,callback){return sendEntry(CMD.process,entry,options,callback)},
+	Stream : function(cmd,options) {
+		return new Transform({
+			objectMode : true,
+			transform(entry,encoding,callback) {
+				sendEntry(cmd,entry,options,res=>{
+					callback(null,res);
+				});
+			}
+		});
+	}
 }

@@ -7,10 +7,9 @@ const
 	Config = require("./lib/config/config.js"),
 	stream = require('stream'),
 	Transporters = Config.Transporters,
+	Processors = Config.Processors,
 	Transform = stream.Transform,
-	PassThrough = stream.PassThrough,
-	NullProcessor = require('./lib/processor/null.js'),
-	EndProcessor = require('./lib/processor/end.js');
+	PassThrough = stream.PassThrough;
 
 function initialize() {
 	Config.read("./config/cfg001.json",(err,cfg)=>{
@@ -28,6 +27,8 @@ function initialize() {
 
 function Master(cfg) {
 	const master = require("./cluster/master.js");
+	const CMD = master.CMD;
+
 	var parserStream = new AsyncStream();
 	var seq = 0;
 
@@ -53,20 +54,14 @@ function Master(cfg) {
 
 	function startProcessorStream() {
 		cfg.flows.forEach(f=>{
-			var to = from = new PassThrough({objectMode:true});
+			var to = from = Processors.Init();
 			f.processors.map(proc=>{
-				return new Transform({
-					objectMode : true,
-					transform : function(entry,encoding,callback) {
-						master.process(entry,{idproc:proc.id},res=>{
-							callback(null,res);
-						});
-					}
-				});
+				var options = {idproc:proc.id,idflow:f.id,sid:proc.sticky?proc.id:null};
+				return master.Stream(CMD.process,options);
 			}).forEach(p=>{
 				to = to.pipe(p);
 			});
-			to.pipe(new EndProcessor());
+			to.pipe(Processors.End());
 			f.pstream = {start:from,end:to};
 		});
 	}

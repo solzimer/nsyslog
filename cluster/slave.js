@@ -30,12 +30,16 @@ function processEntry(message) {
 	var idproc = message.options.idproc;
 	var idflow = message.options.idflow;
 	var id = message.id;
-	cfg.
-		flows.find(f=>f.id==idflow).
-		processors.find(p=>p.id==idproc).
-		process(entry,(err,res)=>{
-			process.send({id:id,entry:res});
-		});
+	try {
+		cfg.
+			flows.find(f=>f.id==idflow).
+			processors.find(p=>p.id==idproc).
+			process(entry,(err,res)=>{
+				process.send({id:id,entry:res,error:err});
+			});
+	}catch(err) {
+		process.send({id:id,entry:entry,error:err});
+	}
 }
 
 module.exports = {

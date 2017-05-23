@@ -67,6 +67,10 @@ function resolveEntry(message) {
 	wcb.cb(error,entry);
 }
 
+function error(msg) {
+	console.error(msg);
+}
+
 init();
 
 module.exports = {
@@ -76,19 +80,23 @@ module.exports = {
 	process(entry,options,callback){return sendEntry(CMD.process,entry,options,callback)},
 	transport(entry,options,callback){return sendEntry(CMD.transform,entry,options,callback)},
 	SlaveStream(cmd,options) {
-		return new Transform({
+		var tr = new Transform({
 			objectMode : true,
 			transform(entry,encoding,callback) {
 				sendEntry(cmd,entry,options,callback);
 			}
 		});
+		tr.on("error",error);
+		return tr;
 	},
 	MasterStream(cmd,instance) {
-		return new Transform({
+		var tr = new Transform({
 			objectMode : true,
 			transform(entry,encoding,callback) {
 				instance[cmd](entry,callback);
 			}
 		});
+		tr.on("error",error);
+		return tr;
 	}
 }

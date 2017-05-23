@@ -4,7 +4,8 @@ const os = require("os");
 const SIZE = os.cpus().length;
 const CMD = {
 	parse : "parse",
-	process : "process"
+	process : "process",
+	transport : "transport"
 }
 
 var workers = [];
@@ -59,26 +60,34 @@ function sendEntry(cmd,entry,options,callback) {
 function resolveEntry(message) {
 	var id = message.id;
 	var entry = message.entry;
+	var error = message.error;
 
 	var wcb = pending[id];
 	delete pending[id];
-	wcb.cb(entry);
+	wcb.cb(error,entry);
 }
 
 init();
 
 module.exports = {
 	CMD : CMD,
-	configure : function(config) {cfg = config},
-	parse : function(entry,options,callback){return sendEntry(CMD.parse,entry,options,callback)},
-	process : function(entry,options,callback){return sendEntry(CMD.process,entry,options,callback)},
-	Stream : function(cmd,options) {
+	configure(config) {cfg = config},
+	parse(entry,options,callback){return sendEntry(CMD.parse,entry,options,callback)},
+	process(entry,options,callback){return sendEntry(CMD.process,entry,options,callback)},
+	transport(entry,options,callback){return sendEntry(CMD.transform,entry,options,callback)},
+	SlaveStream(cmd,options) {
 		return new Transform({
 			objectMode : true,
 			transform(entry,encoding,callback) {
-				sendEntry(cmd,entry,options,res=>{
-					callback(null,res);
-				});
+				sendEntry(cmd,entry,options,callback);
+			}
+		});
+	},
+	MasterStream(cmd,instance) {
+		return new Transform({
+			objectMode : true,
+			transform(entry,encoding,callback) {
+				instance[cmd](entry,callback);
 			}
 		});
 	}

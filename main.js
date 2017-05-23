@@ -57,7 +57,7 @@ function Master(cfg) {
 			var to = from = Processors.Init();
 			f.processors.map(proc=>{
 				var options = {idproc:proc.id,idflow:f.id,sid:proc.sticky?proc.id:null};
-				return master.Stream(CMD.process,options);
+				return master.SlaveStream(CMD.process,options);
 			}).forEach(p=>{
 				to = to.pipe(p);
 			});
@@ -68,8 +68,8 @@ function Master(cfg) {
 
 	function startTransportStream() {
 		function walk(trs) {
-			if(trs.write) {
-				return trs;
+			if(trs.transport) {
+				return master.MasterStream(CMD.transport,trs);
 			}
 			else if(trs.mode=="serial") {
 				var from = stream = Transporters.Null();

@@ -1,4 +1,8 @@
 {
+	"register" : [
+		{"type":"transporter","id":"reverse","require":"cfg001/reverse.js"}
+	],
+
 	"transporters" : {
 		"file1" : {
 			"type" : "file",
@@ -16,6 +20,9 @@
 		},
 		"mongo" : {
 			"type" : "mongo"
+		},
+		"reverse" : {
+			"type" : "reverse"
 		},
 		"log" : {
 			"type" : "console",

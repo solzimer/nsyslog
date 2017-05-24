@@ -34,12 +34,17 @@ function Master(cfg) {
 	var seq = 0;
 
 	this.start = function() {
-		master.configure(cfg);
-		startParserStream();
-		startProcessorStream();
-		startTransportStream();
-		startFlowStream();
-		startServers();
+		try {
+			master.configure(cfg);
+			startParserStream();
+			startProcessorStream();
+			startTransportStream();
+			startFlowStream();
+			startServers();
+		}catch(err) {
+			console.error(err);
+			process.exit(1);
+		}
 	}
 
 	function startParserStream() {
@@ -89,6 +94,9 @@ function Master(cfg) {
 					stream.pipe(walk(tr)).pipe(Transporters.End());
 				});
 				return stream;
+			}
+			else {
+				throw new Error(`Invalid transporter ${trs.id}`);
 			}
 		}
 

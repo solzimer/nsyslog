@@ -1,4 +1,7 @@
 {
+	"register" : [
+		{"type":"processor","id":"correlator","require":"cfg001/correlate.js"}
+	],
 	"processors" : {
 		"host1" : {
 			"type" : "properties",
@@ -14,6 +17,10 @@
 		"stats" : {
 			"type" : "stats",
 			"sticky" : true
+		},
+		"correlate" : {
+			"type" : "correlator",
+			"config" : {}
 		}
 	},
 

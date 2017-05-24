@@ -1,18 +1,19 @@
 const
 	cluster = require('cluster'),
-	net = require('net'),
 	program = require("commander"),
 	extend = require("extend"),
 	AsyncStream = require("promise-stream-queue"),
 	Config = require("./lib/config/config.js"),
-	stream = require('stream'),
 	Transporters = Config.Transporters,
-	Processors = Config.Processors,
-	Transform = stream.Transform,
-	PassThrough = stream.PassThrough;
+	Processors = Config.Processors;
 
 function initialize() {
 	Config.read("./config/cfg001.json",(err,cfg)=>{
+		if(err) {
+			console.error(err);
+			return;
+		}
+
 		if(cluster.isMaster) {
 			console.log(cfg);
 			var master = new Master(cfg);
@@ -43,7 +44,10 @@ function Master(cfg) {
 
 	function startParserStream() {
 		parserStream.forEach((err,item,ex)=>{
-			if(err) console.log(err);
+			if(err) {
+				console.log(err);
+				return;
+			}
 			var entry = item.entry;
 			entry.flows = item.flows.map(f=>f.id);
 			item.flows.
@@ -107,8 +111,8 @@ function Master(cfg) {
 		parserStream.push(new Promise((resolve,reject)=>{
 			var flows = cfg.flows.filter(f=>!f.disabled).filter(f=>f.from(entry));
 			if(flows.find(flow=>flow.parse)) {
-				master.parse(entry,null,rentry=>{
-					resolve({entry:extend(entry,rentry),flows:flows})
+				master.parse(entry,null,(err,res)=>{
+					resolve({entry:extend(entry,res),flows:flows})
 				});
 			}
 			else {

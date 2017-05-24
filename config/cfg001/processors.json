@@ -1,0 +1,23 @@
+{
+	"processors" : {
+		"host1" : {
+			"type" : "properties",
+			"sticky" : true,
+			"config" : {"set": {"extra": {"test1":"${type}"}}
+			}
+		},
+		"host2" : {
+			"type" : "properties",
+			"config" : {"set": {"extra": {"test2":"${facility}"}}
+			}
+		},
+		"stats" : {
+			"type" : "stats",
+			"sticky" : true
+		}
+	},
+
+	"processorGroups" : {
+		"pgroup1" : ["host1","host2"]
+	}
+}

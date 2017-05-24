@@ -1,0 +1,41 @@
+{
+	"transporters" : {
+		"file1" : {
+			"type" : "file",
+			"config" : {
+				"format" : "${originalMessage}",
+				"path" : "/var/log/nsyslog/${host}/${appName}.log"
+			}
+		},
+		"file2" : {
+			"type" : "file",
+			"config" : {
+				"format" : "${timestamp} ${originalMessage}",
+				"path" : "/var/log/nsyslog/${host}/${appName}_${prival}.log"
+			}
+		},
+		"mongo" : {
+			"type" : "mongo"
+		},
+		"log" : {
+			"type" : "console",
+			"config" : {"format" : "${originalMessage}", "level" : "log"}
+		},
+		"debug" : {
+			"type" : "console",
+			"config" : {"format" : "${JSON}", "level" : "debug"}
+		},
+		"warn" : {
+			"type" : "console",
+			"config" : {"format" : "${originalMessage}", "level" : "warn"}
+		},
+		"error" : {
+			"type" : "console",
+			"config" : {"format" : "${originalMessage}", "level" : "error"}
+		}
+	},
+
+	"transporterGroups" : {
+		"files" : {"mode":"parallel", "transporters":["file1","file2"]}
+	}
+}

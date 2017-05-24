@@ -1,25 +1,9 @@
 {
 	"include" : [
-		"processors.json"
+		"cfg001/servers.json",
+		"cfg001/processors.json",
+		"cfg001/transporters.json"
 	],
-	"servers" : {
-		"udp" : {
-			"type" : "udp",
-			"config" : {
-				"protocol" : "udp4",
-				"interface" : "0.0.0.0",
-				"port" : "514"
-			}
-		},
-		"tcp" : {
-			"type" : "tcp",
-			"config" : {
-				"protocol" : "tcp",
-				"interface" : "0.0.0.0",
-				"port" : "514"
-			}
-		}
-	},
 
 	"filters" : {
 		"fromUDP" : "${server.protocol}=='udp4'",
@@ -31,68 +15,6 @@
 	},
 
 	"filterGroups" : {
-	},
-
-	"transporters" : {
-		"file1" : {
-			"type" : "file",
-			"config" : {
-				"format" : "${originalMessage}",
-				"path" : "/var/log/nsyslog/${host}/${appName}.log"
-			}
-		},
-		"file2" : {
-			"type" : "file",
-			"config" : {
-				"format" : "${timestamp} ${originalMessage}",
-				"path" : "/var/log/nsyslog/${host}/${appName}_${prival}.log"
-			}
-		},
-		"mongo" : {
-			"type" : "mongo"
-		},
-		"log" : {
-			"type" : "console",
-			"config" : {"format" : "${originalMessage}", "level" : "log"}
-		},
-		"debug" : {
-			"type" : "console",
-			"config" : {"format" : "${JSON}", "level" : "debug"}
-		},
-		"warn" : {
-			"type" : "console",
-			"config" : {"format" : "${originalMessage}", "level" : "warn"}
-		},
-		"error" : {
-			"type" : "console",
-			"config" : {"format" : "${originalMessage}", "level" : "error"}
-		}
-	},
-
-	"transporterGroups" : {
-		"files" : {"mode":"parallel", "transporters":["file1","file2"]}
-	},
-
-	"processors" : {
-		"host1" : {
-			"type" : "properties",
-			"sticky" : true,
-			"config" : {"set": {"extra": {"test1":"${type}"}}
-			}
-		},
-		"host2" : {
-			"type" : "properties",
-			"config" : {"set": {"extra": {"test2":"${facility}"}}
-			}
-		},
-		"stats" : {
-			"type" : "stats",
-			"sticky" : true
-		}
-	},
-
-	"processorGroups" : {
-		"pgroup1" : ["host1","host2"]
 	},
 
 	"flows" : [

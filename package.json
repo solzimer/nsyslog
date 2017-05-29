@@ -22,7 +22,7 @@
     "commander": "^2.9.0",
     "dgram": "^1.0.1",
     "extend": "^3.0.1",
-    "fileq": "^0.1.1",
+    "fileq": "*",
     "mkdirp": "^0.5.1",
     "moment": "^2.15.1",
     "mongodb": "^2.2.27",

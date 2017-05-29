@@ -2,6 +2,7 @@ const
 	cluster = require('cluster'),
 	program = require("commander"),
 	extend = require("extend"),
+	FileQueue = require("fileq"),
 	AsyncStream = require("promise-stream-queue"),
 	Config = require("./lib/config/config.js"),
 	Transporters = Config.Transporters,
@@ -30,6 +31,7 @@ function Master(cfg) {
 	const master = require("./cluster/master.js");
 	const CMD = master.CMD;
 
+	var queue = FileQueue.from('./db/servers',{max:1000,bsize:500});
 	var parserStream = new AsyncStream();
 	var seq = 0;
 
@@ -41,6 +43,7 @@ function Master(cfg) {
 			startTransportStream();
 			startFlowStream();
 			startServers();
+			entryLoop();
 		}catch(err) {
 			console.error(err);
 			process.exit(1);
@@ -114,25 +117,28 @@ function Master(cfg) {
 		})
 	}
 
-	function collectEntry(entry) {
-		entry.seq = seq++;
-		parserStream.push(new Promise((resolve,reject)=>{
-			var flows = cfg.flows.filter(f=>!f.disabled).filter(f=>f.from(entry));
-			if(flows.find(flow=>flow.parse)) {
-				master.parse(entry,null,(err,res)=>{
-					resolve({entry:extend(entry,res),flows:flows})
-				});
-			}
-			else {
-				resolve({entry:entry,flows:flows});
-			}
-		}));
+	function entryLoop() {
+		queue.peek((err,entry)=>{
+			entry.seq = seq++;
+			parserStream.push(new Promise((resolve,reject)=>{
+				var flows = cfg.flows.filter(f=>!f.disabled).filter(f=>f.from(entry));
+				if(flows.find(flow=>flow.parse)) {
+					master.parse(entry,null,(err,res)=>{
+						resolve({entry:extend(entry,res),flows:flows})
+					});
+				}
+				else {
+					resolve({entry:entry,flows:flows});
+				}
+			}));
+			entryLoop();
+		});
 	}
 
 	function startServers() {
 		for(var i in cfg.servers) {
 			var server = cfg.servers[i];
-			server.start(collectEntry);
+			server.start(entry=>queue.push(entry));
 		}
 	}
 }

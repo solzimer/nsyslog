@@ -85,10 +85,11 @@ module.exports = {
 			transform(entry,encoding,callback) {
 				sendEntry(cmd,entry,options,(err,res)=>{
 					if(err) {
-						console.error("ERROR! ",err);
+						this.emit("strerr",err);
 						callback(null,entry);
 					}
 					else {
+						this.emit("strok",res);						
 						callback(null,res);
 					}
 				});
@@ -104,15 +105,16 @@ module.exports = {
 				try {
 					instance[cmd](entry,(err,res)=>{
 						if(err) {
-							console.error("ERROR! ",err);
+							this.emit("strerr",err);
 							callback(null,entry);
 						}
 						else {
+							this.emit("strok",res);
 							callback(null,res);
 						}
 					});
 				}catch(err) {
-					console.error("EXCEPTION! ",err);
+					this.emit("strerr",err);
 					callback(null,entry);
 				}
 			}

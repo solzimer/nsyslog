@@ -79,22 +79,28 @@ function Master(cfg) {
 	}
 
 	function startTransportStream() {
+		function strok(msg){console.log("OK")};
+		function strerr(msg){console.error("ERR")};
+		function handle(str){
+			return str.on("strerr",strerr).on("strok",strok);
+		};
+
 		function walk(trs) {
 			if(trs.transport) {
-				return master.MasterStream(CMD.transport,trs);
+				return handle(master.MasterStream(CMD.transport,trs));
 			}
 			else if(trs.mode=="serial") {
 				var from = stream = Transporters.Null();
 				trs.list.forEach(tr=>{
 					stream = stream.pipe(walk(tr));
 				});
-				stream.pipe(Transporters.End());
+				stream.pipe(handle(Transporters.End()));
 				return from;
 			}
 			else if(trs.mode=="parallel") {
 				var stream = Transporters.Null();
 				trs.list.forEach(tr=>{
-					stream.pipe(walk(tr)).pipe(Transporters.End());
+					stream.pipe(walk(tr)).pipe(handle(Transporters.End()));
 				});
 				return stream;
 			}

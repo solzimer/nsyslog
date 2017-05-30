@@ -5,6 +5,15 @@
 		"cfg001/transporters.json"
 	],
 
+	"config" : {
+		"tasks" : 4,
+		"queue" : {
+			"cache" : 10,
+			"bsize" : 400,
+			"max" : 1000
+		}
+	},
+
 	"filters" : {
 		"fromUDP" : "${server.protocol}=='udp4'",
 		"localhost" : "${client.address}=='127.0.0.1'",

@@ -31,7 +31,8 @@ function Master(cfg) {
 	const master = require("./cluster/master.js");
 	const CMD = master.CMD;
 
-	var queue = FileQueue.from('./db/servers',{max:1000,bsize:500});
+	var qconf = extend(true,{max:1000,bsize:500},cfg.config.queue);
+	var queue = FileQueue.from('./db/servers',qconf);
 	var parserStream = new AsyncStream();
 	var seq = 0;
 
@@ -79,8 +80,12 @@ function Master(cfg) {
 	}
 
 	function startTransportStream() {
-		function strok(msg){console.log("OK")};
-		function strerr(msg){console.error("ERR")};
+		function strok(msg,instance){
+			//console.log("OK");
+		};
+		function strerr(msg,instance){
+			//console.error("ERR");
+		};
 		function handle(str){
 			return str.on("strerr",strerr).on("strok",strok);
 		};
@@ -110,7 +115,6 @@ function Master(cfg) {
 		}
 
 		cfg.flows.forEach(flow=>{
-			var ntr = Transporters.Null();
 			var trs = flow.transporters;
 			flow.tstream = walk(trs);
 		});
@@ -124,20 +128,27 @@ function Master(cfg) {
 	}
 
 	function entryLoop() {
-		queue.peek((err,entry)=>{
-			entry.seq = seq++;
-			parserStream.push(new Promise((resolve,reject)=>{
-				var flows = cfg.flows.filter(f=>!f.disabled).filter(f=>f.from(entry));
-				if(flows.find(flow=>flow.parse)) {
-					master.parse(entry,null,(err,res)=>{
-						resolve({entry:extend(entry,res),flows:flows})
-					});
-				}
-				else {
-					resolve({entry:entry,flows:flows});
-				}
-			}));
-			entryLoop();
+		// Request a task
+		master.take(()=>{
+			// Request an entry from the queue
+			queue.peek((err,entry,mem)=>{
+				console.log("FROM MEMORY => ",mem==true);
+				entry.seq = seq++;
+				// Parse the entry if needed, and push it to the stream
+				parserStream.push(new Promise((resolve,reject)=>{
+					var flows = cfg.flows.filter(f=>!f.disabled).filter(f=>f.from(entry));
+					if(flows.find(flow=>flow.parse)) {
+						master.parse(entry,null,(err,res)=>{
+							resolve({entry:extend(entry,res),flows:flows})
+						});
+					}
+					else {
+						resolve({entry:entry,flows:flows});
+					}
+				}));
+				entryLoop();
+				master.leave();
+			});
 		});
 	}
 

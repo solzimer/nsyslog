@@ -1,7 +1,11 @@
-const cluster = require('cluster');
-const Transform = require('stream').Transform;
-const os = require("os");
+const
+	cluster = require('cluster'),
+	Transform = require('stream').Transform,
+	semaphore = require('semaphore'),
+	os = require("os");
+
 const SIZE = os.cpus().length;
+const SEM = SIZE * 1000;
 const CMD = {
 	parse : "parse",
 	process : "process",
@@ -13,6 +17,7 @@ var pid = wid = 0;
 var pending = {};
 var cfg = {};
 var sticky = {};
+var sem = null;
 
 function voidfn(){}
 
@@ -75,23 +80,32 @@ init();
 
 module.exports = {
 	CMD : CMD,
-	configure(config) {cfg = config},
+	configure(config) {
+		cfg = config;
+		sem = semaphore(cfg.config.tasks || SEM);
+		console.log(cfg.config.tasks || SEM);
+	},
 	parse(entry,options,callback){return sendEntry(CMD.parse,entry,options,callback)},
 	process(entry,options,callback){return sendEntry(CMD.process,entry,options,callback)},
 	transport(entry,options,callback){return sendEntry(CMD.transform,entry,options,callback)},
+	take(callback) {sem.take(callback);},
+	leave(callback) {sem.leave(callback);},
 	SlaveStream(cmd,options) {
 		var tr = new Transform({
 			objectMode : true,
 			transform(entry,encoding,callback) {
 				sendEntry(cmd,entry,options,(err,res)=>{
-					if(err) {
-						this.emit("strerr",err);
-						callback(null,entry);
-					}
-					else {
-						this.emit("strok",res);						
-						callback(null,res);
-					}
+					sem.take(()=>{
+						if(err) {
+							this.emit("strerr",err,options);
+							callback(null,entry);
+						}
+						else {
+							this.emit("strok",res,options);
+							callback(null,res);
+						}
+						sem.leave();
+					});
 				});
 			}
 		});
@@ -102,21 +116,27 @@ module.exports = {
 		var tr = new Transform({
 			objectMode : true,
 			transform(entry,encoding,callback) {
-				try {
-					instance[cmd](entry,(err,res)=>{
-						if(err) {
-							this.emit("strerr",err);
+				sem.take(()=>{
+					setTimeout(()=>{
+						try {
+							instance[cmd](entry,(err,res)=>{
+								if(err) {
+									this.emit("strerr",err,instance);
+									callback(null,entry);
+								}
+								else {
+									this.emit("strok",res,instance);
+									callback(null,res);
+								}
+								sem.leave();
+							});
+						}catch(err) {
+							this.emit("strerr",err,instance);
 							callback(null,entry);
+							sem.leave();
 						}
-						else {
-							this.emit("strok",res);
-							callback(null,res);
-						}
-					});
-				}catch(err) {
-					this.emit("strerr",err);
-					callback(null,entry);
-				}
+					},100);
+				});
 			}
 		});
 		tr.on("error",error);

@@ -1,6 +1,7 @@
 {
 	"register" : [
-		{"type":"transporter","id":"reverse","require":"cfg001/reverse.js"}
+		{"type":"transporter","id":"reverse","require":"cfg001/reverse.js"},
+		{"type":"transporter","id":"fail","require":"cfg001/fail.js"}
 	],
 
 	"transporters" : {
@@ -23,6 +24,9 @@
 		},
 		"reverse" : {
 			"type" : "reverse"
+		},
+		"doerror" : {
+			"type" : "fail"
 		},
 		"log" : {
 			"type" : "console",

@@ -68,7 +68,7 @@ function resolveEntry(message) {
 }
 
 function error(msg) {
-	console.error(msg);
+	console.error("MASTER ERROR => ",msg);
 }
 
 init();
@@ -83,7 +83,15 @@ module.exports = {
 		var tr = new Transform({
 			objectMode : true,
 			transform(entry,encoding,callback) {
-				sendEntry(cmd,entry,options,callback);
+				sendEntry(cmd,entry,options,(err,res)=>{
+					if(err) {
+						console.error("ERROR! ",err);
+						callback(null,entry);
+					}
+					else {
+						callback(null,res);
+					}
+				});
 			}
 		});
 		tr.on("error",error);
@@ -93,7 +101,20 @@ module.exports = {
 		var tr = new Transform({
 			objectMode : true,
 			transform(entry,encoding,callback) {
-				instance[cmd](entry,callback);
+				try {
+					instance[cmd](entry,(err,res)=>{
+						if(err) {
+							console.error("ERROR! ",err);
+							callback(null,entry);
+						}
+						else {
+							callback(null,res);
+						}
+					});
+				}catch(err) {
+					console.error("EXCEPTION! ",err);
+					callback(null,entry);
+				}
 			}
 		});
 		tr.on("error",error);

@@ -22,6 +22,6 @@
 		{"from":"localhost", "disabled":true, "when":["httpRed"], "transporters":"warn", "mode":"parallel"},
 		{"from":"localhost", "disabled":true, "when":["httpErr"], "transporters":"error", "mode":"serial"},
 		{"from":"interface", "disabled":true, "parse":true, "processors":["stats"], "transporters":["debug"], "mode":"serial"},
-		{"from":"*", "disabled":false, "parse":false, "transporters":["debug"]}
+		{"from":"*", "disabled":false, "parse":false, "transporters":["debug","doerror","warn"], "mode":"serial"}
 	]
 }

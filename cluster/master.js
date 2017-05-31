@@ -117,25 +117,23 @@ module.exports = {
 			objectMode : true,
 			transform(entry,encoding,callback) {
 				sem.take(()=>{
-					setTimeout(()=>{
-						try {
-							instance[cmd](entry,(err,res)=>{
-								if(err) {
-									this.emit("strerr",err,instance);
-									callback(null,entry);
-								}
-								else {
-									this.emit("strok",res,instance);
-									callback(null,res);
-								}
-								sem.leave();
-							});
-						}catch(err) {
-							this.emit("strerr",err,instance);
-							callback(null,entry);
+					try {
+						instance[cmd](entry,(err,res)=>{
+							if(err) {
+								this.emit("strerr",err,instance);
+								callback(null,entry);
+							}
+							else {
+								this.emit("strok",res,instance);
+								callback(null,res);
+							}
 							sem.leave();
-						}
-					},100);
+						});
+					}catch(err) {
+						this.emit("strerr",err,instance);
+						callback(null,entry);
+						sem.leave();
+					}
 				});
 			}
 		});

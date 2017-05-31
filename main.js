@@ -140,14 +140,15 @@ function Master(cfg) {
 					if(flows.find(flow=>flow.parse)) {
 						master.parse(entry,null,(err,res)=>{
 							resolve({entry:extend(entry,res),flows:flows})
+							master.leave();
 						});
 					}
 					else {
 						resolve({entry:entry,flows:flows});
+						master.leave();
 					}
 				}));
-				entryLoop();
-				master.leave();
+				setImmediate(entryLoop);
 			});
 		});
 	}

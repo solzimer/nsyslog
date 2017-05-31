@@ -6,7 +6,7 @@
 	],
 
 	"config" : {
-		"tasks" : 4,
+		"tasks" : 1000,
 		"queue" : {
 			"cache" : 10,
 			"bsize" : 400,

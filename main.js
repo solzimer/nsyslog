@@ -5,6 +5,7 @@ const
 	FileQueue = require("fileq"),
 	AsyncStream = require("promise-stream-queue"),
 	Config = require("./lib/config/config.js"),
+	Duplex = require("stream").Duplex,
 	Transporters = Config.Transporters,
 	Processors = Config.Processors;
 
@@ -122,9 +123,24 @@ function Master(cfg) {
 
 	function startFlowStream() {
 		cfg.flows.forEach(f=>{
-			f.stream = f.pstream.start;
+			var fileq = FileQueue.from(`./db/flows/${f.id}`,{truncate:true});
+			var wstr = new Duplex({
+				objectMode : true,
+				write(entry, encoding, callback) {
+					console.log("Write => "+entry.originalMessage);
+					fileq.push(entry,callback);
+  			},
+				read(size) {
+					fileq.peek((err,entry)=>{
+						console.log("Read =>"+entry.originalMessage);
+						this.push(entry);
+					});
+				}
+			});
+			f.stream = wstr;
+			f.stream.pipe(f.pstream.start);
 			f.pstream.end.pipe(f.tstream);
-		})
+		});
 	}
 
 	function entryLoop() {

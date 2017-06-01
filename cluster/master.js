@@ -82,8 +82,7 @@ module.exports = {
 	CMD : CMD,
 	configure(config) {
 		cfg = config;
-		sem = semaphore(cfg.config.tasks || SEM);
-		console.log(cfg.config.tasks || SEM);
+		sem = semaphore(cfg.config.parser.max || SEM);
 	},
 	parse(entry,options,callback){return sendEntry(CMD.parse,entry,options,callback)},
 	process(entry,options,callback){return sendEntry(CMD.process,entry,options,callback)},
@@ -95,17 +94,14 @@ module.exports = {
 			objectMode : true,
 			transform(entry,encoding,callback) {
 				sendEntry(cmd,entry,options,(err,res)=>{
-					sem.take(()=>{
-						if(err) {
-							this.emit("strerr",err,options);
-							callback(null,entry);
-						}
-						else {
-							this.emit("strok",res,options);
-							callback(null,res);
-						}
-						sem.leave();
-					});
+					if(err) {
+						this.emit("strerr",err,options);
+						callback(null,entry);
+					}
+					else {
+						this.emit("strok",res,options);
+						callback(null,res);
+					}
 				});
 			}
 		});
@@ -116,25 +112,21 @@ module.exports = {
 		var tr = new Transform({
 			objectMode : true,
 			transform(entry,encoding,callback) {
-				sem.take(()=>{
-					try {
-						instance[cmd](entry,(err,res)=>{
-							if(err) {
-								this.emit("strerr",err,instance);
-								callback(null,entry);
-							}
-							else {
-								this.emit("strok",res,instance);
-								callback(null,res);
-							}
-							sem.leave();
-						});
-					}catch(err) {
-						this.emit("strerr",err,instance);
-						callback(null,entry);
-						sem.leave();
-					}
-				});
+				try {
+					instance[cmd](entry,(err,res)=>{
+						if(err) {
+							this.emit("strerr",err,instance);
+							callback(null,entry);
+						}
+						else {
+							this.emit("strok",res,instance);
+							callback(null,res);
+						}
+					});
+				}catch(err) {
+					this.emit("strerr",err,instance);
+					callback(null,entry);
+				}
 			}
 		});
 		tr.on("error",error);

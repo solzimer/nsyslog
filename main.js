@@ -125,6 +125,7 @@ function Master(cfg) {
 		cfg.flows.forEach(f=>{
 			var fileq = FileQueue.from(`./db/flows/${f.id}`,{truncate:true});
 			var wstr = new Duplex({
+				highWaterMark : cfg.config.stream.buffer,
 				objectMode : true,
 				write(entry, encoding, callback) {
 					console.log("Write => "+entry.originalMessage);

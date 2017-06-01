@@ -6,12 +6,9 @@
 	],
 
 	"config" : {
-		"tasks" : 10000,
-		"queue" : {
-			"cache" : 100,
-			"bsize" : 400,
-			"max" : 1000
-		}
+		"parser" : {"max" : 1000},
+		"stream" : {"buffer": 100},
+		"queue" : {"cache" : 100,	"bsize" : 500, "max" : 1000}
 	},
 
 	"filters" : {

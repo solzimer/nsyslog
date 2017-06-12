@@ -1,7 +1,6 @@
 const
 	cluster = require('cluster'),
 	Transform = require('stream').Transform,
-	semaphore = require('semaphore'),
 	os = require("os");
 
 const SIZE = os.cpus().length;
@@ -80,15 +79,10 @@ init();
 
 module.exports = {
 	CMD : CMD,
-	configure(config) {
-		cfg = config;
-		sem = semaphore(cfg.config.parser.max || SEM);
-	},
+	configure(config) {cfg = config},
 	parse(entry,options,callback){return sendEntry(CMD.parse,entry,options,callback)},
 	process(entry,options,callback){return sendEntry(CMD.process,entry,options,callback)},
 	transport(entry,options,callback){return sendEntry(CMD.transform,entry,options,callback)},
-	take(callback) {sem.take(callback);},
-	leave(callback) {sem.leave(callback);},
 	SlaveStream(cmd,options) {
 		var tr = new Transform({
 			objectMode : true,

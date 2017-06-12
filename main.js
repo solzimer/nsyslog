@@ -3,9 +3,11 @@ const
 	program = require("commander"),
 	extend = require("extend"),
 	FileQueue = require("fileq"),
-	AsyncStream = require("promise-stream-queue"),
 	Config = require("./lib/config/config.js"),
+	QueueStream = require("./lib/queuestream.js"),
 	Duplex = require("stream").Duplex,
+	Transform = require("stream").Transform,
+	Writable = require('stream').Writable;
 	Transporters = Config.Transporters,
 	Processors = Config.Processors;
 
@@ -34,36 +36,21 @@ function Master(cfg) {
 
 	var qconf = extend(true,{max:1000,bsize:500},cfg.config.queue);
 	var queue = FileQueue.from('./db/servers',qconf);
-	var parserStream = new AsyncStream();
+	var queueStream = new QueueStream(queue);
 	var seq = 0;
 
 	this.start = function() {
 		try {
 			master.configure(cfg);
-			startParserStream();
 			startProcessorStream();
 			startTransportStream();
 			startFlowStream();
+			startParserStream();
 			startServers();
-			entryLoop();
 		}catch(err) {
 			console.error(err);
 			process.exit(1);
 		}
-	}
-
-	function startParserStream() {
-		parserStream.forEach((err,item,ex)=>{
-			if(err) {
-				console.log(err);
-				return;
-			}
-			var entry = item.entry;
-			entry.flows = item.flows.map(f=>f.id);
-			item.flows.
-				filter(flow=>flow.when(entry)).
-				forEach(flow=>flow.stream.write(entry));
-		});
 	}
 
 	function startProcessorStream() {
@@ -144,36 +131,42 @@ function Master(cfg) {
 		});
 	}
 
-	function entryLoop() {
-		// Request a task
-		master.take(()=>{
-			// Request an entry from the queue
-			queue.peek((err,entry,mem)=>{
-				console.log("FROM MEMORY => ",mem==true);
+	function startParserStream() {
+		queueStream.pipe(new Transform({
+			objectMode : true,
+			highWaterMark : cfg.config.stream.buffer,
+			transform(entry, encoding, callback) {
 				entry.seq = seq++;
-				// Parse the entry if needed, and push it to the stream
-				parserStream.push(new Promise((resolve,reject)=>{
-					var flows = cfg.flows.filter(f=>!f.disabled).filter(f=>f.from(entry));
-					if(flows.find(flow=>flow.parse)) {
-						master.parse(entry,null,(err,res)=>{
-							resolve({entry:extend(entry,res),flows:flows})
-							master.leave();
-						});
-					}
-					else {
-						resolve({entry:entry,flows:flows});
-						master.leave();
-					}
-				}));
-				setImmediate(entryLoop);
-			});
-		});
+
+				var flows = cfg.flows.filter(f=>!f.disabled).filter(f=>f.from(entry));
+				if(flows.find(flow=>flow.parse)) {
+					master.parse(entry,null,(err,res)=>{
+						callback(null,{entry:extend(entry,res),flows:flows})
+					});
+				}
+				else {
+					callback(null,{entry:entry,flows:flows});
+				}
+			}
+		})).pipe(new Writable({
+			objectMode : true,
+			highWaterMark : cfg.config.stream.buffer,
+			write(item, encoding, callback) {
+				var entry = item.entry;
+				entry.flows = item.flows.map(f=>f.id);
+				item.flows.
+					filter(flow=>flow.when(entry)).
+					forEach(flow=>flow.stream.write(entry));
+
+				callback();
+			}
+		}));
 	}
 
 	function startServers() {
 		for(var i in cfg.servers) {
 			var server = cfg.servers[i];
-			server.start(entry=>queue.push(entry));
+			server.start(entry=>queueStream.write(entry));
 		}
 	}
 }

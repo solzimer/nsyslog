@@ -35,6 +35,7 @@ function Master(cfg) {
 	const CMD = master.CMD;
 
 	var qconf = extend(true,{max:1000,bsize:500},cfg.config.queue);
+	var strconf = extend(true,{},cfg.config.stream);
 	var queue = FileQueue.from('./db/servers',qconf);
 	var queueStream = new QueueStream(queue);
 	var seq = 0;
@@ -111,20 +112,7 @@ function Master(cfg) {
 	function startFlowStream() {
 		cfg.flows.forEach(f=>{
 			var fileq = FileQueue.from(`./db/flows/${f.id}`,{truncate:true});
-			var wstr = new Duplex({
-				highWaterMark : cfg.config.stream.buffer,
-				objectMode : true,
-				write(entry, encoding, callback) {
-					console.log("Write => "+entry.originalMessage);
-					fileq.push(entry,callback);
-  			},
-				read(size) {
-					fileq.peek((err,entry)=>{
-						console.log("Read =>"+entry.originalMessage);
-						this.push(entry);
-					});
-				}
-			});
+			var wstr = new QueueStream(fileq,{highWaterMark:strconf.buffer});
 			f.stream = wstr;
 			f.stream.pipe(f.pstream.start);
 			f.pstream.end.pipe(f.tstream);
@@ -134,7 +122,7 @@ function Master(cfg) {
 	function startParserStream() {
 		queueStream.pipe(new Transform({
 			objectMode : true,
-			highWaterMark : cfg.config.stream.buffer,
+			highWaterMark : strconf.buffer,
 			transform(entry, encoding, callback) {
 				entry.seq = seq++;
 
@@ -150,7 +138,7 @@ function Master(cfg) {
 			}
 		})).pipe(new Writable({
 			objectMode : true,
-			highWaterMark : cfg.config.stream.buffer,
+			highWaterMark : strconf.buffer,
 			write(item, encoding, callback) {
 				var entry = item.entry;
 				entry.flows = item.flows.map(f=>f.id);

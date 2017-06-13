@@ -3,6 +3,7 @@ const
 	program = require("commander"),
 	extend = require("extend"),
 	FileQueue = require("fileq"),
+	StatsDB = require("./lib/stats.js"),
 	Config = require("./lib/config/config.js"),
 	AsyncStream = require("promise-stream-queue"),
 	QueueStream = require("./lib/stream/queuestream.js"),
@@ -73,24 +74,26 @@ function Master(cfg) {
 	}
 
 	function startTransportStream() {
-		function strok(msg,instance){
-			//console.log("OK");
+		function strok(msg,instance,flow){
+
+			console.log("OK",instance.id,flow.id);
 		};
-		function strerr(msg,instance){
+		function strerr(msg,instance,flow){
 			//console.error("ERR");
 		};
 		function handle(str){
+			//StatsDB.createTimed(`${null}`);
 			return str.on("strerr",strerr).on("strok",strok);
 		};
 
-		function walk(trs) {
+		function walk(trs,flow) {
 			if(trs.transport) {
-				return handle(master.MasterStream(CMD.transport,trs));
+				return handle(master.MasterStream(CMD.transport,trs,flow));
 			}
 			else if(trs.mode=="serial") {
 				var from = stream = Transporters.Null();
 				trs.list.forEach(tr=>{
-					stream = stream.pipe(walk(tr));
+					stream = stream.pipe(walk(tr,flow));
 				});
 				stream.pipe(handle(Transporters.End()));
 				return from;
@@ -98,7 +101,7 @@ function Master(cfg) {
 			else if(trs.mode=="parallel") {
 				var stream = Transporters.Null();
 				trs.list.forEach(tr=>{
-					stream.pipe(walk(tr)).pipe(handle(Transporters.End()));
+					stream.pipe(walk(tr,flow)).pipe(handle(Transporters.End()));
 				});
 				return stream;
 			}
@@ -109,7 +112,7 @@ function Master(cfg) {
 
 		cfg.flows.forEach(flow=>{
 			var trs = flow.transporters;
-			flow.tstream = walk(trs);
+			flow.tstream = walk(trs,flow);
 		});
 	}
 

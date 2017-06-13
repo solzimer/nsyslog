@@ -110,23 +110,23 @@ module.exports = {
 		tr.on("error",error);
 		return tr;
 	},
-	MasterStream(cmd,instance) {
+	MasterStream(cmd,instance,flow) {
 		var tr = new Transform({
 			objectMode : true,
 			transform(entry,encoding,callback) {
 				try {
 					instance[cmd](entry,(err,res)=>{
 						if(err) {
-							this.emit("strerr",err,instance);
+							this.emit("strerr",err,instance,flow);
 							callback(null,entry);
 						}
 						else {
-							this.emit("strok",res,instance);
+							this.emit("strok",res,instance,flow);
 							callback(null,res);
 						}
 					});
 				}catch(err) {
-					this.emit("strerr",err,instance);
+					this.emit("strerr",err,instance,flow);
 					callback(null,entry);
 				}
 			}

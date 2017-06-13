@@ -4,7 +4,9 @@ const
 	extend = require("extend"),
 	FileQueue = require("fileq"),
 	Config = require("./lib/config/config.js"),
-	QueueStream = require("./lib/queuestream.js"),
+	AsyncStream = require("promise-stream-queue"),
+	QueueStream = require("./lib/stream/queuestream.js"),
+	AwaitStream = require("./lib/stream/awaitstream.js"),
 	Duplex = require("stream").Duplex,
 	Transform = require("stream").Transform,
 	Writable = require('stream').Writable;
@@ -37,17 +39,19 @@ function Master(cfg) {
 	var qconf = extend(true,{max:1000,bsize:500},cfg.config.queue);
 	var strconf = extend(true,{},cfg.config.stream);
 	var queue = FileQueue.from('./db/servers',qconf);
-	var queueStream = new QueueStream(queue);
+	var queueStream = new QueueStream(queue);	// Stream for the fileq file buffer
 	var seq = 0;
 
 	this.start = function() {
 		try {
 			master.configure(cfg);
-			startProcessorStream();
-			startTransportStream();
-			startFlowStream();
-			startParserStream();
-			startServers();
+			master.ready.then(()=>{
+				startProcessorStream();
+				startTransportStream();
+				startFlowStream();
+				startParserStream();
+				startServers();
+			});
 		}catch(err) {
 			console.error(err);
 			process.exit(1);
@@ -120,35 +124,62 @@ function Master(cfg) {
 	}
 
 	function startParserStream() {
-		queueStream.pipe(new Transform({
-			objectMode : true,
-			highWaterMark : strconf.buffer,
+		// Active flows
+		var flows = cfg.flows.filter(f=>!f.disabled);
+
+		// Transform that sends lines to parser workers ands pushes a Promise
+		var parserTransform = new Transform({
+			objectMode:true, highWaterMark:strconf.buffer,
 			transform(entry, encoding, callback) {
 				entry.seq = seq++;
+				var aflows = flows.filter(f=>f.from(entry));
+				var parse = aflows.find(flow=>flow.parse);
+				var pr = new Promise((resolve,reject)=>{
+					if(parse) {
+						master.parse(entry,null,(err,res)=>{
+							resolve({entry:extend(entry,res),flows:aflows});
+						});
+					}
+					else {
+						resolve({entry:entry,flows:aflows});
+					}
+				});
 
-				var flows = cfg.flows.filter(f=>!f.disabled).filter(f=>f.from(entry));
-				if(flows.find(flow=>flow.parse)) {
-					master.parse(entry,null,(err,res)=>{
-						callback(null,{entry:extend(entry,res),flows:flows})
-					});
-				}
-				else {
-					callback(null,{entry:entry,flows:flows});
-				}
+				callback(null,pr);
 			}
-		})).pipe(new Writable({
-			objectMode : true,
-			highWaterMark : strconf.buffer,
-			write(item, encoding, callback) {
+		});
+
+		// Transform that limits async entry reads (unresolved promises) to
+		// highWaterMark value
+		var awaitStream = new AwaitStream({
+			highWaterMark : strconf.buffer
+		});
+
+		// Duplex stream that serializes promises
+		var asyncStream = new AsyncStream().toStream({
+			highWaterMark : strconf.buffer
+		});
+
+		// End of the stream. Collect the parsed entries and push them to the
+		// flow stream
+		var endStream = new Transform({
+			objectMode:true, highWaterMark:strconf.buffer,
+			transform(item, encoding, callback) {
 				var entry = item.entry;
 				entry.flows = item.flows.map(f=>f.id);
 				item.flows.
 					filter(flow=>flow.when(entry)).
 					forEach(flow=>flow.stream.write(entry));
-
 				callback();
 			}
-		}));
+		});
+
+		// Instrument the parser flow
+		queueStream.								// Reads from fileQ
+			pipe(parserTransform).		// Generates a promise to parser worker
+			pipe(awaitStream).				// Limits to X pending parses
+			pipe(asyncStream).				// Serialize resolved parses
+			pipe(endStream);					// Send parsed lines to process flow
 	}
 
 	function startServers() {

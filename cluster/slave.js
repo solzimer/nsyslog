@@ -15,6 +15,7 @@ function start() {
 		else if(message.command==CMD.process) processEntry(message);
 		else error(message);
 	});
+	process.send("OK");
 }
 
 function parseEntry(message) {

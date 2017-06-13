@@ -17,19 +17,26 @@ var pending = {};
 var cfg = {};
 var sticky = {};
 var sem = null;
+var resolve = null;
+var ready =  new Promise((res,rej)=>{resolve = res;});
 
 function voidfn(){}
 
 function init() {
+	var j = 0;
+
 	console.log('Master cluster setting up ' + SIZE + ' workers...');
 
-	for(var i = 0; i < SIZE; i++) {
+	for(let i = 0; i < SIZE; i++) {
 			workers.push(cluster.fork());
 	}
 
 	cluster.on('online',(worker) => {
 			console.log('Worker ' + worker.process.pid + ' is online');
-			worker.on('message', resolveEntry);
+			worker.once('message',online=>{
+				worker.on('message', resolveEntry);
+				if(++j==SIZE) resolve();
+			});
 	});
 
 	cluster.on('exit', (worker, code, signal) => {
@@ -79,6 +86,7 @@ init();
 
 module.exports = {
 	CMD : CMD,
+	ready : ready,
 	configure(config) {cfg = config},
 	parse(entry,options,callback){return sendEntry(CMD.parse,entry,options,callback)},
 	process(entry,options,callback){return sendEntry(CMD.process,entry,options,callback)},

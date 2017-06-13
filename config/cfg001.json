@@ -7,8 +7,8 @@
 
 	"config" : {
 		"parser" : {"max" : 1000},
-		"stream" : {"buffer": 100},
-		"queue" : {"cache" : 100,	"bsize" : 500, "max" : 1000}
+		"stream" : {"buffer": 1000},
+		"queue" : {"cache" : 100, "bsize" : 500, "max" : 1000}
 	},
 
 	"filters" : {
@@ -28,6 +28,6 @@
 		{"from":"localhost", "disabled":true, "when":["httpRed"], "transporters":"warn", "mode":"parallel"},
 		{"from":"localhost", "disabled":true, "when":["httpErr"], "transporters":"error", "mode":"serial"},
 		{"from":"interface", "disabled":true, "parse":true, "processors":["stats"], "transporters":["debug"], "mode":"serial"},
-		{"from":"*", "disabled":false, "parse":false, "transporters":["debug","doerror","warn"], "mode":"serial"}
+		{"from":"*", "disabled":false, "parse":true, "transporters":["debug"], "mode":"serial"}
 	]
 }

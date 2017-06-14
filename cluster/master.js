@@ -3,6 +3,7 @@ const
 	Transform = require('stream').Transform,
 	os = require("os");
 
+const CHANNEL = "nsyslog";
 const SIZE = os.cpus().length;
 const SEM = SIZE * 1000;
 const CMD = {
@@ -65,7 +66,7 @@ function sendEntry(cmd,entry,options,callback) {
 	var wid = getId(options.sid);
 	var w = workers[wid];
 	pending[id] = {cb:callback,w:w};
-	w.send({id:id,command:cmd,entry:entry,options:options});
+	w.send({channel:CHANNEL,id:id,command:cmd,entry:entry,options:options});
 }
 
 function resolveEntry(message) {
@@ -74,8 +75,10 @@ function resolveEntry(message) {
 	var error = message.error;
 
 	var wcb = pending[id];
-	delete pending[id];
-	wcb.cb(error,entry);
+	if(wcb) {
+		delete pending[id];
+		wcb.cb(error,entry);
+	}
 }
 
 function error(msg) {
@@ -131,6 +134,8 @@ module.exports = {
 				}
 			}
 		});
+		tr.flow = flow;
+		tr.instance = instance;
 		tr.on("error",error);
 		return tr;
 	}

@@ -2,6 +2,7 @@ const
 	extend = require("extend"),
 	parser = require("nsyslog-parser");
 
+const CHANNEL = "nsyslog";
 const CMD = {
 	parse : "parse",
 	process : "process"
@@ -11,11 +12,17 @@ var cfg = null;
 
 function start() {
 	process.on('message',(message) => {
-		if(message.command==CMD.parse) parseEntry(message);
-		else if(message.command==CMD.process) processEntry(message);
-		else error(message);
+		if(message.channel==CHANNEL) {
+			if(message.command==CMD.parse) parseEntry(message);
+			else if(message.command==CMD.process) processEntry(message);
+			else error(message);
+		}
 	});
 	process.send("OK");
+}
+
+function error(message) {
+	console.error(message);
 }
 
 function parseEntry(message) {

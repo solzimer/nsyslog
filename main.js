@@ -3,7 +3,6 @@ const
 	program = require("commander"),
 	extend = require("extend"),
 	FileQueue = require("fileq"),
-	StatsDB = require("./lib/stats.js"),
 	Config = require("./lib/config/config.js"),
 	AsyncStream = require("promise-stream-queue"),
 	QueueStream = require("./lib/stream/queuestream.js"),
@@ -35,7 +34,16 @@ function initialize() {
 
 function Master(cfg) {
 	const master = require("./cluster/master.js");
+	const StatsDB = require("./lib/stats.js");
 	const CMD = master.CMD;
+	const tstats = [
+		{path:"/sec/30", time:1000*30, options:{step:100,ops:["count"]}},
+		{path:"/sec/60", time:1000*60, options:{step:1000,ops:["count"]}},
+		{path:"/min/5", time:1000*60*6, options:{step:5000,ops:["count"]}},
+		{path:"/min/15", time:1000*60*15, options:{step:10000,ops:["count"]}},
+		{path:"/min/30", time:1000*60*30, options:{step:10000,ops:["count"]}},
+		{path:"/min/60", time:1000*60*60, options:{step:10000,ops:["count"]}},
+	]
 
 	var qconf = extend(true,{max:1000,bsize:500},cfg.config.queue);
 	var strconf = extend(true,{},cfg.config.stream);
@@ -75,15 +83,24 @@ function Master(cfg) {
 
 	function startTransportStream() {
 		function strok(msg,instance,flow){
-
-			console.log("OK",instance.id,flow.id);
+			debugger;
+			tstats.forEach(s=>{
+				var path = `${s.path}/${flow.id}/${instance.id}`;
+				StatsDB.push(path,1);
+			});
 		};
 		function strerr(msg,instance,flow){
-			//console.error("ERR");
+			console.error("ERR");
 		};
 		function handle(str){
-			//StatsDB.createTimed(`${null}`);
-			return str.on("strerr",strerr).on("strok",strok);
+			if(str.flow && str.instance) {
+				tstats.forEach(s=>{
+					var path = `${s.path}/${str.flow.id}/${str.instance.id}`;
+					StatsDB.createTimed(path,s.time,s.options);
+				});
+				return str.on("strerr",strerr).on("strok",strok);
+			}
+			else return str;
 		};
 
 		function walk(trs,flow) {
@@ -195,6 +212,7 @@ function Master(cfg) {
 
 function Slave(cfg) {
 	const slave = require('./cluster/slave.js');
+	const frontend = require('./http/frontend.js');
 
 	this.start = function() {
 		slave.configure(cfg);

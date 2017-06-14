@@ -1,0 +1,278 @@
+Jun 15 00:02:53 MacBook-Pro-de-David com.apple.xpc.launchd[1] (com.apple.imfoundation.IMRemoteURLConnectionAgent): Unknown key for integer: _DirtyJetsamMemoryLimit
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.369 GoogleSoftwareUpdateAgent[46940/0x7fffbd0b33c0] [lvl=2] -[KSAgentApp setupLoggerOutput] Agent settings: <KSAgentSettings:0x10020af30 bundleID=com.google.Keystone.Agent lastCheck=2017-06-14 21:13:32 +0000 checkInterval=18000.000000 uiDisplayInterval=604800.000000 sleepInterval=1800.000000 jitterInterval=900 maxRunInterval=0.000000 isConsoleUser=1 ticketStorePath=/Users/david/Library/Google/GoogleSoftwareUpdate/TicketStore/Keystone.ticketstore runMode=4 daemonUpdateEngineBrokerServiceName=com.google.Keystone.Daemon.UpdateEngine daemonAdministrationServiceName=com.google.Keystone.Daemon.Administration logEverything=0 logBufferSize=2048 alwaysPromptForUpdates=0 productIDToUpdate=com.google.gpautobackup lastUIDisplayed=2017-04-16 17:50:35 +0000 alwaysShowStatusItem=0 updateCheckTag=(null) printResults=YES userInitiated=YES>
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.371 GoogleSoftwareUpdateAgent[46940/0x7fffbd0b33c0] [lvl=2] -[KSAgentApp checkForUpdates] Starting update check.
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.371 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSAgentApp(KeystoneThread) runKeystonesInThreadWithArg:] Starting engine thread
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateDaemon[46941]: 2017-06-15 00:06:22.401 GoogleSoftwareUpdateDaemon[46941/0x7fffbd0b33c0] [lvl=2] +[KSKeystoneTicketRepair updateKeystoneTicketInTicketStore:version:bundlePath:error:] KSKeystoneTicketRepair does not need to update the Keystone ticket.
+Jun 15 00:06:22 MacBook-Pro-de-David com.apple.xpc.launchd[1] (com.google.keystone.daemon[46941]): Endpoint has been activated through legacy launch(3) APIs. Please switch to XPC or bootstrap_check_in(): com.google.Keystone.Daemon.Administration
+Jun 15 00:06:22 MacBook-Pro-de-David com.apple.xpc.launchd[1] (com.google.keystone.daemon[46941]): Endpoint has been activated through legacy launch(3) APIs. Please switch to XPC or bootstrap_check_in(): com.google.Keystone.Daemon.UpdateEngine
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateDaemon[46941]: 2017-06-15 00:06:22.406 GoogleSoftwareUpdateDaemon[46941/0x7fffbd0b33c0] [lvl=2] -[KeystoneDaemon logServiceState] GoogleSoftwareUpdate daemon (1.2.8.57) vending:
+		com.google.Keystone.Daemon.UpdateEngine: 1 connection(s)
+		com.google.Keystone.Daemon.Administration: 0 connection(s)
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateDaemon[46941]: 2017-06-15 00:06:22.406 GoogleSoftwareUpdateDaemon[46941/0x7fffbd0b33c0] [lvl=2] -[KeystoneDaemon logServiceState] GoogleSoftwareUpdate daemon (1.2.8.57) vending:
+		com.google.Keystone.Daemon.UpdateEngine: 1 connection(s)
+		com.google.Keystone.Daemon.Administration: 1 connection(s)
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateDaemon[46941]: 2017-06-15 00:06:22.409 GoogleSoftwareUpdateDaemon[46941/0x7fffbd0b33c0] [lvl=2] -[KeystoneDaemon logServiceState] GoogleSoftwareUpdate daemon (1.2.8.57) vending:
+		com.google.Keystone.Daemon.UpdateEngine: 2 connection(s)
+		com.google.Keystone.Daemon.Administration: 1 connection(s)
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.414 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSAgentApp(KeystoneThread) runKeystonesInThreadWithArg:] Checking with system-wide engine: <KSDaemonUpdateEngine:0x100504430
+		ticketStore=<KSPersistentTicketStore:0x1005022c0 store=<KSKeyedPersistentStore:0x100500a70
+			path="/Library/Google/GoogleSoftwareUpdate/TicketStore/Keystone.ticketstore"
+			lockFile=<KSLockFile:0x100502100
+				path="/Library/Google/GoogleSoftwareUpdate/TicketStore/Keystone.ticketstore.lock"
+				locked=NO
+			>
+		>>
+		processor=<KSActionProcessor:0x100505030
+			delegate=<KSDaemonUpdateEngine:0x100504430>
+			isProcessing=NO actionsCompleted=0 progress=0.00
+			errors=0 currentActionErrors=0
+			events=0 currentActionEvents=0
+			actionQueue=( )
+		>
+		delegate=(null)
+		serverInfoStore=(null)
+		errors=0
+	>
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.414 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSAgentApp(KeystoneThread) shouldRunSystemUpdateEngineForProduct:] No system ticket found for product with id 'com.google.gpautobackup'. Skipping system update engine.
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateDaemon[46941]: 2017-06-15 00:06:22.415 GoogleSoftwareUpdateDaemon[46941/0x7fffbd0b33c0] [lvl=2] -[KeystoneDaemon logServiceState] GoogleSoftwareUpdate daemon (1.2.8.57) vending:
+		com.google.Keystone.Daemon.UpdateEngine: 1 connection(s)
+		com.google.Keystone.Daemon.Administration: 1 connection(s)
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.416 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSAgentApp(KeystoneThread) runKeystonesInThreadWithArg:] Checking with local engine: <KSUpdateEngine:0x10042c580
+		ticketStore=<KSPersistentTicketStore:0x100525dc0 store=<KSKeyedPersistentStore:0x100526560
+			path="/Users/david/Library/Google/GoogleSoftwareUpdate/TicketStore/Keystone.ticketstore"
+			lockFile=<KSLockFile:0x100526380
+				path="/Users/david/Library/Google/GoogleSoftwareUpdate/TicketStore/Keystone.ticketstore.lock"
+				locked=NO
+			>
+		>>
+		processor=<KSActionProcessor:0x100422d70
+			delegate=<KSUpdateEngine:0x10042c580>
+			isProcessing=NO actionsCompleted=0 progress=0.00
+			errors=0 currentActionErrors=0
+			events=0 currentActionEvents=0
+			actionQueue=( )
+		>
+		delegate=(null)
+		serverInfoStore=<KSServerPrivateInfoStore:0x100418d80 path="/Users/david/Library/Google/GoogleSoftwareUpdate/Servers">
+		errors=0
+	>
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.416 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSAgentApp(KeystoneThread) runKeystonesInThreadWithArg:] About to run checks for any other apps.
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.416 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSAgentApp updateProductWithProductID:usingEngine:] Checking for updates for "com.google.gpautobackup" using engine <KSUpdateEngine:0x10042c580
+		ticketStore=<KSPersistentTicketStore:0x100525dc0 store=<KSKeyedPersistentStore:0x100526560
+			path="/Users/david/Library/Google/GoogleSoftwareUpdate/TicketStore/Keystone.ticketstore"
+			lockFile=<KSLockFile:0x100526380
+				path="/Users/david/Library/Google/GoogleSoftwareUpdate/TicketStore/Keystone.ticketstore.lock"
+				locked=NO
+			>
+		>>
+		processor=<KSActionProcessor:0x100422d70
+			delegate=<KSUpdateEngine:0x10042c580>
+			isProcessing=NO actionsCompleted=0 progress=0.00
+			errors=0 currentActionErrors=0
+			events=0 currentActionEvents=0
+			actionQueue=( )
+		>
+		delegate=(null)
+		serverInfoStore=<KSServerPrivateInfoStore:0x100418d80 path="/Users/david/Library/Google/GoogleSoftwareUpdate/Servers">
+		errors=0
+	>
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.417 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSUpdateEngine updateProductID:] KSUpdateEngine updating product ID: "com.google.gpautobackup"
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.419 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSCheckAction performAction] KSCheckAction checking 1 ticket(s).
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.425 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSUpdateCheckAction performAction] KSUpdateCheckAction starting update check for ticket(s): {(
+		<KSTicket:0x1002b2ec0
+			productID=com.google.gpautobackup
+			version=1.1.1.338
+			xc=<KSPathExistenceChecker:0x1002b2250 path=/Applications/Google Photos Backup.app>
+			serverType=Omaha
+			url=https://tools.google.com/service/update2
+			creationDate=2017-01-03 09:21:52
+			ticketVersion=1
+		>
+	)}
+	Using server: <KSOmahaServer:0x100203d30
+		engine=<KSUpdateEngine:0x10042c580>
+	>
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.445 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] +[KSCodeSigningVerification verifyBundle:applicationId:error:] KSCodeSigningVerification verifying code signing for '/Applications/Google Photos Backup.app' with the requirement 'anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] exists and certificate leaf[field.1.2.840.113635.100.6.1.13] exists and certificate leaf[subject.OU]="EQHXZ8M8AV" and (identifier="com.google.gpautobackup")'
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.709 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSUpdateCheckAction performAction] KSUpdateCheckAction running KSServerUpdateRequest: <KSOmahaServerUpdateRequest:0x1003660e0
+		server=<KSOmahaServer:0x100203d30>
+		url="https://tools.google.com/service/update2?cup2hreq=9b1033572033365fb8a2699764e8ad5d159e7cc2f96caa2eff1f0f9247983103&cup2key=7:3574421831"
+		fallbackURLs=(
+			http://tools.google.com/service/update2?cup2hreq=9b1033572033365fb8a2699764e8ad5d159e7cc2f96caa2eff1f0f9247983103&cup2key=7:1012847697
+		)
+		runningFetchers=0
+		tickets=1
+		body=
+			<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+			<request protocol="3.0" version="KeystoneAgent-1.2.8.57" ismachine="1" requestid="{A50FC650-0314-4AF8-9DDA-B1C73FA698F4}" dedup="cr" sessionid="{141F73A7-B9E8-40F9-A5D8-85BB80662A0D}" installsource="ondemandupdate">
+			    <os platform="mac" version="10.12" arch="i486" sp="10.12.4_i486"></os>
+			    <app appid="com.google.gpautobackup" version="1.1.1.338" lang="en-us" installage="162" installdate="3654" brand="GGLG" signed="1">
+			        <ping rd="3817" ad="3816" ping_freshness="{198A5D46-C215-4992-B26A-9DDD69540063}"></ping>
+			        <updatecheck></updatecheck>
+			    </app>
+			</request>
+		headers={
+			"X-GoogleUpdate-Interactivity" = fg;
+		}
+	>
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.709 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSOutOfProcessFetcher beginFetchWithDelegate:] KSOutOfProcessFetcher start fetch from URL: "https://tools.google.com/service/update2?cup2hreq=9b1033572033365fb8a2699764e8ad5d159e7cc2f96caa2eff1f0f9247983103&cup2key=7:3574421831"
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.710 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSOutOfProcessFetcher(PrivateMethods) launchedHelperTaskForToolPath:error:] KSOutOfProcessFetcher launched '/Library/Google/GoogleSoftwareUpdate/GoogleSoftwareUpdate.bundle/Contents/MacOS/ksfetch' with process id: 46942
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.710 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSOutOfProcessFetcher beginFetchWithDelegate:] KSOutOfProcessFetcher fetching from URL: "https://tools.google.com/service/update2?cup2hreq=9b1033572033365fb8a2699764e8ad5d159e7cc2f96caa2eff1f0f9247983103&cup2key=7:3574421831"
+Jun 15 00:06:22 MacBook-Pro-de-David ksfetch[46942]: 2017-06-15 00:06:22.742 ksfetch[46942/0x7fffbd0b33c0] [lvl=2] KSHelperReceiveAllData() KSHelperTool read 2031 bytes from stdin.
+Jun 15 00:06:22 MacBook-Pro-de-David ksfetch[46942]: 2017-06-15 00:06:22.743 ksfetch[46942/0x7fffbd0b33c0] [lvl=2] main() Fetcher received a request: <NSMutableURLRequest: 0x10010e100> { URL: https://tools.google.com/service/update2?cup2hreq=9b1033572033365fb8a2699764e8ad5d159e7cc2f96caa2eff1f0f9247983103&cup2key=7:3574421831 }
+Jun 15 00:06:22 MacBook-Pro-de-David ksfetch[46942]: 2017-06-15 00:06:22.744 ksfetch[46942/0x7fffbd0b33c0] [lvl=2] main() Fetcher received a download path: /tmp/KSOutOfProcessFetcher.hG4qB9sDLr/download
+Jun 15 00:06:22 MacBook-Pro-de-David ksfetch[46942]: 2017-06-15 00:06:22.744 ksfetch[46942/0x7fffbd0b33c0] [lvl=2] main() ksfetch fetching URL (<NSMutableURLRequest: 0x10010e100> { URL: https://tools.google.com/service/update2?cup2hreq=9b1033572033365fb8a2699764e8ad5d159e7cc2f96caa2eff1f0f9247983103&cup2key=7:3574421831 }) to folder:/tmp/KSOutOfProcessFetcher.hG4qB9sDLr/download
+Jun 15 00:06:22 MacBook-Pro-de-David ksfetch[46942]: 2017-06-15 00:06:22.744 ksfetch[46942/0x7fffbd0b33c0] [lvl=2] main() Setting up download file handles...
+Jun 15 00:06:22 MacBook-Pro-de-David ksfetch[46942]: 2017-06-15 00:06:22.893 ksfetch[46942/0x7fffbd0b33c0] [lvl=2] -[FetchDelegate fetcher:finishedWithData:] Fetcher downloaded successfully data of length: 0
+Jun 15 00:06:22 MacBook-Pro-de-David ksfetch[46942]: 2017-06-15 00:06:22.893 ksfetch[46942/0x7fffbd0b33c0] [lvl=2] main() ksfetch done fetching.
+Jun 15 00:06:22 MacBook-Pro-de-David ksfetch[46942]: 2017-06-15 00:06:22.896 ksfetch[46942/0x7fffbd0b33c0] [lvl=2] main() Fetcher is exiting.
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.900 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSOutOfProcessFetcher(PrivateMethods) helperErrorAvailable:] KSOutOfProcessFetcher helper tool raw STDERR:
+	:	<>
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.900 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSOutOfProcessFetcher(PrivateMethods) helperDidTerminate:] KSOutOfProcessFetcher fetch ended for URL: "https://tools.google.com/service/update2?cup2hreq=9b1033572033365fb8a2699764e8ad5d159e7cc2f96caa2eff1f0f9247983103&cup2key=7:3574421831"
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.901 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSUpdateCheckAction(KSServerUpdateRequestDelegate) serverRequest:fetchedWithResponse:] KSUpdateCheckAction received KSServerUpdateResponse: <KSOmahaServerUpdateResponse:0x100435950
+		server=<KSOmahaServer:0x100203d30>
+		url="https://tools.google.com/service/update2?cup2hreq=9b1033572033365fb8a2699764e8ad5d159e7cc2f96caa2eff1f0f9247983103&cup2key=7:3574421831"
+		tickets=1
+		status=200
+		data=
+			<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+			<response protocol="3.0" server="prod">
+			    <daystart elapsed_days="3817" elapsed_seconds="54365"></daystart>
+			    <app appid="com.google.gpautobackup" cohort="" cohortname="" status="ok">
+			        <ping status="ok"></ping>
+			        <updatecheck status="noupdate"></updatecheck>
+			    </app>
+			</response>
+	>
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.903 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSOmahaServer updateInfosForUpdateResponse:updateRequest:infoStore:upToDateTickets:updatedTickets:events:errors:] Response passed CUP validation.
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.908 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSUpdateCheckAction(PrivateMethods) finishAction] KSUpdateCheckAction found updates: {( )}
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.909 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSPrefetchAction performAction] KSPrefetchAction no updates to prefetch.
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.910 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSMultiUpdateAction performAction] KSSilentUpdateAction had no updates to apply.
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.910 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSMultiUpdateAction performAction] KSPromptAction had no updates to apply.
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.910 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSAgentApp(KeystoneDelegate) updateEngineFinishedWithErrors:] Keystone finished: errors=0
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.910 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSUpdateEngine(PrivateMethods) updateFinish] KSUpdateEngine update processing complete.
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:22.911 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSAgentApp updateProductWithProductID:usingEngine:] Done checking for updates for '"com.google.gpautobackup"' using engine <KSUpdateEngine:0x10042c580
+		ticketStore=<KSPersistentTicketStore:0x100525dc0 store=<KSKeyedPersistentStore:0x100526560
+			path="/Users/david/Library/Google/GoogleSoftwareUpdate/TicketStore/Keystone.ticketstore"
+			lockFile=<KSLockFile:0x100526380
+				path="/Users/david/Library/Google/GoogleSoftwareUpdate/TicketStore/Keystone.ticketstore.lock"
+				locked=NO
+			>
+		>>
+		processor=<KSActionProcessor:0x1004419b0
+			delegate=<KSUpdateEngine:0x10042c580>
+			isProcessing=NO actionsCompleted=0 progress=0.00
+			errors=0 currentActionErrors=0
+			events=0 currentActionEvents=0
+			actionQueue=( )
+		>
+		delegate=<KSAgentApp: 0x100415cf0>
+		serverInfoStore=<KSServerPrivateInfoStore:0x100418d80 path="/Users/david/Library/Google/GoogleSoftwareUpdate/Servers">
+		errors=0
+	>
+Jun 15 00:06:22 MacBook-Pro-de-David GoogleSoftwareUpdateDaemon[46941]: 2017-06-15 00:06:22.913 GoogleSoftwareUpdateDaemon[46941/0x7fffbd0b33c0] [lvl=2] -[KeystoneDaemon logServiceState] GoogleSoftwareUpdate daemon (1.2.8.57) vending:
+		com.google.Keystone.Daemon.UpdateEngine: 1 connection(s)
+		com.google.Keystone.Daemon.Administration: 0 connection(s)
+Jun 15 00:06:23 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:23.042 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSAgentUploader fetcher:finishedWithData:] Successfully uploaded stats to <NSMutableURLRequest: 0x10043e110> { URL: https://tools.google.com/service/update2 }
+Jun 15 00:06:23 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:23.045 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSAgentApp uploadStats:] Successfully uploaded stats <KSStatsCollection:0x1004179e0 path="/Users/david/Library/Google/GoogleSoftwareUpdate/Stats/Keystone.stats", count=5, stats={
+	    checks = 1;
+	    tickets = 0;
+	    usertickets = 5;
+	    validtickets = 0;
+	    validusertickets = 5;
+	}>
+Jun 15 00:06:24 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:24.046 GoogleSoftwareUpdateAgent[46940/0x700005893000] [lvl=2] -[KSAgentApp(KeystoneThread) runKeystonesInThreadWithArg:] Finished with engine thread
+Jun 15 00:06:24 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[46940]: 2017-06-15 00:06:24.376 GoogleSoftwareUpdateAgent[46940/0x7fffbd0b33c0] [lvl=2] -[KSAgentApp checkForUpdates] Finished update check.
+Jun 15 00:06:52 MacBook-Pro-de-David GoogleSoftwareUpdateDaemon[46941]: 2017-06-15 00:06:52.459 GoogleSoftwareUpdateDaemon[46941/0x7fffbd0b33c0] [lvl=2] -[KeystoneDaemon main] GoogleSoftwareUpdateDaemon inactive, shutdown.
+Jun 15 00:07:13 MacBook-Pro-de-David syslogd[54]: ASL Sender Statistics
+Jun 15 00:12:58 MacBook-Pro-de-David crashpad_handler[31573]: [0615/001258:ERROR:crash_report_database_mac.mm(622)] Failed to enumerate reports in directory /tmp/Atom Crashes/pending: Error Domain=NSCocoaErrorDomain Code=260 "La carpeta “pending” no existe." UserInfo={NSFilePath=/tmp/Atom Crashes/pending, NSUserStringVariant=(
+	    Folder
+	), NSUnderlyingError=0x7f8556e01930 {Error Domain=NSOSStatusErrorDomain Code=-43 "fnfErr: File not found"}}
+Jun 15 00:17:13 MacBook-Pro-de-David syslogd[54]: ASL Sender Statistics
+Jun 15 00:27:13 MacBook-Pro-de-David syslogd[54]: ASL Sender Statistics
+Jun 15 00:27:58 MacBook-Pro-de-David crashpad_handler[31573]: [0615/002758:ERROR:crash_report_database_mac.mm(622)] Failed to enumerate reports in directory /tmp/Atom Crashes/pending: Error Domain=NSCocoaErrorDomain Code=260 "La carpeta “pending” no existe." UserInfo={NSFilePath=/tmp/Atom Crashes/pending, NSUserStringVariant=(
+	    Folder
+	), NSUnderlyingError=0x7f85579006a0 {Error Domain=NSOSStatusErrorDomain Code=-43 "fnfErr: File not found"}}
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.AccountPolicyHelper" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.authd" sharing output destination "/var/log/asl" with ASL Module "com.apple.asl".
+	Output parameters from ASL Module "com.apple.asl" override any specified in ASL Module "com.apple.authd".
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.authd" sharing output destination "/var/log/system.log" with ASL Module "com.apple.asl".
+	Output parameters from ASL Module "com.apple.asl" override any specified in ASL Module "com.apple.authd".
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.authd" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.callhistory.asl.conf" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.cdscheduler" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.clouddocs" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.contacts.ContactsAutocomplete" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.contacts.ContactsUICore" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.coreaudio" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.CoreDuetAdmissionControl" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.eventmonitor" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.family.asl" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.icloud.fmfd" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 --- last message repeated 2 times ---
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.install" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.iokit.power" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.mail" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.MessageTracer" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.mkb" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.mkb.internal" sharing output destination "/private/var/log/keybagd.log" with ASL Module "com.apple.mkb".
+	Output parameters from ASL Module "com.apple.mkb" override any specified in ASL Module "com.apple.mkb.internal".
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.mobileme.fmf1" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.mobileme.fmf1.internal" sharing output destination "/var/log/FindMyFriendsApp/FindMyFriendsApp.asl" with ASL Module "com.apple.mobileme.fmf1".
+	Output parameters from ASL Module "com.apple.mobileme.fmf1" override any specified in ASL Module "com.apple.mobileme.fmf1.internal".
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.mobileme.fmf1.internal" sharing output destination "/var/log/FindMyFriendsApp" with ASL Module "com.apple.mobileme.fmf1".
+	Output parameters from ASL Module "com.apple.mobileme.fmf1" override any specified in ASL Module "com.apple.mobileme.fmf1.internal".
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.mobileme.fmf1.internal" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.networking.symptoms" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 --- last message repeated 2 times ---
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.performance" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:30:06 MacBook-Pro-de-David syslogd[54]: Configuration Notice:
+	ASL Module "com.apple.secinitd" claims selected messages.
+	Those messages may not appear in standard system log files or in the ASL database.
+Jun 15 00:34:10 MacBook-Pro-de-David GoogleSoftwareUpdateAgent[47488]: 2017-06-15 00:34:10.327 GoogleSoftwareUpdateAgent[47488/0x7fffbd0b33c0] [lvl=2] -[KSAgentApp setupLoggerOutput] Agent settings: <KSAgentSettings:0x10022d860 bundleID=com.google.Keystone.Agent lastCheck=2017-06-14 21:13:32 +0000 checkInterval=18000.000000 uiDisplayInterval=604800.000000 sleepInterval=1800.000000 jitterInterval=900 maxRunInterval=0.000000 isConsoleUser=1 ticketStorePath=/Users/david/Library/Google/GoogleSoftwareUpdate/TicketStore/Keystone.ticketstore runMode=3 daemonUpdateEngineBrokerServiceName=com.google.Keystone.Daemon.UpdateEngine daemonAdministrationServiceName=com.google.Keystone.Daemon.Administration logEverything=0 logBufferSize=2048 alwaysPromptForUpdates=0 productIDToUpdate=(null) lastUIDisplayed=2017-04-16 17:50:35 +0000 alwaysShowStatusItem=0 updateCheckTag=(null) printResults=NO userInitiated=NO>

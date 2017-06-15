@@ -70,6 +70,8 @@ function sendEntry(cmd,entry,options,callback) {
 }
 
 function resolveEntry(message) {
+	if(message.channel!=CHANNEL) return;
+	
 	var id = message.id;
 	var entry = message.entry;
 	var error = message.error;

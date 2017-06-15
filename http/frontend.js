@@ -1,11 +1,15 @@
 const
-	express = require('express'),
-	memored = require('memored');
+	express = require('express');
+	try {
+		shm = require('../lib/sharedmem.js');
+	}catch(err) {
+		console.log(err);
+	}
 
 const app = express();
 
 app.get('/fstats', function (req, res) {
-	memored.read('fstats', (err, value) => {
+	shm.get('fstats', (err, value) => {
 		console.log(err,value);
 		res.send(value);
 	});

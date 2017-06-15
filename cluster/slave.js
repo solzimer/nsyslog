@@ -30,7 +30,7 @@ function parseEntry(message) {
 	var id = message.id;
 	var res = parser(entry.originalMessage);
 	entry = extend(entry,res);
-	process.send({id:id,entry:entry});
+	process.send({channel:CHANNEL,id:id,entry:entry});
 }
 
 function processEntry(message) {
@@ -43,10 +43,10 @@ function processEntry(message) {
 			flows.find(f=>f.id==idflow).
 			processors.find(p=>p.id==idproc).
 			process(entry,(err,res)=>{
-				process.send({id:id,entry:res,error:err});
+				process.send({channel:CHANNEL,id:id,entry:res,error:err});
 			});
 	}catch(err) {
-		process.send({id:id,entry:entry,error:err});
+		process.send({channel:CHANNEL,id:id,entry:entry,error:err});
 	}
 }
 

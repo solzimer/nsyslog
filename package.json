@@ -24,6 +24,7 @@
     "express": "^4.15.3",
     "extend": "^3.0.1",
     "fileq": "*",
+    "fs-extra": "^5.0.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.15.1",
     "mongodb": "^2.2.27",

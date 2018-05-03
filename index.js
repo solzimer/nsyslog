@@ -13,12 +13,9 @@ const
 	Transporters = Config.Transporters,
 	Processors = Config.Processors;
 
-function initialize() {
-	Config.read("./config/cfg001.json",(err,cfg)=>{
-		if(err) {
-			console.error(err);
-			return;
-		}
+async function initialize() {
+	try {
+		let cfg = await Config.read("./config/cfg001.json");
 
 		if(cluster.isMaster) {
 			console.log(cfg);
@@ -29,7 +26,10 @@ function initialize() {
 			var slave = new Slave(cfg);
 			slave.start();
 		}
-	});
+	}catch(err) {
+		console.error(err);
+		return;
+	}
 }
 
 function Master(cfg) {
@@ -45,6 +45,7 @@ function Master(cfg) {
 		{path:"/min/60", time:1000*60*60, options:{step:10000,ops:["count"]}},
 	]
 
+	debugger;
 	var qconf = extend(true,{max:1000,bsize:500},cfg.config.queue);
 	var strconf = extend(true,{},cfg.config.stream);
 	var queue = FileQueue.from('./db/servers',qconf);

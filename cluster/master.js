@@ -4,7 +4,7 @@ const
 	os = require("os");
 
 const CHANNEL = "nsyslog";
-const SIZE = os.cpus().length;
+const SIZE = 1;//os.cpus().length;
 const SEM = SIZE * 1000;
 const CMD = {
 	parse : "parse",
@@ -71,7 +71,7 @@ function sendEntry(cmd,entry,options,callback) {
 
 function resolveEntry(message) {
 	if(message.channel!=CHANNEL) return;
-	
+
 	var id = message.id;
 	var entry = message.entry;
 	var error = message.error;

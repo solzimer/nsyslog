@@ -4,7 +4,7 @@ const
 	os = require("os");
 
 const CHANNEL = "nsyslog";
-const SIZE = 1;//os.cpus().length;
+const SIZE = 0;//os.cpus().length;
 const SEM = SIZE * 1000;
 const CMD = {
 	parse : "parse",
@@ -28,6 +28,7 @@ function init() {
 
 	console.log('Master cluster setting up ' + SIZE + ' workers...');
 
+	if(SIZE<=0) resolve();
 	for(let i = 0; i < SIZE; i++) {
 			workers.push(cluster.fork());
 	}

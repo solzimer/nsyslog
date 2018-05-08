@@ -45,10 +45,9 @@ function Master(cfg) {
 		{path:"/min/60", time:1000*60*60, options:{step:10000,ops:["count"]}},
 	]
 
-	debugger;
 	var qconf = extend(true,{max:1000,bsize:500},cfg.config.queue);
 	var strconf = extend(true,{},cfg.config.stream);
-	var queue = FileQueue.from('./db/servers',qconf);
+	var queue = FileQueue.from('servers',{path:"db"});
 	var queueStream = new QueueStream(queue);	// Stream for the fileq file buffer
 	var seq = 0;
 
@@ -73,7 +72,8 @@ function Master(cfg) {
 			var to = from = Processors.Init();
 			f.processors.map(proc=>{
 				var options = {idproc:proc.id,idflow:f.id,sid:proc.sticky?proc.id:null};
-				return master.SlaveStream(CMD.process,options);
+				//return master.SlaveStream(CMD.process,options);
+				return master.MasterStream(CMD.process, proc, f);
 			}).forEach(p=>{
 				to = to.pipe(p);
 			});
@@ -136,7 +136,7 @@ function Master(cfg) {
 
 	function startFlowStream() {
 		cfg.flows.forEach(f=>{
-			var fileq = FileQueue.from(`./db/flows/${f.id}`,{truncate:true});
+			var fileq = FileQueue.from(f.id,{path:'./db/flows/${f.id}',truncate:true});
 			var wstr = new QueueStream(fileq,{highWaterMark:strconf.buffer});
 			f.stream = wstr;
 			f.stream.pipe(f.pstream.start);

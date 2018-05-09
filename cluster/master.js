@@ -4,7 +4,7 @@ const
 	os = require("os");
 
 const CHANNEL = "nsyslog";
-const SIZE = 0;//os.cpus().length;
+const SIZE = 1;//os.cpus().length;
 const SEM = SIZE * 1000;
 const CMD = {
 	parse : "parse",

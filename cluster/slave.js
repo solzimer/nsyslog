@@ -13,8 +13,7 @@ var cfg = null;
 function start() {
 	process.on('message',(message) => {
 		if(message.channel==CHANNEL) {
-			if(message.command==CMD.parse) parseEntry(message);
-			else if(message.command==CMD.process) processEntry(message);
+			if(message.command==CMD.process) processEntry(message);
 			else error(message);
 		}
 	});
@@ -23,14 +22,6 @@ function start() {
 
 function error(message) {
 	console.error(message);
-}
-
-function parseEntry(message) {
-	var entry = message.entry;
-	var id = message.id;
-	var res = parser(entry.originalMessage);
-	entry = extend(entry,res);
-	process.send({channel:CHANNEL,id:id,entry:entry});
 }
 
 function processEntry(message) {

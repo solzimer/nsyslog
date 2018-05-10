@@ -34,7 +34,7 @@
 		},
 		"debug" : {
 			"type" : "console",
-			"config" : {"format" : "${originalMessage}", "level" : "debug"}
+			"config" : {"format" : "[${host}] => ${originalMessage}", "level" : "debug"}
 		},
 		"warn" : {
 			"type" : "console",

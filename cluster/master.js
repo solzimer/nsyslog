@@ -1,10 +1,11 @@
 const
 	cluster = require('cluster'),
+	parser = require("nsyslog-parser"),
 	Transform = require('stream').Transform,
 	os = require("os");
 
 const CHANNEL = "nsyslog";
-const SIZE = 1;//os.cpus().length;
+const SIZE = 0;//os.cpus().length;
 const SEM = SIZE * 1000;
 const CMD = {
 	parse : "parse",
@@ -94,7 +95,8 @@ module.exports = {
 	CMD : CMD,
 	ready : ready,
 	configure(config) {cfg = config},
-	parse(entry,options,callback){return sendEntry(CMD.parse,entry,options,callback)},
+	/*parse(entry,options,callback){return sendEntry(CMD.parse,entry,options,callback)},*/
+	parse(entry,options,callback){callback(parser(entry.originalMessage))},
 	process(entry,options,callback){return sendEntry(CMD.process,entry,options,callback)},
 	transport(entry,options,callback){return sendEntry(CMD.transform,entry,options,callback)},
 	SlaveStream(cmd,options) {

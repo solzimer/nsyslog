@@ -27,8 +27,8 @@
 		{"from":"localhost", "disabled":true, "when":["httpOk"], "transporters":"log", "mode":"serial"},
 		{"from":"localhost", "disabled":true, "when":["httpRed"], "transporters":"warn", "mode":"parallel"},
 		{"from":"localhost", "disabled":true, "when":["httpErr"], "transporters":"error", "mode":"serial"},
-		{"from":"interface", "disabled":true, "parse":true, "processors":["stats"], "transporters":["debug"], "mode":"serial"},
-		{"from":"*", "disabled":false, "parse":true, "transporters":["debug"], "mode":"serial"},
-		{"from":"*", "disabled":false, "parse":false, "transporters":["warn"], "mode":"serial"}
+		{"from":"interface", "disabled":true, "processors":["stats"], "transporters":["debug"], "mode":"serial"},
+		{"from":"*", "disabled":false, "processors":["syslog"], "transporters":["debug"], "mode":"serial"},
+		{"from":"*", "disabled":false, "transporters":["warn"], "mode":"serial"}
 	]
 }

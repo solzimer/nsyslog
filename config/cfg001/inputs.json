@@ -1,5 +1,5 @@
 {
-	"servers" : {
+	"inputs" : {
 		"udp" : {
 			"type" : "udp",
 			"config" : {

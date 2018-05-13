@@ -1,9 +1,8 @@
 const
-	cluster = require('cluster'),
 	program = require("commander"),
 	extend = require("extend"),
 	FileQueue = require("fileq"),
-	Config = require("./lib/config/config.js"),
+	Config = require("./lib/config"),
 	AsyncStream = require("promise-stream-queue"),
 	QueueStream = require("./lib/stream/queuestream.js"),
 	AwaitStream = require("./lib/stream/awaitstream.js"),
@@ -11,31 +10,25 @@ const
 	Transform = require("stream").Transform,
 	Writable = require('stream').Writable;
 	Transporters = Config.Transporters,
-	Processors = Config.Processors;
+	Processors = Config.Processors,
+	Factory = require("./lib/factory"),
+	StatsDB = require("./lib/stats");
 
 async function initialize() {
 	try {
 		let cfg = await Config.read("./config/cfg001.json");
 
-		if(cluster.isMaster) {
-			console.log(cfg);
-			var master = new Master(cfg);
-			master.start();
-		}
-		else {
-			var slave = new Slave(cfg);
-			slave.start();
-		}
+		console.log(cfg);
+		var master = new NSyslog(cfg);
+		master.start();
+
 	}catch(err) {
 		console.error(err);
 		return;
 	}
 }
 
-function Master(cfg) {
-	const master = require("./cluster/master.js");
-	const StatsDB = require("./lib/stats.js");
-	const CMD = master.CMD;
+function NSyslog(cfg) {
 	const tstats = [
 		{path:"/sec/30", time:1000*30, options:{step:100,ops:["count"]}},
 		{path:"/sec/60", time:1000*60, options:{step:1000,ops:["count"]}},
@@ -51,16 +44,13 @@ function Master(cfg) {
 	var queueStream = new QueueStream(queue);	// Stream for the fileq file buffer
 	var seq = 0;
 
-	this.start = function() {
+	this.start = async function() {
 		try {
-			master.configure(cfg);
-			master.ready.then(()=>{
-				startProcessorStream();
-				startTransportStream();
-				startFlowStream();
-				startParserStream();
-				startServers();
-			});
+			startProcessorStream();
+			startTransportStream();
+			startFlowStream();
+			startParserStream();
+			startInputs();
 		}catch(err) {
 			console.error(err);
 			process.exit(1);
@@ -72,8 +62,7 @@ function Master(cfg) {
 			var to = from = Processors.Init();
 			f.processors.map(proc=>{
 				var options = {idproc:proc.id,idflow:f.id,sid:proc.sticky?proc.id:null};
-				//return master.SlaveStream(CMD.process,options);
-				return master.MasterStream(CMD.process, proc, f);
+				return Factory.transform(proc,f);
 			}).forEach(p=>{
 				to = to.pipe(p);
 			});
@@ -105,7 +94,7 @@ function Master(cfg) {
 
 		function walk(trs,flow) {
 			if(trs.transport) {
-				return handle(master.MasterStream(CMD.transport,trs,flow));
+				return handle(Factory.writer(trs,flow));
 			}
 			else if(trs.mode=="serial") {
 				var from = stream = Transporters.Null();
@@ -167,23 +156,12 @@ function Master(cfg) {
 			pipe(endStream);					// Send parsed lines to process flow
 	}
 
-	function startServers() {
-		for(var i in cfg.servers) {
-			var server = cfg.servers[i];
-			server.start(entry=>queueStream.write(entry));
+	function startInputs() {
+		for(var i in cfg.inputs) {
+			var input = cfg.inputs[i];
+			input.start((err,entry)=>queueStream.write(entry));
 		}
 	}
 }
-
-function Slave(cfg) {
-	const slave = require('./cluster/slave.js');
-	const frontend = require('./http/frontend.js');
-
-	this.start = function() {
-		slave.configure(cfg);
-		slave.start();
-	}
-}
-
 
 initialize();

@@ -1,6 +1,6 @@
 {
 	"include" : [
-		"cfg001/servers.json",
+		"cfg001/inputs.json",
 		"cfg001/processors.json",
 		"cfg001/transporters.json"
 	],

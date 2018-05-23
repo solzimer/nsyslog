@@ -38,7 +38,6 @@ function NSyslog(cfg) {
 		{path:"/min/60", time:1000*60*60, options:{step:10000,ops:["count"]}},
 	]
 
-	var qconf = extend(true,{buffer:100},cfg.config.queue);
 	var strconf = extend(true,{buffer:100},cfg.config.stream);
 	var queue = FileQueue.from('servers',{path:"db"});
 	var queueStream = new QueueStream(queue);	// Stream for the fileq file buffer
@@ -49,7 +48,6 @@ function NSyslog(cfg) {
 			startProcessorStream();
 			startTransportStream();
 			startFlowStream();
-			startParserStream();
 			startInputs();
 		}catch(err) {
 			console.error(err);
@@ -58,16 +56,13 @@ function NSyslog(cfg) {
 	}
 
 	function startProcessorStream() {
-		cfg.flows.forEach(f=>{
+		cfg.flows.forEach(flow=>{
 			var to = from = Processors.Init();
-			f.processors.map(proc=>{
-				var options = {idproc:proc.id,idflow:f.id,sid:proc.sticky?proc.id:null};
-				return Factory.transform(proc,f);
-			}).forEach(p=>{
-				to = to.pipe(p);
-			});
+			flow.processors.
+				map(proc=>Factory.transform(proc,flow)).
+				forEach(p=>to = to.pipe(p));
 			to.pipe(Processors.End());
-			f.pstream = {start:from,end:to};
+			flow.pstream = {start:from,end:to};
 		});
 	}
 
@@ -123,22 +118,22 @@ function NSyslog(cfg) {
 	}
 
 	function startFlowStream() {
-		cfg.flows.forEach(f=>{
+		// Active flows
+		var flows = cfg.flows.filter(f=>!f.disabled);
+
+		// For each flow, create a queue stream and pipe to processors stream,
+		// then, pipe processors stream to transporters stream
+		flows.forEach(f=>{
 			var fileq = FileQueue.from(f.id,{path:'./db/flows/${f.id}',truncate:true});
 			var wstr = new QueueStream(fileq,{highWaterMark:strconf.buffer});
 			f.stream = wstr;
 			f.stream.pipe(f.pstream.start);
 			f.pstream.end.pipe(f.tstream);
 		});
-	}
 
-	function startParserStream() {
-		// Active flows
-		var flows = cfg.flows.filter(f=>!f.disabled);
-
-		// End of the stream. Collect the parsed entries and push them to the
-		// flow stream
-		var endStream = new Transform({
+		// Collect input entries, filter "from" and "when" attributes, and
+		// push them to the flow stream
+		var flowStream = new Transform({
 			objectMode:true, highWaterMark:strconf.buffer,
 			transform(entry, encoding, callback) {
 				entry.seq = seq++;
@@ -151,9 +146,8 @@ function NSyslog(cfg) {
 			}
 		});
 
-		// Instrument the parser flow
-		queueStream.								// Reads from fileQ
-			pipe(endStream);					// Send parsed lines to process flow
+		// Instrument the stream
+		queueStream.pipe(flowStream);
 	}
 
 	function startInputs() {

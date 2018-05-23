@@ -6,9 +6,8 @@
 	],
 
 	"config" : {
-		"parser" : {"max" : 1000},
-		"stream" : {"buffer": 1000},
-		"queue" : {"cache" : 100, "bsize" : 500, "max" : 1000}
+		"input" : {"buffer" : 1000},
+		"process" : {"buffer": 1000}
 	},
 
 	"filters" : {

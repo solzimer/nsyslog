@@ -2,7 +2,7 @@
 	"register" : [
 		{"type":"processor","id":"correlator","require":"cfg001/correlate.js"}
 	],
-	
+
 	"processors" : {
 		"syslog" : {
 			"type" : "syslogparser",
@@ -10,7 +10,6 @@
 		},
 		"host1" : {
 			"type" : "properties",
-			"sticky" : true,
 			"config" : {"set": {"extra": {"test1":"${type}"}}}
 		},
 		"host2" : {

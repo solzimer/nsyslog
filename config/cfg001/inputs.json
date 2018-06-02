@@ -19,7 +19,7 @@
 		"glob" : {
 			"type" : "glob",
 			"config" : {
-				"path" : "*"
+				"path" : "/opt/nsyslog/index.js"
  			}
 		}
 	}

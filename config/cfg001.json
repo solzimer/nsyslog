@@ -11,7 +11,6 @@
 	},
 
 	"filters" : {
-		"glob" : "${id}=='glob'",
 		"fromUDP" : "${server.protocol}=='udp4'",
 		"localhost" : "${client.address}=='127.0.0.1'",
 		"interface" : "${client.address}!='127.0.0.1'",
@@ -28,7 +27,7 @@
 		{"from":"localhost", "disabled":true, "when":["httpRed"], "transporters":"warn", "mode":"parallel"},
 		{"from":"localhost", "disabled":true, "when":["httpErr"], "transporters":"error", "mode":"serial"},
 		{"from":"interface", "disabled":true, "processors":["stats"], "transporters":["debug"], "mode":"serial"},
-		{"from":"glob", "disabled":false, "transporters":["debug"], "mode":"serial"},
+		{"from":"${id}=='glob'", "disabled":false, "transporters":["debug"], "mode":"serial"},
 		{"from":"*", "disabled":true, "processors":["syslog"], "transporters":["debug"], "mode":"serial"},
 		{"from":"*", "disabled":false, "transporters":["warn"], "mode":"serial"}
 	]

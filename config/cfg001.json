@@ -23,9 +23,14 @@
 	},
 
 	"flows" : [
-		{"from":"localhost", "disabled":true, "when":["httpOk"], "transporters":"log", "mode":"serial"},
-		{"from":"localhost", "disabled":true, "when":["httpRed"], "transporters":"warn", "mode":"parallel"},
-		{"from":"localhost", "disabled":true, "when":["httpErr"], "transporters":"error", "mode":"serial"},
+		{
+			"from":"localhost", "disabled":true, "when":["httpOk"], "transporters":"log", "mode":"parallel",
+			"flows" : [
+				{"when":["httpOk"], "transporters":"log", "mode":"parallel"},
+				{"when":["httpRed"], "transporters":"warn", "mode":"parallel"},
+				{"when":["httpErr"], "transporters":"error", "mode":"serial"}
+			]
+		},
 		{"from":"interface", "disabled":true, "processors":["stats"], "transporters":["debug"], "mode":"serial"},
 		{"from":"${id}=='glob'", "disabled":false, "transporters":["debug"], "mode":"serial"},
 		{"from":"*", "disabled":true, "processors":["syslog"], "transporters":["debug"], "mode":"serial"},

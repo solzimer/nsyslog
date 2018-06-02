@@ -1,5 +1,6 @@
 const
 	program = require("commander"),
+	logger = require('./lib/logger'),
 	Config = require("./lib/config"),
 	NSyslog = require("./lib/nsyslog"),
 	StatsDB = require("./lib/stats");
@@ -8,12 +9,12 @@ async function initialize() {
 	try {
 		let cfg = await Config.read("./config/cfg001.json");
 
-		console.log(cfg);
+		logger.info(`Config loaded!`);
 		var master = new NSyslog(cfg);
 		master.start();
 
 	}catch(err) {
-		console.error(err);
+		logger.error(err);
 		return;
 	}
 }
@@ -26,7 +27,7 @@ function strok(msg,instance,flow){
 }
 
 function strerr(msg,instance,flow){
-	console.error("ERR");
+	logger.error("ERR");
 }
 
 function handle(str){

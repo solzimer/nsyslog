@@ -5,9 +5,13 @@ const
 	NSyslog = require("./lib/nsyslog"),
 	StatsDB = require("./lib/stats");
 
+program.version('0.0.1')
+	.option('-f, --file [file]', 'Config file')
+	.parse(process.argv);
+
 async function initialize() {
 	try {
-		let cfg = await Config.read("./config/cfg001.json");
+		let cfg = await Config.read(program.file || "./config/cfg001.json");
 
 		logger.info(`Config loaded!`);
 		var master = new NSyslog(cfg);

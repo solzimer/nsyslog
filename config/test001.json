@@ -1,0 +1,39 @@
+{
+	"config" : {
+		"input" : {"buffer" : 1000},
+		"process" : {"buffer": 1000}
+	},
+
+	"inputs" : {
+		"glob" : {
+			"type" : "glob",
+			"config" : {
+				"path" : "/var/log/lorem.log"
+ 			}
+		}
+	},
+
+	"processors" : {
+	},
+
+	"transporters" : {
+		"file1" : {
+			"type" : "file",
+			"config" : {
+				"format" : "${originalMessage}",
+				"path" : "/var/log/nsyslog/test001_out.log"
+			}
+		},
+		"mongo" : {
+			"type" : "mongo"
+		},
+		"log" : {
+			"type" : "console",
+			"config" : {"format" : "${originalMessage}", "level" : "log"}
+		}
+	},
+
+	"flows" : [
+		{"from":"${id}=='glob'", "transporters":"file1"}
+	]
+}

@@ -8,12 +8,16 @@
 		"glob" : {
 			"type" : "glob",
 			"config" : {
-				"path" : "/var/log/lorem.log"
- 			}
+				"path" : "/var/log/*.log"
+			}
 		}
 	},
 
 	"processors" : {
+		"timestamp" : {
+			"type" : "timestamp",
+			"config" : {}
+		}
 	},
 
 	"transporters" : {
@@ -25,7 +29,11 @@
 			}
 		},
 		"mongo" : {
-			"type" : "mongo"
+			"type" : "mongo",
+			"config" : {
+				"url" : "mongodb://localhost:27017/test",
+				"collection" : "syslog"
+			}
 		},
 		"log" : {
 			"type" : "console",
@@ -34,6 +42,6 @@
 	},
 
 	"flows" : [
-		{"from":"${id}=='glob'", "transporters":"file1"}
+		{"from":"${input}=='glob'", "processors":["timestamp"], "transporters":"mongo"}
 	]
 }

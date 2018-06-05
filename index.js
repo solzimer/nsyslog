@@ -16,7 +16,11 @@ async function initialize() {
 		logger.info(`Config loaded!`);
 		var master = new NSyslog(cfg);
 		master.start();
-
+		/*
+		master.on('processor',(flow,processor,entry)=>{
+			console.log(`${flow.id} => ${processor.instance.id} => ${entry.seq}`);
+		});
+		*/
 	}catch(err) {
 		logger.error(err);
 		return;

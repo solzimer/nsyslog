@@ -9,6 +9,12 @@ program.version('0.0.1')
 	.option('-f, --file [file]', 'Config file')
 	.parse(process.argv);
 
+const stats = {
+	input : {},
+	processor : {},
+	transporter : {}
+};
+
 async function initialize() {
 	try {
 		let cfg = await Config.read(program.file || "./config/cfg001.json");
@@ -19,14 +25,23 @@ async function initialize() {
 
 		nsyslog.on('error',()=>{});
 		nsyslog.on('all',(event,stage,flow,module,entry)=>{
+			let id = module.instance.id;
+			stats[stage][id] = stats[stage][id] || {id:id, success:0, fail:0};
+
 			if(event!='error') {
-				logger.debug(`${event} : ${stage} : ${flow.id} => ${module.instance.id} => ${entry.seq}`);
+				//logger.debug(`${event} : ${stage} : ${flow.id} => ${module.instance.id} => ${entry.seq}`);
+				stats[stage][id].success++;
 			}
 			else {
-				logger.error(`${event} : ${stage} : ${flow.id} => ${module.instance.id}`);
-				logger.error(entry);
+				//logger.error(`${event} : ${stage} : ${flow.id} => ${module.instance.id}`);
+				//logger.error(entry);
+				stats[stage][id].fail++;
 			}
 		});
+
+		setInterval(()=>{
+			logger.info(stats);
+		},1000);
 
 	}catch(err) {
 		logger.error(err);

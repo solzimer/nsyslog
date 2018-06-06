@@ -21,54 +21,30 @@ async function initialize() {
 
 		logger.info(`Config loaded!`);
 		var nsyslog = new NSyslog(cfg);
-		nsyslog.start();
 
-		nsyslog.on('error',()=>{});
-		nsyslog.on('all',(event,stage,flow,module,entry)=>{
+		nsyslog.on('data',(stage,flow,module,entry)=>{
 			let id = module.instance.id;
 			stats[stage][id] = stats[stage][id] || {id:id, success:0, fail:0};
+			stats[stage][id].success++;
+		});
 
-			if(event!='error') {
-				//logger.debug(`${event} : ${stage} : ${flow.id} => ${module.instance.id} => ${entry.seq}`);
-				stats[stage][id].success++;
-			}
-			else {
-				//logger.error(`${event} : ${stage} : ${flow.id} => ${module.instance.id}`);
-				//logger.error(entry);
-				stats[stage][id].fail++;
-			}
+		nsyslog.on('error',(stage,flow,module,entry)=>{
+			let id = module.instance.id;
+			stats[stage][id] = stats[stage][id] || {id:id, success:0, fail:0};
+			stats[stage][id].error++;
+			logger.error(entry);
 		});
 
 		setInterval(()=>{
-			logger.info(stats);
+			logger.info(new Date(),stats);
 		},1000);
+
+		await nsyslog.start();
 
 	}catch(err) {
 		logger.error(err);
 		return;
 	}
-}
-
-function strok(msg,instance,flow){
-	tstats.forEach(s=>{
-		var path = `${s.path}/${flow.id}/${instance.id}`;
-		StatsDB.push(path,1);
-	});
-}
-
-function strerr(msg,instance,flow){
-	logger.error("ERR");
-}
-
-function handle(str){
-	if(str.flow && str.instance) {
-		tstats.forEach(s=>{
-			var path = `${s.path}/${str.flow.id}/${str.instance.id}`;
-			StatsDB.createTimed(path,s.time,s.options);
-		});
-		return str.on("strerr",strerr).on("strok",strok);
-	}
-	else return str;
 }
 
 initialize();

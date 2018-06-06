@@ -31,7 +31,6 @@
     "mongodb": "^2.2.27",
     "nsyslog-parser": "^0.8.1",
     "promise-stream-queue": "*",
-    "q": "^1.5.0",
     "semaphore": "^1.0.5",
     "swstats": "^0.6.1",
     "tiny-worker": "^2.1.1",

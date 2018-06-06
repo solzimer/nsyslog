@@ -14,13 +14,20 @@ async function initialize() {
 		let cfg = await Config.read(program.file || "./config/cfg001.json");
 
 		logger.info(`Config loaded!`);
-		var master = new NSyslog(cfg);
-		master.start();
-		/*
-		master.on('processor',(flow,processor,entry)=>{
-			console.log(`${flow.id} => ${processor.instance.id} => ${entry.seq}`);
+		var nsyslog = new NSyslog(cfg);
+		nsyslog.start();
+
+		nsyslog.on('error',()=>{});
+		nsyslog.on('all',(event,stage,flow,module,entry)=>{
+			if(event!='error') {
+				logger.debug(`${event} : ${stage} : ${flow.id} => ${module.instance.id} => ${entry.seq}`);
+			}
+			else {
+				logger.error(`${event} : ${stage} : ${flow.id} => ${module.instance.id}`);
+				logger.error(entry);
+			}
 		});
-		*/
+
 	}catch(err) {
 		logger.error(err);
 		return;

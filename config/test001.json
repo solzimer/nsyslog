@@ -33,7 +33,13 @@
 			"type" : "mongo",
 			"config" : {
 				"url" : "mongodb://localhost:27017/test",
-				"collection" : "syslog"
+				"collection" : "syslog",
+				"format" : {
+					"message" : "${originalMessage}",
+					"extra" : {
+						"timestamp" : "${timestamp}"
+					}
+				}
 			}
 		},
 		"log" : {

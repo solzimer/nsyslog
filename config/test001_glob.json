@@ -1,8 +1,10 @@
 {
 	"config" : {
 		"datadir" : "/tmp/nsyslog",
-		"input" : {"buffer" : 1000},
-		"process" : {"buffer": 1000}
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
 	},
 
 	"inputs" : {

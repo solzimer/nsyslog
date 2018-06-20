@@ -24,11 +24,10 @@
 	},
 
 	"transporters" : {
-		"file1" : {
-			"type" : "file",
+		"stat" : {
+			"type" : "stat",
 			"config" : {
-				"format" : "${originalMessage}",
-				"path" : "/var/log/nsyslog/test001_out.log"
+				"threshold" : 1000
 			}
 		},
 		"mongo" : {
@@ -54,6 +53,6 @@
 	},
 
 	"flows" : [
-		{"from":"${input}=='glob'", "processors":["timestamp"], "transporters":"mongo"}
+		{"from":"${input}=='glob'", "processors":["timestamp"], "transporters":"stat"}
 	]
 }

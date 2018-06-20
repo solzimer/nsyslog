@@ -45,8 +45,13 @@ async function initialize() {
 			logger.info("Pausing nsyslog...");
 			await nsyslog.pause();
 			logger.info("nsyslog paused...");
+			setTimeout(async()=>{
+				logger.info("Resuming nsyslog...");
+				await nsyslog.resume();
+				logger.info("nsyslog resumed...");
+			},5000);
 		},5000);
-		
+
 	}catch(err) {
 		logger.error(err);
 		return;

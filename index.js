@@ -36,7 +36,7 @@ async function initialize() {
 		});
 
 		setInterval(()=>{
-			logger.info(new Date(),stats);
+			logger.info(new Date(),JSON.stringify(stats));
 		},1000);
 
 		await nsyslog.start();
@@ -50,7 +50,7 @@ async function initialize() {
 				await nsyslog.resume();
 				logger.info("nsyslog resumed...");
 			},5000);
-		},5000);
+		},10000);
 
 	}catch(err) {
 		logger.error(err);

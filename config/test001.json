@@ -53,6 +53,7 @@
 	},
 
 	"flows" : [
-		{"from":"${input}=='glob'", "processors":["timestamp"], "transporters":"stat"}
+		{"from":"${input}=='glob'", "processors":["timestamp"], "transporters":"stat"},
+		{"from":"${input}=='glob'", "processors":["timestamp"], "transporters":"log"}
 	]
 }

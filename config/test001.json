@@ -25,7 +25,8 @@
 			"type" : "properties",
 			"config" : {
 				"set" : {
-					"match" : "${originalMessage.match(/Unknown/)!=null}"
+					"match" : "${originalMessage.match(/Unknown/)!=null}",
+					"proc" : true
 				}
 			}
 		}
@@ -61,7 +62,7 @@
 	},
 
 	"flows" : [
-		{"from":"${input}=='glob'", "processors":["timestamp","props"], "transporters":["log","#"]},
-		{"from":"${match}==true", "processors":["timestamp"], "transporters":"log"}
+		{"from":"${input}=='glob' && !${proc}", "processors":["timestamp","props"], "transporters":["stat","#"]},
+		{"from":"${match}=='true'", "processors":["timestamp"], "transporters":"log"}
 	]
 }

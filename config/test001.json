@@ -11,7 +11,7 @@
 		"glob" : {
 			"type" : "glob",
 			"config" : {
-				"path" : "/var/log/*.log"
+				"path" : "/var/log/system.log"
 			}
 		}
 	},
@@ -20,6 +20,14 @@
 		"timestamp" : {
 			"type" : "timestamp",
 			"config" : {}
+		},
+		"props" : {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"match" : "${originalMessage.match(/Unknown/)!=null}"
+				}
+			}
 		}
 	},
 
@@ -48,12 +56,12 @@
 		},
 		"log" : {
 			"type" : "console",
-			"config" : {"format" : "${originalMessage}", "level" : "log"}
+			"config" : {"format" : "${match} => ${originalMessage}", "level" : "log"}
 		}
 	},
 
 	"flows" : [
-		{"from":"${input}=='glob'", "processors":["timestamp"], "transporters":"stat"},
-		{"from":"${input}=='glob'", "processors":["timestamp"], "transporters":"log"}
+		{"from":"${input}=='glob'", "processors":["timestamp","props"], "transporters":["log","#"]},
+		{"from":"${match}==true", "processors":["timestamp"], "transporters":"log"}
 	]
 }

@@ -8,10 +8,12 @@
 	},
 
 	"inputs" : {
-		"glob" : {
-			"type" : "glob",
+		"file" : {
+			"type" : "file",
 			"config" : {
-				"path" : "/var/log/system.log"
+				"path" : "/var/log/rfdemo/rfdemo.log",
+				"readmode" : "offset",
+				"offset" : "start"
 			}
 		}
 	},
@@ -58,11 +60,16 @@
 		"log" : {
 			"type" : "console",
 			"config" : {"format" : "${match} => ${originalMessage}", "level" : "log"}
+		},
+		"logfile" : {
+			"type" : "console",
+			"config" : {"format" : "${path} => ${originalMessage}", "level" : "log"}
 		}
 	},
 
 	"flows" : [
 		{"from":"${input}=='glob' && !${proc}", "processors":["timestamp","props"], "transporters":["stat","#"]},
-		{"from":"${match}=='true'", "processors":["timestamp"], "transporters":"log"}
+		{"from":"${match}=='true'", "processors":["timestamp"], "transporters":"log"},
+		{"from":"${input}=='file'", "transporters":"logfile"}
 	]
 }

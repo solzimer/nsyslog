@@ -15,6 +15,10 @@ const stats = {
 	transporter : {}
 };
 
+function timer(t) {
+	return new Promise(ok=>setTimeout(ok,t));
+}
+
 async function initialize() {
 	try {
 		let cfg = await Config.read(program.file || "./config/cfg001.json");
@@ -41,17 +45,21 @@ async function initialize() {
 
 		await nsyslog.start();
 
-		setTimeout(async ()=>{
-			logger.info("Pausing nsyslog...");
-			await nsyslog.pause();
-			logger.info("nsyslog paused...");
-			setTimeout(async()=>{
-				logger.info("Resuming nsyslog...");
-				await nsyslog.resume();
-				logger.info("nsyslog resumed...");
-			},5000);
-		},10000);
-
+		/*
+		await timer(10000);
+		logger.info("Pausing nsyslog...");
+		await nsyslog.pause();
+		logger.info("nsyslog paused...");
+		await timer(5000);
+		logger.info("Resuming nsyslog...");
+		await nsyslog.resume();
+		logger.info("nsyslog resumed...");
+		await timer(5000);
+		logger.info("stopping nsyslog...");
+		await nsyslog.stop();
+		logger.info("nsyslog stopped...");
+		*/
+	
 	}catch(err) {
 		logger.error(err);
 		return;

@@ -1,0 +1,5 @@
+2018/06/27-11:54:01.399 db54 Recovering log #80
+2018/06/27-11:54:01.399 db54 Level-0 table #83: started
+2018/06/27-11:54:01.403 db54 Level-0 table #83: 237 bytes OK
+2018/06/27-11:54:01.414 db54 Delete type=0 #80
+2018/06/27-11:54:01.414 db54 Delete type=3 #78

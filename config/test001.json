@@ -11,7 +11,7 @@
 		"file" : {
 			"type" : "file",
 			"config" : {
-				"path" : "/var/log/**/*.*",
+				"path" : "/kafka_2.12-0.11.0.2/logs/state-change.log*",
 				"watch" : true,
 				"readmode" : "watermark",
 				"offset" : "start"
@@ -72,6 +72,9 @@
 				"path" : "/var/logout/${path}",
 				"format" : "${originalMessage}"
 			}
+		},
+		"null" : {
+			"type" : "null"
 		}
 	},
 

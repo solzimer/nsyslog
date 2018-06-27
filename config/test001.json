@@ -11,9 +11,9 @@
 		"file" : {
 			"type" : "file",
 			"config" : {
-				"path" : "/var/log/**/*.log",
+				"path" : "/kafka_2.12-0.11.0.2/logs/controller.log.2017-12-04-12",
 				"watch" : true,
-				"readmode" : "offset",
+				"readmode" : "watermark",
 				"offset" : "start"
 			}
 		}

@@ -42,7 +42,7 @@ async function initialize() {
 		setInterval(()=>{
 			logger.info(new Date(),JSON.stringify(stats));
 		},1000);
-	
+
 		await nsyslog.start();
 
 		/*
@@ -59,6 +59,24 @@ async function initialize() {
 		await nsyslog.stop();
 		logger.info("nsyslog stopped...");
 		*/
+
+		process.on('SIGTERM', async()=>{
+			try {
+				await nsyslog.stop();
+			}catch(err){
+				logger.error(err);
+			}
+			setTimeout(()=>process.exit(1),500);
+		});
+
+		process.on('SIGINT', async()=>{
+			try {
+				await nsyslog.stop();
+			}catch(err){
+				logger.error(err);
+			}
+			setTimeout(()=>process.exit(1),500);
+		});
 
 	}catch(err) {
 		logger.error(err);

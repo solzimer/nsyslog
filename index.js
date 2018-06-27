@@ -39,11 +39,9 @@ async function initialize() {
 			logger.error(entry);
 		});
 
-		/*
 		setInterval(()=>{
 			logger.info(new Date(),JSON.stringify(stats));
 		},1000);
-		*/
 	
 		await nsyslog.start();
 

@@ -11,7 +11,7 @@
 		"file" : {
 			"type" : "file",
 			"config" : {
-				"path" : "/var/log/rfdemo/**/*.log",
+				"path" : "/var/log/**/*.log",
 				"watch" : true,
 				"readmode" : "offset",
 				"offset" : "start"
@@ -65,12 +65,19 @@
 		"logfile" : {
 			"type" : "console",
 			"config" : {"format" : "${path} => ${originalMessage}", "level" : "log"}
+		},
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/logout/${path}",
+				"format" : "${originalMessage}"
+			}
 		}
 	},
 
 	"flows" : [
 		{"from":"${input}=='glob' && !${proc}", "processors":["timestamp","props"], "transporters":["stat","#"]},
 		{"from":"${match}=='true'", "processors":["timestamp"], "transporters":"log"},
-		{"from":"${input}=='file'", "transporters":"logfile"}
+		{"from":"${input}=='file'", "transporters":"file"}
 	]
 }

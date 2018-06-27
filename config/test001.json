@@ -11,9 +11,9 @@
 		"file" : {
 			"type" : "file",
 			"config" : {
-				"path" : "/kafka_2.12-0.11.0.2/logs/state-change.log*",
+				"path" : "/var/log/*.log",
 				"watch" : true,
-				"readmode" : "watermark",
+				"readmode" : "offset",
 				"offset" : "start"
 			}
 		}
@@ -81,6 +81,6 @@
 	"flows" : [
 		{"from":"${input}=='glob' && !${proc}", "processors":["timestamp","props"], "transporters":["stat","#"]},
 		{"from":"${match}=='true'", "processors":["timestamp"], "transporters":"log"},
-		{"from":"${input}=='file'", "transporters":"file"}
+		{"from":"${input}=='file'", "transporters":"null"}
 	]
 }

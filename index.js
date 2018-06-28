@@ -1,3 +1,8 @@
+if(module.parent) {
+	module.exports = require("./lib/nsyslog");
+	return;
+}
+
 const
 	program = require("commander"),
 	logger = require('./lib/logger'),
@@ -32,11 +37,11 @@ async function initialize() {
 			stats[stage][id].success++;
 		});
 
-		nsyslog.on('error',(stage,flow,module,entry)=>{
+		nsyslog.on('error',(stage,flow,module,error)=>{
 			let id = module.instance.id;
 			stats[stage][id] = stats[stage][id] || {id:id, success:0, fail:0};
 			stats[stage][id].error++;
-			logger.error(entry);
+			logger.error(error);
 		});
 
 		setInterval(()=>{

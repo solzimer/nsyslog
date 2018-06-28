@@ -62,15 +62,22 @@
 			"type" : "console",
 			"config" : {"format" : "${match} => ${originalMessage}", "level" : "log"}
 		},
-		"logfile" : {
-			"type" : "console",
-			"config" : {"format" : "${path} => ${originalMessage}", "level" : "log"}
-		},
 		"file" : {
 			"type" : "file",
 			"config" : {
 				"path" : "/var/logout/${path}",
 				"format" : "${originalMessage}"
+			}
+		},
+		"syslog" : {
+			"type" : "syslog",
+			"config" : {
+				"url" : "udp://192.168.134.90:514",
+				"format" : "${originalMessage}",
+				"application" : "${filename}",
+				"hostname" : "localhost",
+				"level" : "info",
+				"facility" : 5
 			}
 		},
 		"null" : {
@@ -81,6 +88,6 @@
 	"flows" : [
 		{"from":"${input}=='glob' && !${proc}", "processors":["timestamp","props"], "transporters":["stat","#"]},
 		{"from":"${match}=='true'", "processors":["timestamp"], "transporters":"log"},
-		{"from":"${input}=='file'", "transporters":"null"}
+		{"from":"${input}=='file'", "transporters":"syslog"}
 	]
 }

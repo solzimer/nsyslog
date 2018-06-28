@@ -65,8 +65,7 @@
 		"file" : {
 			"type" : "file",
 			"config" : {
-				"path" : "/var/logout/${path}",
-				"format" : "${originalMessage}"
+				"path" : "/var/logout${path}"
 			}
 		},
 		"syslog" : {
@@ -89,6 +88,6 @@
 	"flows" : [
 		{"from":"${input}=='glob' && !${proc}", "processors":["timestamp","props"], "transporters":["stat","#"]},
 		{"from":"${match}=='true'", "processors":["timestamp"], "transporters":"log"},
-		{"from":"${input}=='file'", "transporters":"syslog"}
+		{"from":"${input}=='file'", "transporters":"file"}
 	]
 }

@@ -88,6 +88,6 @@
 	"flows" : [
 		{"from":"${input}=='glob' && !${proc}", "processors":["timestamp","props"], "transporters":["stat","#"]},
 		{"from":"${match}=='true'", "processors":["timestamp"], "transporters":"log"},
-		{"from":"${input}=='file'", "transporters":"file"}
+		{"from":"${input}=='file'", "transporters":"null"}
 	]
 }

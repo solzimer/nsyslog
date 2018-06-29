@@ -6,9 +6,11 @@
 	},
 
 	"inputs" : {
-		"tcp" : {
-			"type" : "tcp",
-			"config" : {}
+		"syslog" : {
+			"type" : "syslog",
+			"config" : {
+				"url" : "udp://0.0.0.0:514"
+			}
 		}
 	},
 
@@ -20,13 +22,6 @@
 	},
 
 	"transporters" : {
-		"file" : {
-			"type" : "file",
-			"config" : {
-				"format" : "${originalMessage}",
-				"path" : "/var/log/nsyslog/test002_out.log"
-			}
-		},
 		"log" : {
 			"type" : "console",
 			"config" : {"format" : "${originalMessage}", "level" : "log"}
@@ -34,6 +29,6 @@
 	},
 
 	"flows" : [
-		{"from":"${input}=='glob'", "processors":["timestamp"], "transporters":["log","file"], "mode":"parallel"}
+		{"from":"${input}=='syslog'", "processors":["timestamp"], "transporters":["log"], "mode":"parallel"}
 	]
 }

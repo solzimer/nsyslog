@@ -1,0 +1,10 @@
+```json
+"inputs" : {
+	"syslog" : {
+		"type" : "syslog",
+		"config" : {
+			"url" : "udp4://0.0.0.0:514"
+		}
+	}
+}
+```

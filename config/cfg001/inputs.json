@@ -1,26 +1,10 @@
 {
 	"inputs" : {
-		"udp" : {
-			"type" : "udp",
+		"syslog" : {
+			"type" : "syslog",
 			"config" : {
-				"protocol" : "udp4",
-				"interface" : "0.0.0.0",
-				"port" : "514"
+				"url" : "udp4://0.0.0.0:514"
 			}
-		},
-		"tcp" : {
-			"type" : "tcp",
-			"config" : {
-				"protocol" : "tcp",
-				"interface" : "0.0.0.0",
-				"port" : "514"
-			}
-		},
-		"glob" : {
-			"type" : "glob",
-			"config" : {
-				"path" : "/opt/nsyslog/index.js"
- 			}
 		}
 	}
 }

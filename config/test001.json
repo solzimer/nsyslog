@@ -11,7 +11,7 @@
 		"syslog" : {
 			"type" : "syslog",
 			"config" : {
-				"url" : "udp://0.0.0.0:514"
+				"url" : "tcp://0.0.0.0:514"
 			}
 		},
 		"file" : {
@@ -77,7 +77,7 @@
 		"syslog" : {
 			"type" : "syslog",
 			"config" : {
-				"url" : "udp://localhost:514",
+				"url" : "tcp://localhost:514",
 				"format" : "${originalMessage}",
 				"application" : "${filename}",
 				"hostname" : "localhost",

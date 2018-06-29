@@ -13,7 +13,7 @@
 			"maxPending" : 1000,
 			"buffer" : true,
 			"config" : {
-				"url" : "tcp://0.0.0.0:514"
+				"url" : "udp://0.0.0.0:514"
 			}
 		},
 		"file" : {
@@ -79,7 +79,7 @@
 		"syslog" : {
 			"type" : "syslog",
 			"config" : {
-				"url" : "tcp://localhost:514",
+				"url" : "udp://localhost:514",
 				"format" : "${originalMessage}",
 				"application" : "${filename}",
 				"hostname" : "localhost",
@@ -96,7 +96,7 @@
 	"flows" : [
 		{"from":"${input}=='glob' && !${proc}", "processors":["timestamp","props"], "transporters":["stat","#"]},
 		{"from":"${match}=='true'", "processors":["timestamp"], "transporters":"log"},
-		{"from":"${input}=='file'", "transporters":"log"},
+		{"from":"${input}=='file'", "transporters":"syslog"},
 		{"from":"${input}=='syslog'", "transporters":"log"}
 	]
 }

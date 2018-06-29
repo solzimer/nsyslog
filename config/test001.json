@@ -10,6 +10,8 @@
 	"inputs" : {
 		"syslog" : {
 			"type" : "syslog",
+			"maxPending" : 1000,
+			"buffer" : true,
 			"config" : {
 				"url" : "tcp://0.0.0.0:514"
 			}
@@ -94,7 +96,7 @@
 	"flows" : [
 		{"from":"${input}=='glob' && !${proc}", "processors":["timestamp","props"], "transporters":["stat","#"]},
 		{"from":"${match}=='true'", "processors":["timestamp"], "transporters":"log"},
-		{"from":"${input}=='file'", "transporters":"syslog"},
+		{"from":"${input}=='file'", "transporters":"log"},
 		{"from":"${input}=='syslog'", "transporters":"log"}
 	]
 }

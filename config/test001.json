@@ -13,7 +13,11 @@
 			"maxPending" : 1000,
 			"buffer" : true,
 			"config" : {
-				"url" : "udp://0.0.0.0:514"
+				"url" : "tls://0.0.0.0:514",
+				"tls" : {
+					"key" : "./config/server.key",
+					"cert" : "./config/server.crt"
+				}
 			}
 		},
 		"file" : {
@@ -79,13 +83,17 @@
 		"syslog" : {
 			"type" : "syslog",
 			"config" : {
-				"url" : "udp://localhost:514",
+				"url" : "tls://localhost:514",
 				"format" : "${originalMessage}",
 				"application" : "${filename}",
 				"hostname" : "localhost",
 				"level" : "info",
 				"facility" : 5,
-				"stream" : true
+				"stream" : false,
+				"tls" : {
+					"key" : "./config/server.key",
+					"cert" : "./config/server.crt"
+				}
 			}
 		},
 		"null" : {

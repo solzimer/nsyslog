@@ -28,7 +28,10 @@
 			"type" : "multilang",
 			"config" : {
 				"path" : "/opt/nsyslog//multilang/split",
-				"module" : true
+				"module" : false,
+				"options" : {
+					"max" : 10
+				}
 			}
 		}
 	},

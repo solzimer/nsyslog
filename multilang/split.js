@@ -6,13 +6,16 @@ class SplitBolt extends BasicBolt {
 	}
 
 	initialize(conf, context, callback) {
-			callback();
+		this.max = conf.max;
+		callback();
 	}
 
 	process(tup, done) {
 		var words = tup.values[0].split(" ");
+		var max = this.max;
 
-		words.forEach((word) => {
+		words.forEach((word,i) => {
+			if(i>=max) return;
 			this.emit({tuple: [word], anchorTupleId: tup.id}, (taskIds)=>{
 				this.log(word + ' sent to task ids - ' + taskIds);
       });

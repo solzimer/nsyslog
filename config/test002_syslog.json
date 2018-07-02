@@ -6,10 +6,13 @@
 	},
 
 	"inputs" : {
-		"syslog" : {
-			"type" : "syslog",
+		"file" : {
+			"type" : "file",
 			"config" : {
-				"url" : "udp://0.0.0.0:514"
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
 			}
 		}
 	},
@@ -22,13 +25,25 @@
 	},
 
 	"transporters" : {
-		"log" : {
-			"type" : "console",
-			"config" : {"format" : "${originalMessage}", "level" : "log"}
+		"syslog" : {
+			"type" : "syslog",
+			"config" : {
+				"url" : "udp://localhost:1514",
+				"format" : "${originalMessage}",
+				"application" : "${filename}",
+				"hostname" : "localhost",
+				"level" : "info",
+				"facility" : 5,
+				"stream" : true,
+				"tls" : {
+					"key" : "./config/server.key",
+					"cert" : "./config/server.crt"
+				}
+			}
 		}
 	},
 
 	"flows" : [
-		{"from":"${input}=='syslog'", "processors":["timestamp"], "transporters":["log"], "mode":"parallel"}
+		{"from":"${input}=='file'", "processors":["timestamp"], "transporters":["syslog"], "mode":"parallel"}
 	]
 }

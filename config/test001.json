@@ -8,18 +8,6 @@
 	},
 
 	"inputs" : {
-		"syslog" : {
-			"type" : "syslog",
-			"maxPending" : 1000,
-			"buffer" : true,
-			"config" : {
-				"url" : "tls://0.0.0.0:514",
-				"tls" : {
-					"key" : "./config/server.key",
-					"cert" : "./config/server.crt"
-				}
-			}
-		},
 		"file" : {
 			"type" : "file",
 			"config" : {
@@ -36,40 +24,16 @@
 			"type" : "timestamp",
 			"config" : {}
 		},
-		"props" : {
-			"type" : "properties",
+		"tokenize" : {
+			"type" : "multilang",
 			"config" : {
-				"set" : {
-					"match" : "${originalMessage.match(/Unknown/)!=null}",
-					"proc" : true
-				}
+				"path" : "/ica/suite/head/SuiteLogHost/multilang/resources/logline/tokenize/main",
+				"module" : true
 			}
 		}
 	},
 
 	"transporters" : {
-		"stat" : {
-			"type" : "stat",
-			"config" : {
-				"threshold" : 1000
-			}
-		},
-		"mongo" : {
-			"type" : "mongo",
-			"config" : {
-				"url" : "mongodb://localhost:27017/test",
-				"collection" : "syslog",
-				"format" : {
-					"path" : "${path}",
-					"message" : "${originalMessage}",
-					"timestamp": "${timestamp}",
-					"extra" : {
-						"type" : "${type}",
-						"path" : "${path}"
-					}
-				}
-			}
-		},
 		"log" : {
 			"type" : "console",
 			"config" : {"format" : "${originalMessage}", "level" : "log"}
@@ -80,31 +44,12 @@
 				"path" : "/var/logout${path}"
 			}
 		},
-		"syslog" : {
-			"type" : "syslog",
-			"config" : {
-				"url" : "tls://localhost:514",
-				"format" : "${originalMessage}",
-				"application" : "${filename}",
-				"hostname" : "localhost",
-				"level" : "info",
-				"facility" : 5,
-				"stream" : false,
-				"tls" : {
-					"key" : "./config/server.key",
-					"cert" : "./config/server.crt"
-				}
-			}
-		},
 		"null" : {
 			"type" : "null"
 		}
 	},
 
 	"flows" : [
-		{"from":"${input}=='glob' && !${proc}", "processors":["timestamp","props"], "transporters":["stat","#"]},
-		{"from":"${match}=='true'", "processors":["timestamp"], "transporters":"log"},
-		{"from":"${input}=='file'", "transporters":"syslog"},
-		{"from":"${input}=='syslog'", "transporters":"log"}
+		{"from":"${input}=='file'", "processors":["tokenize"], "transporters":"null"}
 	]
 }

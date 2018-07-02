@@ -27,7 +27,7 @@
 		"tokenize" : {
 			"type" : "multilang",
 			"config" : {
-				"path" : "/ica/suite/head/SuiteLogHost/multilang/resources/logline/tokenize/main",
+				"path" : "/opt/nsyslog//multilang/split",
 				"module" : true
 			}
 		}

@@ -24,6 +24,12 @@
 			"type" : "timestamp",
 			"config" : {}
 		},
+		"seq" : {
+			"type" : "sequence",
+			"config" : {
+				"start" : 0
+			}
+		},
 		"totuple" : {
 			"type" : "properties",
 			"config" : {
@@ -44,8 +50,9 @@
 		"tokenize" : {
 			"type" : "multilang",
 			"config" : {
-				"path" : "node /t/nsyslog/multilang/js/tokenize.js",
-				"cores" : 5,
+				"path" : "node /opt/nsyslog/multilang/js/tokenize.js",
+				"cores" : 20,
+				"wire" : "shuffle",
 				"module" : false,
 				"tuple" : "${tuple}",
 				"options" : {
@@ -58,7 +65,7 @@
 	"transporters" : {
 		"log" : {
 			"type" : "console",
-			"config" : {"format" : "${count} => ${tokens}", "level" : "log"}
+			"config" : {"format" : "${seq} : ${count} => ${tokens}", "level" : "log"}
 		},
 		"file" : {
 			"type" : "file",
@@ -72,6 +79,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["totuple","tokenize","fromtuple"], "transporters":"log"}
+		{"from":"*", "processors":["seq","totuple","tokenize","fromtuple"], "transporters":"null"}
 	]
 }

@@ -27,7 +27,7 @@
 		"tokenize" : {
 			"type" : "multilang",
 			"config" : {
-				"path" : "node /opt/nsyslog/multilang/js/split.js",
+				"path" : "node /t/nsyslog/multilang/js/split.js",
 				"module" : false,
 				"options" : {
 					"max" : 10

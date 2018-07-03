@@ -40,7 +40,7 @@ async function initialize() {
 		nsyslog.on('error',(stage,flow,module,error)=>{
 			let id = module.instance.id;
 			stats[stage][id] = stats[stage][id] || {id:id, success:0, fail:0};
-			stats[stage][id].error++;
+			stats[stage][id].fail++;
 			logger.error(error);
 		});
 

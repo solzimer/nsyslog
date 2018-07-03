@@ -24,11 +24,30 @@
 			"type" : "timestamp",
 			"config" : {}
 		},
+		"totuple" : {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"tuple" : ["${originalMessage}", "${timestamp}"]
+				}
+			}
+		},
+		"fromtuple" : {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"count" : "${tuple[0]}",
+					"tokens" : "${tuple[1]}"
+				}
+			}
+		},
 		"tokenize" : {
 			"type" : "multilang",
 			"config" : {
-				"path" : "node /t/nsyslog/multilang/js/split.js",
+				"path" : "node /t/nsyslog/multilang/js/tokenize.js",
+				"cores" : 5,
 				"module" : false,
+				"tuple" : "${tuple}",
 				"options" : {
 					"max" : 10
 				}
@@ -39,7 +58,7 @@
 	"transporters" : {
 		"log" : {
 			"type" : "console",
-			"config" : {"format" : "${originalMessage}", "level" : "log"}
+			"config" : {"format" : "${count} => ${tokens}", "level" : "log"}
 		},
 		"file" : {
 			"type" : "file",
@@ -53,6 +72,6 @@
 	},
 
 	"flows" : [
-		{"from":"${input}=='file'", "processors":["tokenize"], "transporters":"null"}
+		{"from":"*", "processors":["totuple","tokenize","fromtuple"], "transporters":"log"}
 	]
 }

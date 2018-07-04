@@ -13,8 +13,10 @@ class TokenizeBolt extends BasicBolt {
 	process(tup, done) {
 		var words = tup.values[0].split(" ");
 
-		this.emit({tuple: [words.length,words], anchorTupleId: tup.id}, (taskIds)=>{});
-		done();
+		//setTimeout(()=>{
+			this.emit({tuple: [words.length,words], anchorTupleId: tup.id}, (taskIds)=>{});
+			done();
+		//},Math.floor(Math.random()*1000));
 	}
 }
 

@@ -1,6 +1,6 @@
 # nsyslog
 
-![Architecture](assets/nsyslog.png)
+![Architecture](assets/nsyslog.svg)
 
 ## Inputs
 * [Syslog UDP, TCP and TLS](inputs/syslog.md)

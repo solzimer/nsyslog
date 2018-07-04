@@ -10,6 +10,7 @@
 * [Timestamp](processors/timestamp.md)
 * [Sequence](processors/sequence.md)
 * [Properties](processors/properties.md)
+* [Syslog Parser](processors/syslogparser.md)
 * [Apache Storm Multilang](processors/multilang.md)
 
 ## Transporters

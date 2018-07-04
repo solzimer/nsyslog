@@ -1,17 +1,17 @@
 ## Inputs
-* [Syslog UDP, TCP and TLS ()](inputs/syslog.md)
+* [Syslog UDP, TCP and TLS](inputs/syslog.md)
 * [File Watcher](inputs/file.md)
 
 ## Processors
-* [Timestamp](inputs/timestamp.md)
-* [Sequence](inputs/sequence.md)
-* [Properties](inputs/properties.md)
-* [Apache Storm Multilang](inputs/multilang.md)
+* [Timestamp](processors/timestamp.md)
+* [Sequence](processors/sequence.md)
+* [Properties](processors/properties.md)
+* [Apache Storm Multilang](processors/multilang.md)
 
 ## Transporters
-* [Null](trans/null.md)
-* [Console](trans/console.md)
-* [File](trans/file.md)
-* [MongoDB](trans/mongodb.md)
-* [Stat](trans/stat.md)
-* [Reemit](trans/reemit.md)
+* [Null](transporters/null.md)
+* [Console](transporters/console.md)
+* [File](transporters/file.md)
+* [MongoDB](transporters/mongodb.md)
+* [Stat](transporters/stat.md)
+* [Reemit](transporters/reemit.md)

@@ -1,3 +1,9 @@
+## Sequence Processor
+
+Places an increaing sequence the input object
+
+## Examples
+
 ```json
 "processors" : {
 	"seq" : {

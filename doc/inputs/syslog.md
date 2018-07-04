@@ -54,7 +54,7 @@ Secure TLS Syslog server with private key and certificate
 
 ## Configuration parameters
 * **url** : Server URL bind pattern. Takes the form of *&lt;protocol&gt;://&lt;bind host&gt;:&lt;bind port&gt;*. Allowed protocols are: **udp**,**udp6**,**tcp**,**tcp6**,**tls** and **tls6**.
-* **tls** : Object passed to the TLS server socket, as described in [NodeJS documentation](https://nodejs.org/api/tls.html#tls_tls_createserver_options_secureconnectionlistener)
+* **tls** : Object passed to the TLS server socket, as described in [NodeJS documentation](https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options)
 
 ## Output
 Each syslog message will generate an object with the following schema:

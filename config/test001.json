@@ -51,7 +51,7 @@
 			"type" : "multilang",
 			"config" : {
 				"path" : "node /t/nsyslog/multilang/js/tokenize.js",
-				"cores" : 10,
+				"cores" : 4,
 				"wire" : "shuffle",
 				"module" : false,
 				"tuple" : "${tuple}",

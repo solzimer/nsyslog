@@ -1,3 +1,7 @@
+# nsyslog
+
+![Architecture](assets/nsyslog.png)
+
 ## Inputs
 * [Syslog UDP, TCP and TLS](inputs/syslog.md)
 * [File Watcher](inputs/file.md)

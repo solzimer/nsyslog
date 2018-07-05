@@ -34,6 +34,7 @@
 			"type" : "properties",
 			"config" : {
 				"deep" : false,
+				"extend" : true,
 				"set" : {
 					"tuple" : ["${originalMessage}", "${timestamp}"]
 				}
@@ -43,6 +44,7 @@
 			"type" : "properties",
 			"config" : {
 				"deep" : false,
+				"extend" : true,
 				"set" : {
 					"count" : "${tuple[0]}",
 					"tokens" : "${tuple[1]}"

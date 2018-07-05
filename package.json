@@ -28,6 +28,7 @@
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
     "jsexpr": "^0.5.3",
+    "kafka-node": "^2.6.1",
     "mkdirp": "^0.5.1",
     "moment": "^2.22.1",
     "mongodb": "^2.2.27",

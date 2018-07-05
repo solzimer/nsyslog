@@ -1,0 +1,38 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"kafka" : {
+			"type" : "kafka",
+			"config" : {
+				"url" : "kafka://192.168.134.90:9092",
+				"topics" : ["/loglines.*/"],
+				"format" : "json",
+				"offset" : "earliest",
+				"group" : "nsyslog"
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"*", "transporters":["null"]}
+	]
+}

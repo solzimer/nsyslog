@@ -33,6 +33,7 @@
 		"totuple" : {
 			"type" : "properties",
 			"config" : {
+				"deep" : false,
 				"set" : {
 					"tuple" : ["${originalMessage}", "${timestamp}"]
 				}
@@ -41,6 +42,7 @@
 		"fromtuple" : {
 			"type" : "properties",
 			"config" : {
+				"deep" : false,
 				"set" : {
 					"count" : "${tuple[0]}",
 					"tokens" : "${tuple[1]}"
@@ -51,7 +53,7 @@
 			"type" : "multilang",
 			"config" : {
 				"path" : "node /t/nsyslog/multilang/js/tokenize.js",
-				"cores" : 4,
+				"cores" : 1,
 				"wire" : "shuffle",
 				"module" : false,
 				"tuple" : "${tuple}",

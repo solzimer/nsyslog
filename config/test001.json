@@ -83,6 +83,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["seq","totuple","tokenize","fromtuple"], "transporters":"null"}
+		{"from":"*", "processors":["tokenize"], "transporters":"null"}
 	]
 }

@@ -79,6 +79,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["seq","totuple","tokenize","fromtuple"], "transporters":"log"}
+		{"from":"*", "processors":["seq","totuple","tokenize","fromtuple"], "transporters":"null"}
 	]
 }

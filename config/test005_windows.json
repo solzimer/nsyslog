@@ -11,7 +11,8 @@
 		"windows" : {
 			"type" : "windows",
 			"config" : {
-				"channel" : "Application"
+				"channel" : "Application",
+				"batchsize" : 1000
 			}
 		}
 	},
@@ -20,7 +21,7 @@
 		"console" : {
 			"type" : "console",
 			"config" : {
-				"format" : "${JSON}"
+				"format" : "${originalMessage.EventData[0].Data}"
 			}
 		},
 		"null" : {
@@ -29,6 +30,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "transporters":["console"]}
+		{"from":"*", "transporters":["null"]}
 	]
 }

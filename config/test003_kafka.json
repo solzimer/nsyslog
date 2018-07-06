@@ -8,14 +8,24 @@
 	},
 
 	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		},
 		"kafka" : {
 			"type" : "kafka",
 			"config" : {
-				"url" : "kafka://192.168.134.90:9092",
-				"topics" : ["/loglines.*/"],
+				"url" : "kafka://localhost:9092",
+				"topics" : ["/logline__.*/"],
 				"format" : "json",
 				"offset" : "earliest",
-				"group" : "nsyslog"
+				"group" : "nsyslog",
+				"watch" : true
 			}
 		}
 	},
@@ -27,12 +37,19 @@
 				"format" : "${JSON}"
 			}
 		},
+		"syslog" : {
+			"type" : "syslog",
+			"config" : {
+				"url" : "udp://localhost:514"
+			}
+		},
 		"null" : {
 			"type" : "null"
 		}
 	},
 
 	"flows" : [
-		{"from":"*", "transporters":["null"]}
+		{"from":"${input}=='file'", "transporters":["syslog"]},
+		{"from":"${input}=='kafka'", "transporters":["null"]}
 	]
 }

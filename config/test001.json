@@ -54,13 +54,13 @@
 		"tokenize" : {
 			"type" : "multilang",
 			"config" : {
-				"path" : "node /t/nsyslog/multilang/js/tokenize.js",
+				"path" : "node /opt/nsyslog/multilang/js/split.js",
 				"cores" : 1,
 				"wire" : "shuffle",
 				"module" : false,
 				"tuple" : "${tuple}",
 				"options" : {
-					"max" : 10
+					"timeout" : 100
 				}
 			}
 		}
@@ -83,6 +83,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["tokenize"], "transporters":"null"}
+		{"from":"*", "processors":["totuple","tokenize","fromtuple"], "transporters":"null"}
 	]
 }

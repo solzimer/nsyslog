@@ -14,6 +14,12 @@
 				"readmode" : "offset",
 				"offset" : "start"
 			}
+		},
+		"syslog" : {
+			"type" : "syslog",
+			"config" : {
+				"url" : "tcp://localhost:514"
+			}
 		}
 	},
 
@@ -28,7 +34,7 @@
 		"syslog" : {
 			"type" : "syslog",
 			"config" : {
-				"url" : "udp://localhost:1514",
+				"url" : "tcp://localhost:514",
 				"format" : "${originalMessage}",
 				"application" : "${filename}",
 				"hostname" : "localhost",
@@ -40,6 +46,9 @@
 					"cert" : "./config/server.crt"
 				}
 			}
+		},
+		"null" : {
+			"type" : "null"
 		}
 	},
 

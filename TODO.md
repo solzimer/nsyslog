@@ -1,10 +1,10 @@
 ### Roadmap
-* ZMQ Bug mode sub windows
-* Syslog ~~TCP~~ / TLS Fault tolerance (TCP done)
-* MongoDB Fault tolerance
-* ~~Test input highWatermark~~
-* Flow Fork
-* Windows input parse XML bug
-* Fix FlowStream highWaterMark
-* Fix BypassStream highWaterMark
-* Bug stopping inputs
+* [ ] ZMQ Bug mode sub windows
+* [x] Syslog TCP / TLS Fault tolerance
+* [ ] MongoDB Fault tolerance
+* [x] Test input highWatermark
+* [ ] Flow Fork
+* [ ] Windows input parse XML bug
+* [ ] Fix FlowStream highWaterMark
+* [ ] Fix BypassStream highWaterMark
+* [x] Bug stopping TCP / TLS inputs

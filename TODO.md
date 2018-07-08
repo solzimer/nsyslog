@@ -10,3 +10,6 @@
 * [x] Bug stopping TCP / TLS inputs
 * [ ] Stdin Input
 * [ ] Stdout Transporter
+* [ ] Stop ZMQ input
+* [ ] Stop Stdin input
+* [ ] Stdin input decide string

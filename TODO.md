@@ -13,3 +13,4 @@
 * [ ] Stop ZMQ input
 * [ ] Stop Stdin input
 * [ ] Stdin input decide string
+* [ ] Stop WebSocket input

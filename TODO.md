@@ -8,3 +8,5 @@
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [x] Bug stopping TCP / TLS inputs
+* [ ] Stdin Input
+* [ ] Stdout Transporter

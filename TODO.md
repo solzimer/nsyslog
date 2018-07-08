@@ -1,5 +1,5 @@
 ### Roadmap
-* [ ] ZMQ Bug mode sub windows
+* [x] ZMQ Bug mode sub windows
 * [x] Syslog TCP / TLS Fault tolerance
 * [ ] MongoDB Fault tolerance
 * [x] Test input highWatermark

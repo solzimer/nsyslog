@@ -11,9 +11,9 @@
 		"zmq" : {
 			"type" : "zmq",
 			"config" : {
-				"url" : "tcp://192.168.134.49:9999",
+				"url" : "tcp://127.0.0.1:9999",
 				"mode" : "sub",
-				"channel" : "test",
+				"channel" : "mi canal",
 				"format" : "json"
 			}
 		}

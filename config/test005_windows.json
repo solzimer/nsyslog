@@ -30,6 +30,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "transporters":["null"]}
+		{"from":"*", "transporters":["console"]}
 	]
 }

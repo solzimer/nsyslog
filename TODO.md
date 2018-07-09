@@ -18,3 +18,6 @@
 * [x] ZMQ transporter
 * [ ] LevelDB transporter
 * [ ] Refactor transporter pause / resume
+* [ ] Config file relative paths
+* [ ] HTTP Post Transporter
+* [x] Transporters as Duplex

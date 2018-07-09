@@ -1,0 +1,45 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog2",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+
+	},
+
+	"transporters" : {
+		"mongo" : {
+			"type" : "mongo",
+			"config" : {
+				"url" : "mongodb://localhost:27017/test",
+				"format" : {
+					"seq" : "${seq}",
+					"line" : "${originalMessage}"
+				}
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"*", "transporters":"mongo"}
+	]
+}

@@ -21,3 +21,4 @@
 * [ ] Config file relative paths
 * [ ] HTTP Post Transporter
 * [x] Transporters as Duplex
+* [ ] Bypass processors and transporters

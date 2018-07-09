@@ -28,6 +28,7 @@
 			"type" : "mongo",
 			"config" : {
 				"url" : "mongodb://localhost:27017/test",
+				"retry" : true,
 				"format" : {
 					"seq" : "${seq}",
 					"line" : "${originalMessage}"

@@ -19,6 +19,9 @@
 * [ ] LevelDB transporter
 * [ ] Refactor transporter pause / resume
 * [ ] Config file relative paths
-* [ ] HTTP Post Transporter
+* [x] HTTP Post Transporter
 * [x] Transporters as Duplex
 * [ ] Bypass processors and transporters
+* [ ] Config cannot be undefined
+* [x] Array Processor
+* [ ] Split Processor

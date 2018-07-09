@@ -20,7 +20,23 @@
 	},
 
 	"processors" : {
-
+		"event" : {
+			"type" : "properties",
+			"config" : {
+				"extend" : false,
+				"set" : {
+					"sev" : 3,
+					"fn" : "${path}",
+					"basemsg" : "${originalMessage}"
+				}
+			}
+		},
+		"array" : {
+			"type" : "array",
+			"max" : 1000,
+			"timeout" : 0,
+			"field" : "array"
+		}
 	},
 
 	"transporters" : {
@@ -28,12 +44,7 @@
 			"type" : "http",
 			"config" : {
 				"url" : "http://192.168.134.90:6080",
-				"format" : {
-					"st" : "${filename}",
-					"fn": "${path}",
-					"sev" : 3,
-					"basemsg" : "${originalMessage}"
-				}
+				"format" : "${array}"
 			}
 		},
 		"null" : {
@@ -42,6 +53,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "transporters":"http"}
+		{"from":"*", "processors":["event","array"], "transporters":"http"}
 	]
 }

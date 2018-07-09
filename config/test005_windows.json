@@ -12,7 +12,7 @@
 			"type" : "windows",
 			"config" : {
 				"channel" : "Application",
-				"batchsize" : 1000
+				"batchsize" : 5000
 			}
 		}
 	},

@@ -4,13 +4,17 @@
 * [ ] MongoDB Fault tolerance
 * [x] Test input highWatermark
 * [ ] Flow Fork
-* [ ] Windows input parse XML bug
+* [x] Windows input parse XML bug
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [x] Bug stopping TCP / TLS inputs
-* [ ] Stdin Input
+* [x] Stdin Input
 * [ ] Stdout Transporter
-* [ ] Stop ZMQ input
-* [ ] Stop Stdin input
+* [x] Stop ZMQ input
+* [x] Stop Stdin input
 * [ ] Stdin input decide string
-* [ ] Stop WebSocket input
+* [x] Stop WebSocket input
+* [ ] TLS Websocket input
+* [x] ZMQ transporter
+* [ ] LevelDB transporter
+* [ ] Refactor transporter pause / resume

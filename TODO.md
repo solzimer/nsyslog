@@ -1,7 +1,7 @@
 ### Roadmap
 * [x] ZMQ Bug mode sub windows
 * [x] Syslog TCP / TLS Fault tolerance
-* [ ] MongoDB Fault tolerance
+* [x] MongoDB Fault tolerance
 * [x] Test input highWatermark
 * [ ] Flow Fork
 * [x] Windows input parse XML bug

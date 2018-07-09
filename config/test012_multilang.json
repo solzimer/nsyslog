@@ -1,0 +1,89 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog2",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"timestamp" : {
+			"type" : "timestamp",
+			"config" : {}
+		},
+		"seq" : {
+			"type" : "sequence",
+			"config" : {
+				"start" : 0
+			}
+		},
+		"totuple" : {
+			"type" : "properties",
+			"config" : {
+				"deep" : false,
+				"extend" : true,
+				"set" : {
+					"tuple" : ["${originalMessage}", "${timestamp}"]
+				}
+			}
+		},
+		"fromtuple" : {
+			"type" : "properties",
+			"config" : {
+				"deep" : false,
+				"extend" : true,
+				"set" : {
+					"count" : "${tuple[0]}",
+					"tokens" : "${tuple[1]}"
+				}
+			}
+		},
+		"tokenize" : {
+			"type" : "multilang",
+			"config" : {
+				"path" : "node /opt/nsyslog/multilang/js/tokenize.js",
+				"cores" : 1,
+				"wire" : "shuffle",
+				"module" : false,
+				"input" : "${tuple}",
+				"output" : "tuple",
+				"options" : {
+					"timeout" : 100
+				}
+			}
+		}
+	},
+
+	"transporters" : {
+		"log" : {
+			"type" : "console",
+			"config" : {"format" : "${seq} : ${count} => ${tokens}", "level" : "log"}
+		},
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/logout${path}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"*", "processors":["totuple","tokenize","fromtuple"], "transporters":"log"}
+	]
+}

@@ -7,7 +7,8 @@
 			"cores" : 4,
 			"wire" : "shuffle",
 			"module" : false,
-			"tuple" : "${tuple}",
+			"input" : "${tuple}",
+			"output" : "tuple",
 			"options" : {
 				"max" : 10
 			}

@@ -24,4 +24,7 @@
 * [ ] Bypass processors and transporters
 * [ ] Config cannot be undefined
 * [x] Array Processor
-* [ ] Split Processor
+* [x] Split Processor
+* [ ] Properties processor
+* [ ] Properties delete processor
+* [ ] Processor and transporter match filter

@@ -1,0 +1,47 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog2",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+
+	},
+
+	"transporters" : {
+		"http" : {
+			"type" : "http",
+			"config" : {
+				"url" : "http://192.168.134.90:6080",
+				"format" : {
+					"st" : "${filename}",
+					"fn": "${path}",
+					"sev" : 3,
+					"basemsg" : "${originalMessage}"
+				}
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"*", "transporters":"http"}
+	]
+}

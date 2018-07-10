@@ -1,0 +1,65 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog2",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"fork1" : {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"fork" : "fork1"
+				}
+			}
+		},
+		"fork2" : {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"fork" : "fork2"
+				}
+			}
+		}
+	},
+
+	"transporters" : {
+		"file1" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/logout/fork1.log",
+				"format" : "${fork} => ${originalMessage}"
+			}
+		},
+		"file2" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/logout/fork2.log",
+				"format" : "${fork} => ${originalMessage}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"id":"flow_fork1", "from":"*", "fork":true, "processors":["fork1"], "transporters":"file1"},
+		{"id":"flow_fork2", "from":"*", "fork":true, "processors":["fork2"], "transporters":"file2"}
+	]
+}

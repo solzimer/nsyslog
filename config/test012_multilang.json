@@ -10,6 +10,10 @@
 	"inputs" : {
 		"file" : {
 			"type" : "file",
+			"when" : {
+				"filter": "/192\\.168\\.134\\.244/.test(${originalMessage})",
+				"bypass": false
+			},			
 			"config" : {
 				"path" : "/var/log/**/*.log",
 				"watch" : true,
@@ -32,10 +36,6 @@
 		},
 		"totuple" : {
 			"type" : "properties",
-			"when" : {
-				"filter": "/192\\.168\\.134\\.244/.test(${originalMessage})",
-				"bypass": false
-			},
 			"config" : {
 				"deep" : false,
 				"extend" : true,

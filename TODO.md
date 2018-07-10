@@ -27,4 +27,4 @@
 * [x] Split Processor
 * [ ] Properties processor
 * [ ] Properties delete processor
-* [ ] Processor and transporter match filter
+* [x] Input Processor and Transporter match filter

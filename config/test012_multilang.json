@@ -32,6 +32,10 @@
 		},
 		"totuple" : {
 			"type" : "properties",
+			"when" : {
+				"filter": "/192\\.168\\.134\\.244/.test(${originalMessage})",
+				"bypass": false
+			},
 			"config" : {
 				"deep" : false,
 				"extend" : true,
@@ -54,7 +58,7 @@
 		"tokenize" : {
 			"type" : "multilang",
 			"config" : {
-				"path" : "node /opt/nsyslog/multilang/js/tokenize.js",
+				"path" : "node /t/nsyslog/multilang/js/tokenize.js",
 				"cores" : 1,
 				"wire" : "shuffle",
 				"module" : false,
@@ -84,6 +88,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["totuple","tokenize","fromtuple"], "transporters":"log"}
+		{"from":"*", "processors":["totuple","tokenize","fromtuple"], "transporters":"null"}
 	]
 }

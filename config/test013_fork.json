@@ -60,7 +60,15 @@
 	},
 
 	"flows" : [
-		{"id":"flow_fork1", "from":"*", "fork":true, "processors":["fork1"], "transporters":"null"},
-		{"id":"flow_fork2", "from":"*", "fork":true, "processors":["fork2"], "transporters":"null"}
+		{"id":"flow_fork1", "from":"*", "fork":false, "processors":["fork1"], "transporters":"null"},
+		{"id":"flow_fork2", "from":"*", "fork":false, "processors":["fork2"], "transporters":"null"},
+		{"id":"flow_fork3", "from":"*", "fork":false, "processors":["fork1"], "transporters":"null"},
+		{"id":"flow_fork4", "from":"*", "fork":false, "processors":["fork2"], "transporters":"null"},
+		{"id":"flow_fork5", "from":"*", "fork":false, "processors":["fork1"], "transporters":"null"},
+		{"id":"flow_fork6", "from":"*", "fork":false, "processors":["fork2"], "transporters":"null"},
+		{"id":"flow_fork7", "from":"*", "fork":false, "processors":["fork1"], "transporters":"null"},
+		{"id":"flow_fork8", "from":"*", "fork":false, "processors":["fork2"], "transporters":"null"},
+		{"id":"flow_fork9", "from":"*", "fork":false, "processors":["fork1"], "transporters":"null"},
+		{"id":"flow_fork10", "from":"*", "fork":false, "processors":["fork2"], "transporters":"null"}
 	]
 }

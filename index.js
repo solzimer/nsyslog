@@ -24,6 +24,12 @@ function timer(t) {
 	return new Promise(ok=>setTimeout(ok,t));
 }
 
+function stat(stage,module) {
+	let id = module.instance.id;
+	stats[stage][id] = stats[stage][id] || {id:id, ack:0, fail:0, emit:0};
+	return stats[stage][id];
+}
+
 async function initialize() {
 	try {
 		let cfg = await Config.read(program.file || "./config/cfg001.json");
@@ -31,39 +37,27 @@ async function initialize() {
 		logger.info(`Config loaded!`);
 		var nsyslog = new NSyslog(cfg);
 
+		nsyslog.on('ack',(stage,flow,module,entry)=>{
+			let st = stat(stage,module);
+			st.ack++;
+		});
+
 		nsyslog.on('data',(stage,flow,module,entry)=>{
-			let id = module.instance.id;
-			stats[stage][id] = stats[stage][id] || {id:id, success:0, fail:0};
-			stats[stage][id].success++;
+			let st = stat(stage,module);
+			st.emit++;
 		});
 
 		nsyslog.on('error',(stage,flow,module,error)=>{
-			let id = module.instance.id;
-			stats[stage][id] = stats[stage][id] || {id:id, success:0, fail:0};
-			stats[stage][id].fail++;
+			let st = stat(stage,module);
+			st.fail++;
 			logger.error(error);
 		});
 
 		setInterval(()=>{
-			logger.info(new Date(),JSON.stringify(stats));
+			logger.info(`${new Date()} : ${JSON.stringify(stats,null,2)}`);
 		},1000);
 
 		await nsyslog.start();
-
-		/*
-		await timer(10000);
-		logger.info("Pausing nsyslog...");
-		await nsyslog.pause();
-		logger.info("nsyslog paused...");
-		await timer(5000);
-		logger.info("Resuming nsyslog...");
-		await nsyslog.resume();
-		logger.info("nsyslog resumed...");
-		await timer(5000);
-		logger.info("stopping nsyslog...");
-		await nsyslog.stop();
-		logger.info("nsyslog stopped...");
-		*/
 
 		process.on('SIGTERM', async()=>{
 			try {

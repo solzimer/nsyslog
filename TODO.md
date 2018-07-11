@@ -15,7 +15,7 @@
 * [x] Array Processor
 * [x] Split Processor
 * [x] Input Processor and Transporter match filter
-* [ ] Flow Fork
+* [x] Flow Fork
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter

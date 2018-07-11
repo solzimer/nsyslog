@@ -54,12 +54,13 @@
 			}
 		},
 		"null" : {
-			"type" : "null"
+			"type" : "null",
+			"config" : {}
 		}
 	},
 
 	"flows" : [
-		{"id":"flow_fork1", "from":"*", "fork":true, "processors":["fork1"], "transporters":"file1"},
-		{"id":"flow_fork2", "from":"*", "fork":true, "processors":["fork2"], "transporters":"file2"}
+		{"id":"flow_fork1", "from":"*", "fork":true, "processors":["fork1"], "transporters":"null"},
+		{"id":"flow_fork2", "from":"*", "fork":true, "processors":["fork2"], "transporters":"null"}
 	]
 }

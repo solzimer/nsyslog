@@ -30,4 +30,4 @@
 * [ ] Properties delete processor
 * [ ] Multilang shuffle, group and all
 * [ ] Multiprocess watermark
-* [ ] Separate ack from emit in event and stats
+* [x] Separate ack from emit in event and stats

@@ -16,6 +16,8 @@
 * [x] Split Processor
 * [x] Input Processor and Transporter match filter
 * [x] Flow Fork
+* [x] Separate ack from emit in event and stats
+* [x] Multiprocess watermark
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
@@ -29,5 +31,4 @@
 * [ ] Properties processor
 * [ ] Properties delete processor
 * [ ] Multilang shuffle, group and all
-* [ ] Multiprocess watermark
-* [x] Separate ack from emit in event and stats
+* [ ] Windows input watermark

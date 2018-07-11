@@ -54,7 +54,7 @@ async function initialize() {
 		});
 
 		setInterval(()=>{
-			logger.info(`${new Date()} : ${JSON.stringify(stats,null,2)}`);
+			logger.info(`${new Date()} : ${JSON.stringify(stats)}`);
 		},1000);
 
 		await nsyslog.start();

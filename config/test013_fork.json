@@ -47,15 +47,7 @@
 	},
 
 	"flows" : [
-		{"id":"flow_fork1", "from":"*", "fork":true, "processors":["fork1"], "transporters":"file"},
-		{"id":"flow_fork2", "from":"*", "fork":true, "processors":["fork2"], "transporters":"file"},
-		{"id":"flow_fork3", "from":"*", "fork":true, "processors":["fork3"], "transporters":"file"},
-		{"id":"flow_fork4", "from":"*", "fork":true, "processors":["fork4"], "transporters":"file"},
-		{"id":"flow_fork5", "from":"*", "fork":true, "processors":["fork5"], "transporters":"file"},
-		{"id":"flow_fork6", "from":"*", "fork":true, "processors":["fork6"], "transporters":"file"},
-		{"id":"flow_fork7", "from":"*", "fork":true, "processors":["fork7"], "transporters":"file"},
-		{"id":"flow_fork8", "from":"*", "fork":true, "processors":["fork8"], "transporters":"file"},
-		{"id":"flow_fork9", "from":"*", "fork":true, "processors":["fork9"], "transporters":"file"},
-		{"id":"flow_fork10", "from":"*", "fork":true, "processors":["fork10"], "transporters":"file"}
+		{"id":"flow_fork1", "from":"${filename}=='install.log'", "fork":true, "processors":["fork1"], "transporters":"file"},
+		{"id":"flow_fork2", "from":"${filename}=='wifi-07-10-2018__06:45:06.752.log'", "fork":true, "processors":["fork2"], "transporters":"file"}
 	]
 }

@@ -11,9 +11,9 @@
 		"file" : {
 			"type" : "file",
 			"when" : {
-				"filter": "/192\\.168\\.134\\.244/.test(${originalMessage})",
+				"filter": false,
 				"bypass": false
-			},			
+			},
 			"config" : {
 				"path" : "/var/log/**/*.log",
 				"watch" : true,
@@ -58,10 +58,10 @@
 		"tokenize" : {
 			"type" : "multilang",
 			"config" : {
-				"path" : "node /t/nsyslog/multilang/js/tokenize.js",
-				"cores" : 1,
+				"path" : "/opt/nsyslog/multilang/js/tokenize.js",
+				"cores" : 4,
 				"wire" : "shuffle",
-				"module" : false,
+				"module" : true,
 				"input" : "${tuple}",
 				"output" : "tuple",
 				"options" : {

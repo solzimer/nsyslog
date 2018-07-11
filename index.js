@@ -32,6 +32,7 @@ function stat(stage,module) {
 
 async function initialize() {
 	try {
+		let ti = Date.now();
 		let cfg = await Config.read(program.file || "./config/cfg001.json");
 
 		logger.info(`Config loaded!`);
@@ -40,6 +41,11 @@ async function initialize() {
 		nsyslog.on('ack',(stage,flow,module,entry)=>{
 			let st = stat(stage,module);
 			st.ack++;
+			if(module.instance.id=="fork1" && st.ack==50000) {
+				let tf = Date.now();
+				console.log(`*************** PROCESS TAKE ${tf-ti} ms *************`);
+				process.exit(0);
+			}
 		});
 
 		nsyslog.on('data',(stage,flow,module,entry)=>{

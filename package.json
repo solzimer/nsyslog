@@ -32,6 +32,7 @@
     "mkdirp": "^0.5.1",
     "moment": "^2.22.1",
     "mongodb": "^2.2.27",
+    "napajs": "^0.2.3",
     "nsyslog-parser": "^0.8.1",
     "pouchdb": "^7.0.0",
     "promise-stream-queue": "*",

@@ -47,7 +47,7 @@
 	},
 
 	"flows" : [
-		{"id":"flow_fork1", "from":"${filename}=='install.log'", "fork":true, "processors":["fork1"], "transporters":"file"},
-		{"id":"flow_fork2", "from":"${filename}=='wifi-07-10-2018__06:45:06.752.log'", "fork":true, "processors":["fork2"], "transporters":"file"}
+		{"id":"flow_fork1", "from":"*", "fork":false, "processors":["fork1"], "transporters":"null"},
+		{"id":"flow_fork2", "from":"*", "fork":false, "processors":["fork2"], "transporters":"null"}
 	]
 }

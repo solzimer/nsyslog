@@ -37,6 +37,7 @@
 		"totuple" : {
 			"type" : "properties",
 			"config" : {
+				"cores" : 4,
 				"deep" : false,
 				"extend" : true,
 				"set" : {
@@ -47,6 +48,7 @@
 		"fromtuple" : {
 			"type" : "properties",
 			"config" : {
+				"cores" : 4,
 				"deep" : false,
 				"extend" : true,
 				"set" : {
@@ -88,6 +90,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["totuple","tokenize","fromtuple"], "transporters":"null"}
+		{"from":"*", "processors":["totuple","fromtuple"], "transporters":"null"}
 	]
 }

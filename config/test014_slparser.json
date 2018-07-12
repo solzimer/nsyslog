@@ -1,0 +1,54 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog2",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"when" : {
+				"filter": false,
+				"bypass": false
+			},
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"parser" : {
+			"type" : "syslogparser",
+			"config" : {
+				"cores" : 0
+			}
+		}
+	},
+
+	"transporters" : {
+		"log" : {
+			"type" : "console",
+			"config" : {"format" : "${seq} : ${count} => ${tokens}", "level" : "log"}
+		},
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/logout${path}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"*", "processors":["parser"], "transporters":"null"}
+	]
+}

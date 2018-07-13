@@ -36,15 +36,14 @@
     "mongodb": "^2.2.27",
     "napajs": "^0.2.3",
     "nsyslog-parser": "^0.8.1",
-    "promise-stream-queue": "*",
+    "promise-stream-queue": "^0.4.1",
     "request": "^2.87.0",
     "semaphore": "^1.1.0",
     "swstats": "^0.6.1",
     "tiny-worker": "^2.1.1",
     "winston": "^2.4.2",
     "ws": "^5.2.1",
-    "xml2js": "^0.4.19",
-    "zeromq": "^4.6.0"
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "line-reader": "^0.4.0"

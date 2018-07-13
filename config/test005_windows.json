@@ -11,6 +11,8 @@
 		"windows" : {
 			"type" : "windows",
 			"config" : {
+				"readmode" : "watermark",
+				"offset" : "begin",
 				"channel" : "Application",
 				"batchsize" : 5000
 			}
@@ -21,7 +23,7 @@
 		"console" : {
 			"type" : "console",
 			"config" : {
-				"format" : "${originalMessage.EventData[0].Data}"
+				"format" : "${originalMessage.SystemTime}: ${originalMessage.EventData[0].Data[0].trim()}"
 			}
 		},
 		"null" : {

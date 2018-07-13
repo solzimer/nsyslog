@@ -19,6 +19,7 @@
 * [x] Separate ack from emit in event and stats
 * [x] Multiprocess watermark
 * [x] Properties processor
+* [x] Windows input watermark
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
@@ -31,4 +32,3 @@
 * [ ] Config cannot be undefined
 * [ ] Properties delete processor
 * [ ] Multilang shuffle, group and all
-* [ ] Windows input watermark

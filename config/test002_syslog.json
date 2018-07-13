@@ -38,7 +38,7 @@
 		"syslog" : {
 			"type" : "syslog",
 			"config" : {
-				"url" : "tcp://localhost:1514",
+				"url" : "udp://localhost:514",
 				"format" : "${originalMessage}",
 				"application" : "${filename}",
 				"hostname" : "localhost",

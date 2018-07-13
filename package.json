@@ -43,7 +43,8 @@
     "tiny-worker": "^2.1.1",
     "winston": "^2.4.2",
     "ws": "^5.2.1",
-    "xml2js": "^0.4.19"
+    "xml2js": "^0.4.19",
+    "zeromq": "^4.6.0"
   },
   "devDependencies": {
     "line-reader": "^0.4.0"

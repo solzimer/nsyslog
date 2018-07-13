@@ -49,6 +49,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["parser"], "transporters":["file","null"]}
+		{"from":"*", "processors":["parser"], "transporters":["null"]}
 	]
 }

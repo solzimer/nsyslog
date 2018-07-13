@@ -18,6 +18,7 @@
 * [x] Flow Fork
 * [x] Separate ack from emit in event and stats
 * [x] Multiprocess watermark
+* [x] Properties processor
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
@@ -28,7 +29,6 @@
 * [ ] Config file relative paths
 * [ ] Bypass processors and transporters
 * [ ] Config cannot be undefined
-* [ ] Properties processor
 * [ ] Properties delete processor
 * [ ] Multilang shuffle, group and all
 * [ ] Windows input watermark

@@ -46,7 +46,7 @@ async function initialize() {
 		nsyslog.on('data',(stage,flow,module,entry)=>{
 			let st = stat(stage,module);
 			st.emit++;
-			if(module.instance.id=="null" && st.emit==100000) {
+			if(module.instance.id=="null" && st.emit==200000) {
 				let tf = Date.now();
 				console.log(`*************** PROCESS TAKE ${tf-ti} ms *************`);
 				process.exit(0);

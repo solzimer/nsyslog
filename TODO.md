@@ -21,6 +21,7 @@
 * [x] Properties processor
 * [x] Windows input watermark
 * [x] File input line number
+* [x] Config cannot be undefined
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
@@ -30,7 +31,6 @@
 * [ ] Refactor transporter pause / resume
 * [ ] Config file relative paths
 * [ ] Bypass processors and transporters
-* [ ] Config cannot be undefined
 * [ ] Properties delete processor
 * [ ] Multilang shuffle, group and all
 * [ ] Generic Parser

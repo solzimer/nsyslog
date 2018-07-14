@@ -27,7 +27,7 @@
 		"parser" : {
 			"type" : "syslogparser",
 			"config" : {
-				"cores" : 0
+				"cores" : 4
 			}
 		}
 	},
@@ -35,7 +35,7 @@
 	"transporters" : {
 		"log" : {
 			"type" : "console",
-			"config" : {"format" : "${seq} : ${count} => ${tokens}", "level" : "log"}
+			"config" : {"format" : "${seq} : ${ln} => ${originalMessage}", "level" : "log"}
 		},
 		"file" : {
 			"type" : "file",
@@ -49,6 +49,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["parser"], "transporters":["null"]}
+		{"from":"*","fork":false, "processors":[], "transporters":["null"]}
 	]
 }

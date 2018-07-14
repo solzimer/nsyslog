@@ -20,6 +20,7 @@
 * [x] Multiprocess watermark
 * [x] Properties processor
 * [x] Windows input watermark
+* [x] File input line number
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
@@ -32,3 +33,4 @@
 * [ ] Config cannot be undefined
 * [ ] Properties delete processor
 * [ ] Multilang shuffle, group and all
+* [ ] Generic Parser

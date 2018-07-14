@@ -22,6 +22,7 @@
 * [x] Windows input watermark
 * [x] File input line number
 * [x] Config cannot be undefined
+* [x] Multilang shuffle, group and ~all~
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
@@ -32,5 +33,5 @@
 * [ ] Config file relative paths
 * [ ] Bypass processors and transporters
 * [ ] Properties delete processor
-* [ ] Multilang shuffle, group and all
 * [ ] Generic Parser
+* [ ] Multilang log levels

@@ -37,18 +37,16 @@
 		"totuple" : {
 			"type" : "properties",
 			"config" : {
-				"cores" : 4,
 				"deep" : false,
 				"extend" : true,
 				"set" : {
-					"tuple" : ["${originalMessage}", "${timestamp}"]
+					"tuple" : ["${originalMessage}", "${timestamp}", "${filename}"]
 				}
 			}
 		},
 		"fromtuple" : {
 			"type" : "properties",
 			"config" : {
-				"cores" : 4,
 				"deep" : false,
 				"extend" : true,
 				"set" : {
@@ -60,10 +58,11 @@
 		"tokenize" : {
 			"type" : "multilang",
 			"config" : {
-				"path" : "/opt/nsyslog/multilang/js/tokenize.js",
+				"path" : "node /opt/nsyslog/multilang/js/tokenize.js",
 				"cores" : 4,
-				"wire" : "shuffle",
-				"module" : true,
+				"wire" : "group",
+				"field" : "${filename}",
+				"module" : false,
 				"input" : "${tuple}",
 				"output" : "tuple",
 				"options" : {
@@ -90,6 +89,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["totuple","fromtuple"], "transporters":"null"}
+		{"from":"*", "processors":["totuple","tokenize","fromtuple"], "transporters":"null"}
 	]
 }

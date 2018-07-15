@@ -22,7 +22,8 @@
 * [x] Windows input watermark
 * [x] File input line number
 * [x] Config cannot be undefined
-* [x] Multilang shuffle, group and ~all~
+* [x] Multilang shuffle, group and ~~all~~
+* [x] Multilang log levels
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
@@ -34,4 +35,3 @@
 * [ ] Bypass processors and transporters
 * [ ] Properties delete processor
 * [ ] Generic Parser
-* [ ] Multilang log levels

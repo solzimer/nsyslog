@@ -13,7 +13,7 @@ class TokenizeBolt extends BasicBolt {
 	process(tup, done) {
 		var words = tup.values[0].split(" ");
 
-		this.log(`${process.pid} => ${tup.values[2]}`);
+		//this.log(`${process.pid} => ${tup.values[2]}`);
 		this.emit({tuple: [words.length,words], anchorTupleId: tup.id}, (taskIds)=>{});
 		done();
 	}

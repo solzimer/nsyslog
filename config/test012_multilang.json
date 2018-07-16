@@ -58,7 +58,7 @@
 		"tokenize" : {
 			"type" : "multilang",
 			"config" : {
-				"path" : "node /opt/nsyslog/multilang/js/tokenize.js",
+				"path" : "node /t/nsyslog/multilang/js/tokenize.js",
 				"cores" : 4,
 				"wire" : "group",
 				"field" : "${filename}",
@@ -70,6 +70,10 @@
 				}
 			}
 		}
+	},
+
+	"processorGroups" : {
+		"alltoken" : ["totuple","tokenize","fromtuple"]
 	},
 
 	"transporters" : {
@@ -89,6 +93,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["totuple","tokenize","fromtuple"], "transporters":"null"}
+		{"from":"*", "processors":["timestamp","$alltoken"], "transporters":"null"}
 	]
 }

@@ -35,3 +35,4 @@
 * [ ] Bypass processors and transporters
 * [ ] Properties delete processor
 * [ ] Generic Parser
+* [ ] Fix Parallel Transporter Groups

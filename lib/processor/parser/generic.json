@@ -1,0 +1,104 @@
+{
+	"start": [{
+			"description": "Timestamp",
+			"name": "token.timestamp",
+			"regex": "^(\\d+\\-\\d+\\-\\d+ \\d+:\\d+:\\d+(\\.\\d+)?(Z)?)"
+		},
+		{
+			"description": "Timestamp ISO",
+			"name": "token.timestamp",
+			"regex": "^(\\d+\\-\\d+\\-\\d+T\\d+:\\d+:\\d+\\.\\d+(\\+\\d+)?(Z)?)"
+		},
+		{
+			"description": "Syslog Timestamp",
+			"name": "token.timestamp",
+			"regex": "^((Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \\d{1,2} \\d{2}\\:\\d{2}\\:\\d{2})",
+			"next": "tags"
+		},
+		{
+			"description": "Thread",
+			"name": "keyword.language",
+			"regex": "\\[[^\\]]+\\]"
+		},
+		{
+			"description": "IP Address",
+			"name": "keyword.operator",
+			"regex": "\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}"
+		},
+		{
+			"description": "Port / Line number",
+			"name": "constant.comment",
+			"regex": "\\:(\\d+)"
+		},
+		{
+			"description": "time",
+			"name": "keyword.comment",
+			"regex": "\\d+ms"
+		},
+		{
+			"description": "hex number",
+			"name": "constant.numeric",
+			"regex": "(0x)[0-9a-fA-F]+"
+		},
+		{
+			"description": "number",
+			"name": "constant.numeric",
+			"regex": "(0x)?\\d+"
+		},
+		{
+			"description": "HTTP method",
+			"name": "keyword.language",
+			"regex": "GET |POST |PUT |DELETE "
+		},
+		{
+			"description": "Property",
+			"name": "param.key",
+			"regex": "([^= ]+)=",
+			"next": "value"
+		},
+		{
+			"description": "Path",
+			"name": "token.path",
+			"regex": "(/[^ /,:>=\\}\"]+)+"
+		},
+		{
+			"description": "Log ERROR",
+			"name": "level.error",
+			"regex": " (ERROR|error|FATAL|fatal|CRIT|crit)[ :]"
+		},
+		{
+			"description": "Log WARN",
+			"name": "level.warn",
+			"regex": " (WARNING|WARN|warning|warn)[ :]"
+		},
+		{
+			"description": "Log DEBUG",
+			"name": "level.debug",
+			"regex": " (DEBUG|debug|TRACE|trace)[ :]"
+		},
+		{
+			"description": "Log INFO",
+			"name": "level.info",
+			"regex": " (INFO|info)[ :]"
+		}
+	],
+	"value": [{
+		"description": "Property",
+		"name": "param.value",
+		"regex": "[^ ,]+",
+		"next": "start"
+	}],
+	"tags": [{
+			"description": "Syslog tags",
+			"name": "app.module",
+			"regex": "[^ :]+",
+			"next": "tags"
+		},
+		{
+			"description": "Syslog tags",
+			"name": "keyword.operator",
+			"regex": ":",
+			"next": "start"
+		}
+	]
+}

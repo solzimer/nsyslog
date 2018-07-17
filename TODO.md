@@ -24,15 +24,17 @@
 * [x] Config cannot be undefined
 * [x] Multilang shuffle, group and ~~all~~
 * [x] Multilang log levels
+* [x] Input, Processor and Transporter Base component
+* [x] Config file relative paths
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
 * [ ] Stdin input decide string
 * [ ] TLS Websocket input
 * [ ] LevelDB transporter
-* [ ] Refactor transporter pause / resume
-* [ ] Config file relative paths
 * [ ] Bypass processors and transporters
 * [ ] Properties delete processor
 * [ ] Generic Parser
 * [ ] Fix Parallel Transporter Groups
+* [ ] Entry get key
+* [ ] TLS options configurer

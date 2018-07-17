@@ -26,6 +26,7 @@
 * [x] Multilang log levels
 * [x] Input, Processor and Transporter Base component
 * [x] Config file relative paths
+* [x] Input keys
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter

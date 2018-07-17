@@ -43,7 +43,7 @@
 		"http" : {
 			"type" : "http",
 			"config" : {
-				"url" : "http://192.168.134.90:6080",
+				"url" : "https://192.168.134.90:6083",
 				"format" : "${array}"
 			}
 		},

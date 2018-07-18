@@ -1,0 +1,87 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog2",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"file1" : {
+			"type" : "file",
+			"config" : {
+				"path" : "data/csv001.csv",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		},
+		"file2" : {
+			"type" : "file",
+			"config" : {
+				"path" : "data/csv002.csv",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"parser1" : {
+			"type" : "csvparser",
+			"config" : {
+				"output" : "csv",
+				"options" : {
+					"trim" : true,
+					"cast" : true,
+					"delimiter" : ",",
+					"columns" : [
+						"VMail Message","Day Mins","Eve Mins","Night Mins","Intl Mins","CustServ Calls",
+						"Day Calls","Day Charge","Eve Calls","Eve Charge","Night Calls","Night Charge",
+						"Intl Calls","Intl Charge","Area Code","Phone","Account Length","Int'l Plan",
+						"VMail Plan","State"
+					]
+				}
+			}
+		},
+		"parser2" : {
+			"type" : "csvparser",
+			"config" : {
+				"output" : "csv",
+				"options" : {
+					"trim" : true,
+					"cast" : true,
+					"delimiter" : ",",
+					"columns" : [
+						"age","workclass","fnlwgt","education","education-num",
+						"marital-status","occupation","relationship","race","sex",
+						"capital-gain","capital-loss","hours-per-week","native-country","income"
+					]
+				}
+			}
+		}
+	},
+
+	"transporters" : {
+		"log" : {
+			"type" : "console",
+			"config" : {"format" : "${JSON}", "level" : "log"}
+		},
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/logout${path}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"${input}=='file1'", "processors":["parser1"], "transporters":["null"]},
+		{"from":"${input}=='file2'", "processors":["parser2"], "transporters":["null"]}
+	]
+}

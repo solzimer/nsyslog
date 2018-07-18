@@ -28,14 +28,19 @@
 * [x] Config file relative paths
 * [x] Input keys
 * [x] TLS options configurer
+* [x] TLS Websocket input
+* [x] File Input relative path
+* [x] CSV Parser
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
 * [ ] Stdin input decide string
-* [ ] TLS Websocket input
 * [ ] LevelDB transporter
 * [ ] Bypass processors and transporters
 * [ ] Properties delete processor
 * [ ] Generic Parser
 * [ ] Fix Parallel Transporter Groups
 * [ ] Entry get key
+* [ ] XML Parser
+* [ ] Nools processor
+* [ ] Reemit Bug

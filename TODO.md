@@ -27,6 +27,7 @@
 * [x] Input, Processor and Transporter Base component
 * [x] Config file relative paths
 * [x] Input keys
+* [x] TLS options configurer
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
@@ -38,4 +39,3 @@
 * [ ] Generic Parser
 * [ ] Fix Parallel Transporter Groups
 * [ ] Entry get key
-* [ ] TLS options configurer

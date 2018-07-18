@@ -45,3 +45,4 @@
 * [ ] XML Parser
 * [ ] Nools processor
 * [ ] Generic Parser Multithread
+* [ ] Factory processor capture exception

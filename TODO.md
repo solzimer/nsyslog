@@ -31,16 +31,17 @@
 * [x] TLS Websocket input
 * [x] File Input relative path
 * [x] CSV Parser
+* [x] CSV Multithread
+* [x] Generic Parser
+* [x] Properties delete processor
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
 * [ ] Stdin input decide string
 * [ ] LevelDB transporter
 * [ ] Bypass processors and transporters
-* [ ] Properties delete processor
-* [ ] Generic Parser
 * [ ] Fix Parallel Transporter Groups
 * [ ] Entry get key
 * [ ] XML Parser
 * [ ] Nools processor
-* [ ] CSV Multithread
+* [ ] Generic Parser Multithread

@@ -33,6 +33,7 @@
 			"type" : "csvparser",
 			"config" : {
 				"output" : "csv",
+				"cores" : 4,
 				"options" : {
 					"trim" : true,
 					"cast" : true,
@@ -50,6 +51,7 @@
 			"type" : "csvparser",
 			"config" : {
 				"output" : "csv",
+				"cores" : 4,
 				"options" : {
 					"trim" : true,
 					"cast" : true,
@@ -81,7 +83,7 @@
 	},
 
 	"flows" : [
-		{"from":"${input}=='file1'", "processors":["parser1"], "transporters":["null"]},
-		{"from":"${input}=='file2'", "processors":["parser2"], "transporters":["null"]}
+		{"from":"${input}=='file1'", "processors":["parser1"], "transporters":["null","#"]},
+		{"from":"${input}=='file2'", "processors":["parser2"], "transporters":["null","#"]}
 	]
 }

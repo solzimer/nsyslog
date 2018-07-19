@@ -22,6 +22,7 @@
     "colors": "^1.1.2",
     "commander": "^2.9.0",
     "csv-parse": "^2.5.0",
+    "csv-stringify": "^3.1.1",
     "dgram": "^1.0.1",
     "express": "^4.16.3",
     "extend": "^3.0.1",

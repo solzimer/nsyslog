@@ -1,5 +1,33 @@
-<Event xmlns="http://schemas/microsoft.com">
+<Event xmlns='http://schemas.microsoft.com/win/2004/08/events/event'>
 	<System>
-		<Provider Name="Microsoft"></Provider>
+		<Provider Name='EventLog'/>
+		<EventID Qualifiers='32768'>6013</EventID>
+		<Level>4</Level>
+		<Task>0</Task>
+		<Keywords>0x80000000000000</Keywords>
+		<TimeCreated SystemTime='YYYY-MM-DDTHH:mm:ss.mmmnnn###'/>
+		<EventRecordID>2866</EventRecordID>
+		<Channel>System</Channel>
+		<Computer>localhost</Computer>
+		<Security/>
 	</System>
+	<EventData>
+		<Data></Data>
+		<Data></Data>
+		<Data></Data>
+		<Data></Data>
+		<Data>2233447</Data>
+		<Data>480 Pacific Standard Time</Data>
+		<Binary>ABC DEF FG</Binary>
+	</EventData>
+	<RenderingInfo Culture='en-US'>
+		<Message>The system uptime is ####### seconds.</Message>
+		<Level>Information</Level>
+		<Task></Task>
+		<Channel></Channel>
+		<Provider></Provider>
+		<Keywords>
+			<Keyword>Classic</Keyword>
+		</Keywords>
+	</RenderingInfo>
 </Event>

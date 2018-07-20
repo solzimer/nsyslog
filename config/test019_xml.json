@@ -23,6 +23,14 @@
 				"readmode" : "offset",
 				"offset" : "start"
 			}
+		},
+		"xmlw" : {
+			"type" : "file",
+			"config" : {
+				"path" : "data/xml-windows.xml",
+				"readmode" : "offset",
+				"offset" : "start"
+			}
 		}
 	},
 
@@ -39,6 +47,14 @@
 			"config" : {
 				"output" : "xml",
 				"tag" : "note",
+				"multiline" : true
+			}
+		},
+		"xmlw" : {
+			"type" : "xmlparser",
+			"config" : {
+				"output" : "xml",
+				"tag" : "Event",
 				"multiline" : true
 			}
 		}
@@ -61,7 +77,8 @@
 	},
 
 	"flows" : [
-		{"from":"xmls", "processors":["xmls"], "transporters":["log"]},
-		{"from":"xmlm", "processors":["xmlm"], "transporters":["log"]}
+		{"from":"xmls", "disabled":false, "processors":["xmls"], "transporters":["log"]},
+		{"from":"xmlm", "disabled":false, "processors":["xmlm"], "transporters":["log"]},
+		{"from":"xmlw", "disabled":false, "processors":["xmlw"], "transporters":["log"]}
 	]
 }

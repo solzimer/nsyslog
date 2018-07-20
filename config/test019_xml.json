@@ -1,0 +1,67 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog2",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"xmls" : {
+			"type" : "file",
+			"config" : {
+				"path" : "data/xml-single.xml",
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		},
+		"xmlm" : {
+			"type" : "file",
+			"config" : {
+				"path" : "data/xml-multi.xml",
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"xmls" : {
+			"type" : "xmlparser",
+			"config" : {
+				"output" : "xml",
+				"tag" : "heading"
+			}
+		},
+		"xmlm" : {
+			"type" : "xmlparser",
+			"config" : {
+				"output" : "xml",
+				"tag" : "note",
+				"multiline" : true
+			}
+		}
+	},
+
+	"transporters" : {
+		"log" : {
+			"type" : "console",
+			"config" : {"format" : "${JSON}", "level" : "log"}
+		},
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/logout${path}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"xmls", "processors":["xmls"], "transporters":["log"]},
+		{"from":"xmlm", "processors":["xmlm"], "transporters":["log"]}
+	]
+}

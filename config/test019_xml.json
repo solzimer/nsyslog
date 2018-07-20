@@ -38,8 +38,9 @@
 		"xmls" : {
 			"type" : "xmlparser",
 			"config" : {
+				"cores" : 4,
 				"output" : "xml",
-				"tag" : "heading"
+				"tag" : "note"
 			}
 		},
 		"xmlm" : {
@@ -77,8 +78,8 @@
 	},
 
 	"flows" : [
-		{"from":"xmls", "disabled":false, "processors":["xmls"], "transporters":["log"]},
-		{"from":"xmlm", "disabled":false, "processors":["xmlm"], "transporters":["log"]},
-		{"from":"xmlw", "disabled":false, "processors":["xmlw"], "transporters":["log"]}
+		{"from":"xmls", "disabled":false, "processors":["xmls"], "transporters":["null"]},
+		{"from":"xmlm", "disabled":true, "processors":["xmlm"], "transporters":["log"]},
+		{"from":"xmlw", "disabled":true, "processors":["xmlw"], "transporters":["log"]}
 	]
 }

@@ -23,7 +23,7 @@
 		"console" : {
 			"type" : "console",
 			"config" : {
-				"format" : "${originalMessage.SystemTime}: ${originalMessage.EventData[0].Data[0].trim()}"
+				"format" : "${originalMessage.SystemTime}: ${originalMessage.EventData.Data.trim()}"
 			}
 		},
 		"null" : {

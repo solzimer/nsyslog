@@ -1,0 +1,42 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"redis" : {
+			"type" : "redis",
+			"config" : {
+				"url" : "redis://localhost",
+				"topics" : ["*"],
+				"format" : "raw"
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		},
+		"syslog" : {
+			"type" : "syslog",
+			"config" : {
+				"url" : "udp://localhost:514"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"${input}=='redis'", "transporters":["console"]}
+	]
+}

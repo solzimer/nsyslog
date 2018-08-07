@@ -47,3 +47,4 @@
 * [ ] Nools processor
 * [ ] Generic Parser Multithread
 * [ ] Factory processor capture exception
+* [ ] Redis Input

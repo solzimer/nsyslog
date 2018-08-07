@@ -29,6 +29,7 @@
     "fileq": "^1.4.0",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
+    "ioredis": "^3.2.2",
     "jsexpr": "^0.5.8",
     "kafka-node": "^2.6.1",
     "leveldown": "^4.0.1",

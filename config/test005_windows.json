@@ -23,7 +23,7 @@
 		"console" : {
 			"type" : "console",
 			"config" : {
-				"format" : "${originalMessage.SystemTime}: ${originalMessage.EventData.Data.trim()}"
+				"format" : "${JSON}"
 			}
 		},
 		"null" : {

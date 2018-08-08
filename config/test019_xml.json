@@ -8,26 +8,11 @@
 	},
 
 	"inputs" : {
-		"xmls" : {
+		"file" : {
 			"type" : "file",
 			"config" : {
-				"path" : "data/xml-single.xml",
-				"readmode" : "offset",
-				"offset" : "start"
-			}
-		},
-		"xmlm" : {
-			"type" : "file",
-			"config" : {
-				"path" : "data/xml-multi.xml",
-				"readmode" : "offset",
-				"offset" : "start"
-			}
-		},
-		"xmlw" : {
-			"type" : "file",
-			"config" : {
-				"path" : "data/xml-windows.xml",
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
 				"readmode" : "offset",
 				"offset" : "start"
 			}
@@ -35,28 +20,19 @@
 	},
 
 	"processors" : {
-		"xmls" : {
-			"type" : "xmlparser",
+		"csv" : {
+			"type" : "csvout",
 			"config" : {
-				"cores" : 4,
-				"output" : "xml",
-				"tag" : "note"
-			}
-		},
-		"xmlm" : {
-			"type" : "xmlparser",
-			"config" : {
-				"output" : "xml",
-				"tag" : "note",
-				"multiline" : true
-			}
-		},
-		"xmlw" : {
-			"type" : "xmlparser",
-			"config" : {
-				"output" : "xml",
-				"tag" : "Event",
-				"multiline" : true
+				"output" : "csv",
+				"fields" : [
+					"${type}",
+					"${seq}",
+					"${ln}",
+					"${path}",
+					"${filename}"
+				],
+				"options" : {
+				}
 			}
 		}
 	},
@@ -78,8 +54,6 @@
 	},
 
 	"flows" : [
-		{"from":"xmls", "disabled":false, "processors":["xmls"], "transporters":["null"]},
-		{"from":"xmlm", "disabled":true, "processors":["xmlm"], "transporters":["log"]},
-		{"from":"xmlw", "disabled":true, "processors":["xmlw"], "transporters":["log"]}
+		{"from":"*", "processors":["csv"], "transporters":["log"]}
 	]
 }

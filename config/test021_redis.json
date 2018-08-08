@@ -12,7 +12,7 @@
 			"type" : "redis",
 			"config" : {
 				"url" : "redis://localhost",
-				"topics" : ["*"],
+				"channels" : ["*"],
 				"format" : "raw"
 			}
 		}

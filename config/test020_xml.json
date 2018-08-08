@@ -1,0 +1,85 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog2",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"xmls" : {
+			"type" : "file",
+			"config" : {
+				"path" : "data/xml-single.xml",
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		},
+		"xmlm" : {
+			"type" : "file",
+			"config" : {
+				"path" : "data/xml-multi.xml",
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		},
+		"xmlw" : {
+			"type" : "file",
+			"config" : {
+				"path" : "data/xml-windows.xml",
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"xmls" : {
+			"type" : "xmlparser",
+			"config" : {
+				"cores" : 4,
+				"output" : "xml",
+				"tag" : "note"
+			}
+		},
+		"xmlm" : {
+			"type" : "xmlparser",
+			"config" : {
+				"output" : "xml",
+				"tag" : "note",
+				"multiline" : true
+			}
+		},
+		"xmlw" : {
+			"type" : "xmlparser",
+			"config" : {
+				"output" : "xml",
+				"tag" : "Event",
+				"multiline" : true
+			}
+		}
+	},
+
+	"transporters" : {
+		"log" : {
+			"type" : "console",
+			"config" : {"format" : "${JSON}", "level" : "log"}
+		},
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/logout${path}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"xmls", "disabled":false, "processors":["xmls"], "transporters":["null"]},
+		{"from":"xmlm", "disabled":true, "processors":["xmlm"], "transporters":["log"]},
+		{"from":"xmlw", "disabled":true, "processors":["xmlw"], "transporters":["log"]}
+	]
+}

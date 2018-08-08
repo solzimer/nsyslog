@@ -38,6 +38,7 @@
     "moment": "^2.22.1",
     "mongodb": "^2.2.27",
     "napajs": "^0.2.3",
+    "nools": "^0.4.4",
     "nsyslog-parser": "^0.8.2",
     "promise-stream-queue": "^0.4.1",
     "request": "^2.87.0",

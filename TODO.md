@@ -36,6 +36,7 @@
 * [x] Properties delete processor
 * [x] CSV Generate processor
 * [x] XML Parser
+* [x] Redis Input
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
@@ -47,4 +48,4 @@
 * [ ] Nools processor
 * [ ] Generic Parser Multithread
 * [ ] Factory processor capture exception
-* [ ] Redis Input
+* [ ] Group Filter

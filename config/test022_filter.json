@@ -1,0 +1,49 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 1000},
+		"process" : {"buffer": 1000}
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : false,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"timestamp" : {
+			"type" : "timestamp",
+			"config" : {}
+		},
+		"filter" : {
+			"type" : "filter",
+			"config" : {
+				"mode" : "accept",
+				"filter" : "/awstats/.test(${originalMessage})"
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"${input}=='file'", "processors":["filter"], "transporters":["console"], "mode":"parallel"}
+	]
+}

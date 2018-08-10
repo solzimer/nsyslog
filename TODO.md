@@ -37,6 +37,7 @@
 * [x] CSV Generate processor
 * [x] XML Parser
 * [x] Redis Input
+* [x] Group Filter
 * [ ] Fix FlowStream highWaterMark
 * [ ] Fix BypassStream highWaterMark
 * [ ] Stdout Transporter
@@ -48,4 +49,3 @@
 * [ ] Nools processor
 * [ ] Generic Parser Multithread
 * [ ] Factory processor capture exception
-* [ ] Group Filter

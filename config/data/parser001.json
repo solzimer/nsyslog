@@ -1,0 +1,41 @@
+{
+	"start": [
+		{
+			"description": "Timestamp",
+			"name": "timestamp",
+			"regex": "^(\\d+\\-\\d+\\-\\d+T\\d+:\\d+:\\d+(\\.\\d+)?(Z)?)",
+			"next" : "hostname"
+		}
+	],
+
+	"hostname" : [
+		{
+			"description": "Source hostname",
+			"name" : "hostname",
+			"regex" : "[a-zA-Z][^ =>]+",
+			"next" : "ipaddr"
+		}
+	],
+	"ipaddr": [
+		{
+			"description": "Source IP address",
+			"name": "ipaddr",
+			"regex" : "\\d+\\.\\d+\\.\\d+\\.\\d+"
+		},
+		{
+			"description" : "Jump state",
+			"name" : null,
+			"regex" : "=>",
+			"next" : "body"
+		}
+	],
+
+	"body" : [
+		{
+			"description" : "Message body",
+			"name" : "body",
+			"regex" : ".*",
+			"next" : "start"
+		}
+	]
+}

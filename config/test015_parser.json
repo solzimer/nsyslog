@@ -15,8 +15,8 @@
 				"bypass": false
 			},
 			"config" : {
-				"path" : "/var/log/**/*.log",
-				"watch" : true,
+				"path" : "/t/nsyslog/config/data/parser001.log",
+				"watch" : false,
 				"readmode" : "offset",
 				"offset" : "start"
 			}
@@ -27,6 +27,7 @@
 		"parser" : {
 			"type" : "parser",
 			"config" : {
+				"path" : "data/parser001.json",
 				"cores" : 4,
 				"map" : true,
 				"singleval" : true

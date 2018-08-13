@@ -1,8 +1,64 @@
-## Multilang Processor
+## Generic Parser
 
-Multilang processors allows the use of [Apache Storm Multilang](http://storm.apache.org/releases/1.1.2/Multilang-protocol.html) protocol to call external components for data processing (Apache Storm Bolts).
+Parse the entry following a state machine JSON ruleset, giving structure to a text message. Rulesets are based on [Ace Editor Syntax Higlighters](https://ace.c9.io/#nav=higlighter) (and they are based on TextMate grammars).
 
-This way, it's possible to create external scripts in any language that process the data in an asynchronous, parallell and/or multi-core way.
+## Ruleset Syntax
+Rulesets are JSON files that describes a state machine that will run over a line (or multiple lines) of text, finding tokens and assigning them to entry fields.
+
+The first state is always **start**:
+
+###Example
+```javascript
+// We want to parse lines that follows the following syntax:
+// 2018-01-01T20:00:00 host1 127.0.0.1 => This is the message body 1
+// 2018-01-01T20:00:00 host2 127.0.0.1 => This is the message body 2
+// 2018-01-01T20:00:00 hostname 127.0.0.1 => This is the message body 3
+{
+	// First state is always "start"
+	"start": [
+		{
+			"description": "Timestamp",	// description is only for informational purpose
+			"name": "timestamp",				// Name of the field to be assigned
+			"regex": "^(\\d+\\-\\d+\\-\\d+T\\d+:\\d+:\\d+(\\.\\d+)?(Z)?)",	// Regular expression to be matched
+			"next" : "hostname"	// Next state after timestamp is "hostname"
+		}
+	],
+
+	"hostname" : [
+		{
+			"description": "Source hostname",
+			"name" : "hostname",
+			"regex" : "[a-zA-Z][^ =>]+",
+			"next" : "ipaddr"
+		}
+	],
+
+	// Parser will be in "ipaddr" state until it finds a "=>" token.
+	// Rules order is very important since first matched will be used
+	"ipaddr": [
+		{
+			"description": "Source IP address",
+			"name": "ipaddr",
+			"regex" : "\\d+\\.\\d+\\.\\d+\\.\\d+"
+		},
+		{
+			"description" : "Jump state",
+			"name" : null,
+			"regex" : "=>",
+			"next" : "body"
+		}
+	],
+
+	"body" : [
+		{
+			"description" : "Message body",
+			"name" : "body",
+			"regex" : ".*",
+			"next" : "start"	// We have reached the end of the line, return to "start"
+		}
+	]
+}
+```
 
 ## Examples
 Use of a external script written in NodeJS. Will spawn 4 processes that process data in a round-robin fashion (shuffle).

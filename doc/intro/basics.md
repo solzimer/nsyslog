@@ -21,3 +21,5 @@ There are four basic components that run under NSyslog:
 * **processors**: Processors are cappable of operate over each entry, to perform operations and transformations. They can parse raw data, json, csv or syslog data, stablish new and computed properties, filter and group, etc... Some processors can even be multithreaded (Yes, in node!).
 * **transporters**: They are the opposite of inputs; They receive the processed entries and send them to their destination endpoints.
 * **flows**: A flow describes a path between inputs, processors and transporters, and are responsible of manage all the process as fast as possible, guaranteeing message order and fault tolerance. Additionally, flows can be forked to take advantage of multi-core cpus.
+
+[Back](../README.md)

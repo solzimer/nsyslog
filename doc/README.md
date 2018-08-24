@@ -2,6 +2,16 @@
 
 ![Architecture](assets/nsyslog.svg)
 
+## Quick Start
+* [Installation](intro/install.md)
+* [Introduction](intro/intro.md)
+* [Components](intro/components.md)
+
+## Configuration File
+* [Introduction](config/intro.md)
+* [Basic configuration](config/basic.md)
+* [Custom components](config/custom.md)
+
 ## Inputs
 * [Standard Input](inputs/stdin.md)
 * [File Watcher](inputs/file.md)

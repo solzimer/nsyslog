@@ -1,13 +1,19 @@
+```javascript
 {
+	// General parameters
 	"config" : {
-		"datadir" : "/tmp/nsyslog",
+		"datadir" : "/tmp/nsyslog",		// Path to store buffers
 		"input" : {"buffer" : 1000},
 		"process" : {"buffer": 1000}
 	},
 
+	// Input declarations
 	"inputs" : {
+		// This is the ID / Reference of the input
 		"file" : {
-			"type" : "file",
+			"type" : "file",	// Input type
+
+			// Configuration for this input instance
 			"config" : {
 				"path" : "/var/log/**/*.log",
 				"watch" : true,
@@ -27,21 +33,15 @@
 		}
 	},
 
+	// Processor declarations
 	"processors" : {
 		"timestamp" : {
 			"type" : "timestamp",
 			"config" : {}
-		},
-		"props" : {
-			"type" : "properties",
-			"config" : {
-				"set" : {
-					"otherfield" : "${timestamp} => ${originalMessage}"
-				}
-			}
 		}
 	},
 
+	// Transporter declarations
 	"transporters" : {
 		"syslog" : {
 			"type" : "syslog",
@@ -59,18 +59,15 @@
 				}
 			}
 		},
-		"logger" : {
-			"type" : "console",
-			"config" : {
-				"format" : "${JSON}"
-			}
-		},
 		"null" : {
 			"type" : "null"
 		}
 	},
 
+	// Flow declarations
 	"flows" : [
-		{"from":"${input}=='file'", "processors":["timestamp","props"], "transporters":["syslog","logger"], "mode":"parallel"}
+		{"from":"${input}=='file'", "processors":["timestamp"], "transporters":["syslog"], "mode":"parallel"}
 	]
 }
+
+```

@@ -1,11 +1,27 @@
 # nsyslog
+The next generation log agent and syslog server!
 
 ![Architecture](assets/nsyslog.svg)
+
+NSyslog is a modern, new generation, log agent and syslog server. It features a modular flow architecture of data collectors (inputs), processors and transporters.
+
+Since all the codebase is written in NodeJS, it has a very small memory footprint and excels at data input/output. It also benefits from the excellent [streams framework](https://nodejs.org/api/stream.html) provided natively by node.
+
+### Main Features
+* Small memory footprint
+* Flow control of push and pull inputs
+* A wide core catalog [inputs](inputs/index.md), [processors](processors/index.md) and [transporters](transporters/index.md)
+* Extensible with custom inputs, processors and transporters
+* Support for Apache Storm multilang protocol
+* Multicore flows for parallel processing
 
 ## Quick Start
 * [Installation](intro/install.md)
 * [Introduction](intro/intro.md)
 * [Components](intro/components.md)
+* [Inputs](inputs/index.md)
+* [Processors](processors/index.md)
+* [Transporters](transporters/index.md)
 
 ## Configuration File
 * [Introduction](config/intro.md)

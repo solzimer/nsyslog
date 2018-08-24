@@ -11,7 +11,9 @@ Some examples:
 * Subscribe to message queues and operate over the data
 * Read Windows events and publish them to a realtime pub/sub mechanism
 
-There's many more that can be done; it depends on your use case. To achieve this level of functionality, NSyslog core architecture is described as follow:
+There's many more that can be done; it depends on your use case. To achieve this level of functionality, NSyslog core architecture is described as follows
+
+## Architecture
 
 ![Architecture](../assets/nsyslog.svg)
 

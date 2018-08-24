@@ -10,6 +10,7 @@ Since all the codebase is written in NodeJS, it has a very small memory footprin
 ### Main Features
 * Small memory footprint
 * Flow control of push and pull inputs
+* On-Disk input data buffering
 * A wide core catalog [inputs](inputs/index.md), [processors](processors/index.md) and [transporters](transporters/index.md)
 * Extensible with custom inputs, processors and transporters
 * Support for Apache Storm multilang protocol
@@ -17,7 +18,7 @@ Since all the codebase is written in NodeJS, it has a very small memory footprin
 
 ## Quick Start
 * [Installation](intro/install.md)
-* [Introduction](intro/intro.md)
+* [Basics](intro/basics.md)
 * [Components](intro/components.md)
 * [Inputs](inputs/index.md)
 * [Processors](processors/index.md)
@@ -27,6 +28,12 @@ Since all the codebase is written in NodeJS, it has a very small memory footprin
 * [Introduction](config/intro.md)
 * [Basic configuration](config/basic.md)
 * [Custom components](config/custom.md)
+
+## API
+* [NSyslog](api/nsyslog.md)
+* [Input](api/input.md)
+* [Processor](api/processor.md)
+* [Transporter](api/transporter.md)
 
 ## Inputs
 * [Standard Input](inputs/stdin.md)

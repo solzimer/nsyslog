@@ -22,4 +22,10 @@ There are four basic components that run under NSyslog:
 * **transporters**: They are the opposite of inputs; They receive the processed entries and send them to their destination endpoints.
 * **flows**: A flow describes a path between inputs, processors and transporters, and are responsible of manage all the process as fast as possible, guaranteeing message order and fault tolerance. Additionally, flows can be forked to take advantage of multi-core cpus.
 
+When inputs collect data, it can be done via *pull* or *push* methods. *Pull* inputs are those that read entries whenever the flows requires it. For example, file inputs are *pull inputs*, since they *activelly* read the file contents only when requested. As opposite, *push* inputs listens for incoming data, and push it to the flow as soon as it arrives, so they cannot perform any flow control. For example, an HTTP server listens for connections and receive the data. In these cases, data is buffered in disk, so the flows are not overflowed by the incoming entries.
+
+When a entry matches a flow condition (that is, a flow wants to process this kind of data), it sends the entries to the processors, that can be either sync, or async. The flow process guarantees that the entry order is preserved.
+
+Finally, when the entries arrive to the transporters phase, they are sent to its final destinations. The flow can configure transporters to operate in serial or parallel mode (or a mix, as we will see)
+
 [Back](../README.md)

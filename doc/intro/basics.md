@@ -13,7 +13,7 @@ Some examples:
 
 There's many more that can be done; it depends on your use case. To achieve this level of functionality, NSyslog core architecture is described as follow:
 
-![Architecture](assets/nsyslog.svg)
+![Architecture](../assets/nsyslog.svg)
 
 There are four basic components that run under NSyslog:
 

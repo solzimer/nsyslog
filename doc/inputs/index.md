@@ -1,4 +1,17 @@
 ## Inputs
+
+Inputs are responsible for reading data from sources and send them to the flows in order to be processed.
+
+An input can be whatever mechanism that allows reading data from any source, such as a text file, database, message queue, TCP/UDP server, etc..
+
+There are two kinds of inputs:
+
+* **Pull Inputs** : Pull inputs activelly read data. It means that, when requested, pull inputs will fetch a line of data, transforms it to an entry, and sends it to the flows. Then, it will wait for the next request. This way, the NSyslog process will not overflow, since data is only transmited and processed as needed, in a controlled manner. Examples of pull inputs are: File readers, database readers...
+
+* **Push Inputs** : Push inputs listens for data from the sources. As soon a source sends data to the input, it transforms them to a entry and sends them to the flows. Push inputs cannot control when data arrives, and if there's more data than NSyslog can handle at a time, it may overflow the process. To solve this issue, entries comming from push inputs are buffered to disk, and flows request them from there. Examples of push inputs are: HTTP servers, WebSocket servers, Redis pub/sub...
+
+This is the core set of included inputs:
+
 * [Standard Input](stdin.md)
 * [File Watcher](file.md)
 * [Syslog UDP, TCP and TLS](syslog.md)
@@ -6,5 +19,39 @@
 * [WebSocket Server](ws.md)
 * [ZeroMQ](zmq.md)
 * [Windows Events](windows.md)
+
+## Configuration
+Every input is configured the same way in the JSON configuration file:
+
+```javascript
+{
+	// Inputs section
+	"inputs" : {
+		"logfiles" : {
+			"type" : "file"
+			"maxPending" : 1000
+			"when" : {
+				"filter": "${originalMessage}.startsWith('root')",
+				"bypass": false
+			},
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"				
+			}
+		}
+	}
+}
+```
+
+Let's look at each section of the JSON configuration:
+* **ID** : The first key (*logfiles*) is the ID / Reference of the input. It can be whatever name you like (following JSON rules), and will be used as a reference in other sections.
+* **type** : The type of the input (as seen before).
+* **maxPending** : This parameter is optional, and will limit how many entries an input will send to flows before they are completely processed.
+* **when** : Optional. It defines a very first filter for entries.
+	* **filter** : Can be an expression or *false*. If an entry match the expression, it will be sent to flows; otherwise the entry is ignored.
+	* **bypass** : Can be *true* or *false*. If *true*, **filter** is ignored, and every entry is passed to flows.
+* **config** : These are the particular configuration parameters of each input type.
 
 [Back](../README.md)

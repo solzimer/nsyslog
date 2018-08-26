@@ -125,4 +125,6 @@ Basic Configuration example:
 }
 ```
 
+You can see a list of examples in [this link](../../config)
+
 [Back](../README.md)

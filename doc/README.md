@@ -19,10 +19,6 @@ Since all the codebase is written in NodeJS, it has a very small memory footprin
 ## Quick Start
 * [Installation](intro/install.md)
 * [Basics](intro/basics.md)
-* [Inputs](inputs/index.md)
-* [Processors](processors/index.md)
-* [Transporters](transporters/index.md)
-* [Flows](flows/index.md)
 
 ## Configuration File
 * [Introduction](config/index.md)

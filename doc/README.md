@@ -29,7 +29,8 @@ Since all the codebase is written in NodeJS, it has a very small memory footprin
 * [Global configurations](config/globals.md)
 * [Inputs](inputs/index.md)
 * [Filters and Filter Groups](config/filters.md)
-* [Processor and Processor Groups](processors/index.md)
+* [Processors and Processor Groups](processors/index.md)
+* [Transporters and Transporter Groups](transporters/index.md)
 * [Flows](config/flows.md)
 * [Custom components](config/custom.md)
 

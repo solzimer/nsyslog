@@ -1,4 +1,4 @@
-## Processors
+## Filters
 
 Filters describe expressions that entries must match in order to be sent to their corresponding flows. These expressions are written following the [jsexpr](https://www.npmjs.com/package/jsexpr) expression evaluator.
 

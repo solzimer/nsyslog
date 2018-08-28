@@ -1,0 +1,33 @@
+{
+	"register" : [
+		{"type":"input","id":"mypush","require":"custom/push-input.js"},
+		{"type":"input","id":"mypull","require":"custom/pull-input.js"}
+	],
+
+	"config" : {
+		"datadir" : "/tmp/nsyslog"
+	},
+
+	"inputs" : {
+		"pusher" : {
+			"type" : "mypull",
+			"config" : {
+				"interval" : 10,
+				"threshold" : 0.99
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		}
+	},
+
+	"flows" : [
+		{"from":"*", "transporters":["console"], "mode":"parallel"}
+	]
+}

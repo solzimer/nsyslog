@@ -205,3 +205,142 @@ Configuration:
 
 ### Processors
 This is the Processor interface:
+```javascript
+class Processor extends Component {
+	constructor(id,type) {
+		super(id,type);
+	}
+
+	process(entry,callback) {
+		callback(null,entry);
+	}
+}
+```
+
+* **process** : This is the key method of a processor. It receives an entry, and when its done, publish the results via the callback function.
+
+Processors doesn't really need to publish an entry as a result of receiving one. You can call the *callback* function without arguments. In a similar way, a processor can output more than one result for an input entry.
+
+### Examples
+```javascript
+const
+	Processor = require('nsyslog').Core.Processor,
+	jsexpr = require('jsexpr');
+
+class MyProcessor extends Processor {
+	constructor(id) {
+		super(id);
+		this.paused = false;
+	}
+
+	configure(config,callback) {
+		config = config || {};
+		this.filter = jsexpr.eval(config.filter);
+		this.duplicate = jsexpr.eval(config.duplicate);
+		callback();
+	}
+
+	process(entry, callback) {
+		if(this.filter(entry)) {
+			// Entry is filtered, so output nothing
+			callback();
+		}
+		else if(this.duplicate(entry)) {
+			// Entry can produce more than one output
+			callback(null,[entry,entry]);
+		}
+		else {
+			// Processors can be asynchronous
+			setTimeout(()=>{
+				entry.myProcess = 'nothing done';
+				callback(null,entry);
+			},100);
+		}
+	}
+}
+
+module.exports = MyProcessor;
+```
+
+Configuration:
+```JSON
+{
+	"register" : [
+		{"type":"processor","id":"myproc","require":"custom/custom-processor.js"}
+	],
+
+	"processors" : {
+		"multi" : {
+			"type" : "myproc",
+			"config" : {
+				"filter" : "${originalMessage}.match(/[02468]$/)",
+				"duplicate" : "${originalMessage}.match(/[13579]$/)"
+			}
+		}
+	}
+}
+```
+
+Another way of creating custom processors is through the use of the [multilang core processor](../processors/multilang.md)
+
+### Transporters
+This is the Transporter interface:
+```javascript
+class Transporter extends Component {
+	constructor(id,type) {
+		super(id,type);
+	}
+
+	transport(entry, callback) {
+		if(callback) callback(null,entry);
+	}
+}
+```
+
+* **transport** : This is the key method of a transporter. It receives an entry, and when its done, publish the results via the callback function.
+
+### Examples
+```javascript
+const
+	Transporter = require('nsyslog').Core.Transporter,
+	jsexpr = require('jsexpr');
+
+class MyTransporter extends Transporter {
+	constructor(id) {
+		super(id);
+	}
+
+	configure(config,callback) {
+		config = config || {};
+		this.format = jsexpr.expression(config.format);
+		callback();
+	}
+
+	transport(entry, callback) {
+		console.log(`Output => ${this.format(entry)}`);
+		callback(null,entry);
+	}
+}
+
+module.exports = MyTransporter;
+```
+
+Configuration:
+```JSON
+{
+	"register" : [
+		{"type":"transporter","id":"mytrans","require":"custom/custom-transporter.js"}
+	],
+
+	"transporters" : {
+		"console" : {
+			"type" : "mytrans",
+			"config" : {
+				"format" : "${seq}: ${originalMessage}"
+			}
+		}
+	}
+}
+```
+
+[Back](../README.md)

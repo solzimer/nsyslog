@@ -30,7 +30,9 @@ A flow tipically looks like this:
 ## Configuration
 Flows are declared in the JSON configuration file, following this syntax:
 
-* **from**: Can be a filter ID, a filter group (preceded by a $), an input ID, or an inline expression. This field describes which entries will be sent to this flow.
+* **from**: Can be a filter ID, a filter group (preceded by a $), an input ID, or an inline expression. This field describes which entries will be sent to this flow. There are two special filters that can be used:
+	* \* : When \* is used, a flow will accept all entries.
+	* DEFAULT : Tis a special case where a flow will receive entries that haven't been sent to any other flow.
 * **when** : Can be a filter ID, a filter group (preceded by a $), or an inline expression. **when** is meant to be a second filter, useful when nesting flows (see below for nested flows)
 * **disabled** : Optional. Can *true* or *false* (*false* by default). This disables a flow (useful for test and debugging purpose).
 * **processors** : A list of processor / processor group IDs (preceded by $). This is the list of processor instances that will transform the entries. They are chained in the same order they are declared.

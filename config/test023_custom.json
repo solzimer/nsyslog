@@ -1,7 +1,9 @@
 {
 	"register" : [
 		{"type":"input","id":"mypush","require":"custom/push-input.js"},
-		{"type":"input","id":"mypull","require":"custom/pull-input.js"}
+		{"type":"input","id":"mypull","require":"custom/pull-input.js"},
+		{"type":"processor","id":"myproc","require":"custom/custom-processor.js"},
+		{"type":"transporter","id":"mytrans","require":"custom/custom-transporter.js"}
 	],
 
 	"config" : {
@@ -10,24 +12,34 @@
 
 	"inputs" : {
 		"pusher" : {
-			"type" : "mypull",
+			"type" : "mypush",
 			"config" : {
 				"interval" : 10,
-				"threshold" : 0.99
+				"threshold" : 0.5
+			}
+		}
+	},
+
+	"processors" : {
+		"multi" : {
+			"type" : "myproc",
+			"config" : {
+				"filter" : "${originalMessage}.match(/[02468]$/)",
+				"duplicate" : "${originalMessage}.match(/[13579]$/)"
 			}
 		}
 	},
 
 	"transporters" : {
 		"console" : {
-			"type" : "console",
+			"type" : "mytrans",
 			"config" : {
-				"format" : "${JSON}"
+				"format" : "${seq}: ${originalMessage}"
 			}
 		}
 	},
 
 	"flows" : [
-		{"from":"*", "transporters":["console"], "mode":"parallel"}
+		{"from":"*", "processors":["multi"], "transporters":["console"], "mode":"parallel"}
 	]
 }

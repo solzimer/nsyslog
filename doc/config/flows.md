@@ -53,6 +53,7 @@ Nested flows are a way to avoid writing multiple flows in the configuration file
 			{"when":["httpErr"], "transporters":"error"}
 		]
 	}
+]
 ```
 
 [Back](../README.md)

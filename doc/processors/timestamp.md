@@ -14,3 +14,6 @@ Places a timestamp to the input object
 	}
 }
 ```
+
+## Configuration parameters
+* **field** : Field where timestamp is stored

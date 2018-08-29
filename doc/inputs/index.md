@@ -16,6 +16,7 @@ This is the core set of included inputs:
 * [File Watcher](file.md)
 * [Syslog UDP, TCP and TLS](syslog.md)
 * [Apache Kafka](kafka.md)
+* [Redis](redis.md)
 * [WebSocket Server](ws.md)
 * [ZeroMQ](zmq.md)
 * [Windows Events](windows.md)

@@ -8,6 +8,8 @@ A flow tipically looks like this:
 {
 	"flows" : [
 		{
+			// ID is optional, but recomended
+			"id" : "myflow",
 			// Can be a filter, a input ID or an inline expression
 			"from" : "files",
 			// Can be a filter or inline expression
@@ -30,6 +32,7 @@ A flow tipically looks like this:
 ## Configuration
 Flows are declared in the JSON configuration file, following this syntax:
 
+* **id** : ID is optional since every flow without one will receive an automatic identifier. But can be useful in case you need to keep track of the flow work.
 * **from**: Can be a filter ID, a filter group (preceded by a $), an input ID, or an inline expression. This field describes which entries will be sent to this flow. There are two special filters that can be used:
 	* \* : When \* is used, a flow will accept all entries.
 	* DEFAULT : Tis a special case where a flow will receive entries that haven't been sent to any other flow.

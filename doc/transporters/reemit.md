@@ -1,51 +1,15 @@
+## Reemit Transporter
+
+Reemit transporter is a special case of transporter that redirects an output entry to the flows input again, This is useful if you want to create a graph of flows.
+
+Reemit transporter desn't need to be declared, as it is internally instantiated by NSyslog, and identified by the \# token.
+
+## Examples
+
 ```json
-"transporters" : {
-	"stat" : {
-		"type" : "stat",
-		"config" : {
-			"threshold" : 1000
-		}
-	},
-	"mongo" : {
-		"type" : "mongo",
-		"config" : {
-			"url" : "mongodb://localhost:27017/test",
-			"collection" : "syslog",
-			"format" : {
-				"path" : "${path}",
-				"message" : "${originalMessage}",
-				"timestamp": "${timestamp}",
-				"extra" : {
-					"type" : "${type}",
-					"path" : "${path}"
-				}
-			}
-		}
-	},
-	"log" : {
-		"type" : "console",
-		"config" : {"format" : "${match} => ${originalMessage}", "level" : "log"}
-	},
-	"file" : {
-		"type" : "file",
-		"config" : {
-			"path" : "/var/logout${path}"
-		}
-	},
-	"syslog" : {
-		"type" : "syslog",
-		"config" : {
-			"url" : "tcp://192.168.134.90:514",
-			"format" : "${originalMessage}",
-			"application" : "${filename}",
-			"hostname" : "localhost",
-			"level" : "info",
-			"facility" : 5,
-			"stream" : true
-		}
-	},
-	"null" : {
-		"type" : "null"
-	}
+{
+	"flows" : [
+		{"from":"some_input", "processors":"somework", "transporters":"#"}
+	]
 }
 ```

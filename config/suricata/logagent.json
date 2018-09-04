@@ -1,0 +1,94 @@
+{
+  "config": {
+    "datadir": "/tmp/nsyslog",
+    "input": {
+      "maxPending": 1000
+    },
+    "buffer": {
+      "maxPending": 1000
+    },
+    "processor": {
+      "maxPending": 1000
+    },
+    "transporter": {
+      "maxPending": 1000
+    }
+  },
+
+  "include" : ["./http.json"],
+
+  "inputs": {
+    "suricata": {
+      "type": "file",
+      "config": {
+        "path": "/var/log/suricata/eve.json",
+        "watch": true,
+        "readmode": "offset",
+        "offset": "start"
+      }
+    }
+  },
+  "processors": {
+    "json": {
+      "type": "jsonparser"
+    },
+		"timestamp" : {
+			"type" : "timestamp",
+			"config" : {
+				"output" : "ts"
+			}
+		},
+		"date" : {
+			"type" : "dateformat",
+			"config" : {
+				"field" : "${timestamp}",
+				"format" : "YYYY-MM-DD",
+				"output" : "evtdate"
+			}
+		},
+		"time" : {
+			"type" : "dateformat",
+			"config" : {
+				"field" : "${timestamp}",
+				"format" : "HH:mm:ss",
+				"output" : "evttime"
+			}
+		},
+    "props": {
+      "type": "properties",
+      "config": {
+        "set": {
+					"input" : "event",
+          "st": "IDS",
+					"res" : "${event_type}"
+        }
+      }
+    }
+  },
+
+	"transporters" : {
+		"mongo" : {
+			"type" : "mongo",
+			"config" : {
+				"url" : "mongodb://boxica4:27017/boxica",
+				"retry" : true,
+				"collection" : "events",
+				"format" : {
+					"timestamp" : "${timestamp}", "et" : "${et}",
+					"evtdate" : "${evtdate}", "evttime" : "${evttime}",
+					"et" : "${et}", "st" : "${st}",
+					"sip": "${sip}", "sp" : "${sp}",
+          "dip" : "${dip}", "dp" : "${dp}",
+          "p" : "${p}", "fn" : "${fn}",
+					"ct1" : "${ct1}",	"ct2" : "${ct2}",	"ct3" : "${ct3}",
+					"ct4" : "${ct4}",	"ct5" : "${ct5}",	"ct6" : "${ct6}",
+					"ct7" : "${ct7}",	"ct8" : "${ct8}",	"ct9" : "${ct9}"
+				}
+			}
+		}
+	},
+
+  "flows": [
+    {"from": "suricata", "processors" : ["json","props","date","time"], "transporters": "#"}
+  ]
+}

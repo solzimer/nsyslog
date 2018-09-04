@@ -1,0 +1,30 @@
+{
+  "processors": {
+    "http_event": {
+      "type": "properties",
+      "config": {
+        "set": {
+					"et" : "${timestamp}",
+					"res" : "${res}",
+          "st" : "${st}",
+          "sip": "${src_ip}",
+          "sp" : "${src_port}",
+          "dip" : "${dest_ip}",
+          "dp" : "${dest_port}",
+          "p" : "${proto}",
+          "fn" : "${http.filename}",
+					"ct1" : "${http.hostname}",
+					"ct2" : "${http.url}",
+					"ct3" : "${http.http_user_agent}",
+					"ct4" : "${http.method}",
+					"ct5" : "${http.protocol}",
+					"ct6" : "${http.status}",
+					"ct7" : "${http.length}"
+        }
+      }
+    }
+  },
+  "flows": [
+    {"from": "${res}=='http'", "processors": "http_event", "transporters":"mongo"}
+  ]
+}

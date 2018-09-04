@@ -1,6 +1,7 @@
 {
 	"config" : {
-		"datadir" : "/tmp/nsyslog",
+		"datadir" : "/tmp/nsyslog1",
+		"wmdir" : "/tmp/wms1",
 		"input" : {"maxPending" : 1000},
 		"buffer" : {"maxPending": 1000},
 		"processor" : {"maxPending": 1000},

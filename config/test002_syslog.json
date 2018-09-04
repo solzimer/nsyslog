@@ -1,6 +1,7 @@
 {
 	"config" : {
 		"datadir" : "/tmp/nsyslog",
+		"wmdir" : "/tmp/wms",
 		"input" : {"buffer" : 1000},
 		"process" : {"buffer": 1000}
 	},

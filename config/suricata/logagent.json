@@ -41,7 +41,7 @@
 		"date" : {
 			"type" : "dateformat",
 			"config" : {
-				"field" : "${timestamp}",
+				"field" : "${ts}",
 				"format" : "YYYY-MM-DD",
 				"output" : "evtdate"
 			}
@@ -49,7 +49,7 @@
 		"time" : {
 			"type" : "dateformat",
 			"config" : {
-				"field" : "${timestamp}",
+				"field" : "${ts}",
 				"format" : "HH:mm:ss",
 				"output" : "evttime"
 			}
@@ -74,7 +74,7 @@
 				"retry" : true,
 				"collection" : "events",
 				"format" : {
-					"timestamp" : "${timestamp}", "et" : "${et}",
+					"timestamp" : "${ts}", "et" : "${et}",
 					"evtdate" : "${evtdate}", "evttime" : "${evttime}",
 					"et" : "${et}", "st" : "${st}",
 					"sip": "${sip}", "sp" : "${sp}",
@@ -85,10 +85,18 @@
 					"ct7" : "${ct7}",	"ct8" : "${ct8}",	"ct9" : "${ct9}"
 				}
 			}
+		},
+		"logger" : {
+			"type" : "console",
+			"config" : {
+				"format" : {
+					"timestamp" : "${JSON}"
+				}
+			}
 		}
 	},
 
   "flows": [
-    {"from": "suricata", "processors" : ["json","props","date","time"], "transporters": "#"}
+    {"from": "suricata", "processors" : ["json","timestamp","props","date","time"], "transporters": "#"}
   ]
 }

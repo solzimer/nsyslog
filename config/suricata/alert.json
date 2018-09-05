@@ -1,6 +1,6 @@
 {
   "processors": {
-    "http_event": {
+    "alert_event": {
       "type": "properties",
       "config": {
         "set": {
@@ -14,22 +14,23 @@
           "dip" : "${dest_ip}",
           "dp" : "${dest_port}",
           "p" : "${proto}",
-          "fn" : "${http.filename}",
-					"ct1" : "${http.hostname}",
-					"ct2" : "${http.url}",
-					"ct3" : "${http.http_user_agent}",
-					"ct4" : "${http.method}",
-					"ct5" : "${http.protocol}",
-					"ct6" : "${http.status}",
-					"ct7" : "${http.length}",
+					"pn" : "${app_proto}",
+					"sev" : "${alert.severity}",
+					"basemsg" : "${alert.signature}",
+					"ct1" : "${alert.action}",
+					"ct2" : "${alert.gid}",
+					"ct3" : "${alert.signature_id}",
+					"ct4" : "${alert.rev}",
+					"ct5" : "${alert.category}",
+					"ct6" : "${app_proto}",
 					"ei" : {
-						"http" : "${http}"
+						"alert" : "${alert}"
 					}
         }
       }
     }
   },
   "flows": [
-    {"from": "${type}=='http'", "processors": "http_event", "transporters":"mongo"}
+    {"from": "${type}=='alert'", "processors": "alert_event", "transporters":"mongo"}
   ]
 }

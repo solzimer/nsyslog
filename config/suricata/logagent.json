@@ -1,21 +1,18 @@
 {
   "config": {
-    "datadir": "/tmp/nsyslog",
-    "input": {
-      "maxPending": 1000
-    },
-    "buffer": {
-      "maxPending": 1000
-    },
-    "processor": {
-      "maxPending": 1000
-    },
-    "transporter": {
-      "maxPending": 1000
-    }
+    "datadir": "/tmp/suitemon",
+    "input": {"maxPending": 1000},
+    "buffer": {"maxPending": 1000},
+    "processor": {"maxPending": 1000},
+    "transporter": {"maxPending": 1000}
   },
 
-  "include" : ["./http.json"],
+  "include" : [
+		"./http.json",
+		"./alert.json",
+		"./dns.json",
+		"./tls.json"
+	],
 
   "inputs": {
     "suricata": {
@@ -23,7 +20,7 @@
       "config": {
         "path": "/var/log/suricata/eve.json",
         "watch": true,
-        "readmode": "offset",
+        "readmode": "watermark",
         "offset": "start"
       }
     }
@@ -32,6 +29,13 @@
     "json": {
       "type": "jsonparser"
     },
+		"filter" : {
+			"type" : "filter",
+			"config" : {
+				"mode" : "reject",
+				"filter" : "${type}=='stats'"
+			}
+		},
 		"timestamp" : {
 			"type" : "timestamp",
 			"config" : {
@@ -54,12 +58,21 @@
 				"output" : "evttime"
 			}
 		},
+		"dbcol" : {
+			"type" : "dateformat",
+			"config" : {
+				"field" : "${timestamp}",
+				"format" : "YYYYMMDD",
+				"output" : "dbcol"
+			}
+		},
     "props": {
       "type": "properties",
       "config": {
         "set": {
 					"input" : "event",
           "st": "IDS",
+					"type" : "${event_type}",
 					"res" : "${event_type}"
         }
       }
@@ -72,14 +85,16 @@
 			"config" : {
 				"url" : "mongodb://boxica4:27017/boxica",
 				"retry" : true,
-				"collection" : "events",
+				"collection" : "events${dbcol}",
 				"format" : {
 					"timestamp" : "${ts}", "et" : "${et}",
 					"evtdate" : "${evtdate}", "evttime" : "${evttime}",
+					"type" : "${type}", "res" : "${res}", "subres" : "${subres}",
 					"et" : "${et}", "st" : "${st}",
 					"sip": "${sip}", "sp" : "${sp}",
           "dip" : "${dip}", "dp" : "${dp}",
-          "p" : "${p}", "fn" : "${fn}",
+					"basemsg" : "${basemsg}", "ei" : "${ei}",
+          "p" : "${p}", "pn":"${pn}", "fn" : "${fn}",
 					"ct1" : "${ct1}",	"ct2" : "${ct2}",	"ct3" : "${ct3}",
 					"ct4" : "${ct4}",	"ct5" : "${ct5}",	"ct6" : "${ct6}",
 					"ct7" : "${ct7}",	"ct8" : "${ct8}",	"ct9" : "${ct9}"
@@ -89,14 +104,12 @@
 		"logger" : {
 			"type" : "console",
 			"config" : {
-				"format" : {
-					"timestamp" : "${JSON}"
-				}
+				"format" : "${JSON}"
 			}
 		}
 	},
 
   "flows": [
-    {"from": "suricata", "processors" : ["json","timestamp","props","date","time"], "transporters": "#"}
+    {"from": "suricata", "processors" : ["json","filter","timestamp","props","date","time","dbcol"], "transporters": "#"}
   ]
 }

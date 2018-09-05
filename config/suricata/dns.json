@@ -1,6 +1,6 @@
 {
   "processors": {
-    "http_event": {
+    "dns_event": {
       "type": "properties",
       "config": {
         "set": {
@@ -14,22 +14,19 @@
           "dip" : "${dest_ip}",
           "dp" : "${dest_port}",
           "p" : "${proto}",
-          "fn" : "${http.filename}",
-					"ct1" : "${http.hostname}",
-					"ct2" : "${http.url}",
-					"ct3" : "${http.http_user_agent}",
-					"ct4" : "${http.method}",
-					"ct5" : "${http.protocol}",
-					"ct6" : "${http.status}",
-					"ct7" : "${http.length}",
+					"ct1" : "${dns.type}",
+					"ct2" : "${dns.id}",
+					"ct3" : "${dns.rrname}",
+					"ct4" : "${dns.rrtype}",
+					"ct5" : "${dns.tx_id}",
 					"ei" : {
-						"http" : "${http}"
+						"dns" : "${dns}"
 					}
         }
       }
     }
   },
   "flows": [
-    {"from": "${type}=='http'", "processors": "http_event", "transporters":"mongo"}
+    {"from": "${type}=='dns'", "processors": "dns_event", "transporters":"mongo"}
   ]
 }

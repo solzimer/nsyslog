@@ -1,6 +1,6 @@
 {
   "processors": {
-    "http_event": {
+    "tls_event": {
       "type": "properties",
       "config": {
         "set": {
@@ -14,22 +14,21 @@
           "dip" : "${dest_ip}",
           "dp" : "${dest_port}",
           "p" : "${proto}",
-          "fn" : "${http.filename}",
-					"ct1" : "${http.hostname}",
-					"ct2" : "${http.url}",
-					"ct3" : "${http.http_user_agent}",
-					"ct4" : "${http.method}",
-					"ct5" : "${http.protocol}",
-					"ct6" : "${http.status}",
-					"ct7" : "${http.length}",
+					"ct1" : "${tls.subject}",
+					"ct2" : "${tls.issuerdn}",
+					"ct3" : "${tls.serial}",
+					"ct4" : "${tls.fingerprint}",
+					"ct5" : "${tls.version}",
+					"ct6" : "${tls.notbefore}",
+					"ct6" : "${tls.notafter}",
 					"ei" : {
-						"http" : "${http}"
+						"tls" : "${tls}"
 					}
         }
       }
     }
   },
   "flows": [
-    {"from": "${type}=='http'", "processors": "http_event", "transporters":"mongo"}
+    {"from": "${type}=='tls'", "processors": "tls_event", "transporters":"mongo"}
   ]
 }

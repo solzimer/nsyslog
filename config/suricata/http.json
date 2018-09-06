@@ -3,8 +3,13 @@
     "http_event": {
       "type": "properties",
       "config": {
+				"extend" : false,
         "set": {
+					"dbcol" : "${dbcol}",					
+					"timestamp" : "${ts}",
 					"et" : "${timestamp}",
+					"evtdate" : "${evtdate}",
+					"evttime" : "${evttime}",
 					"type" : "${type}",
 					"res" : "${res}",
 					"subres" : "${in_iface}",

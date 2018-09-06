@@ -18,7 +18,7 @@
     "suricata": {
       "type": "file",
       "config": {
-        "path": "/var/log/suricata/eve.json",
+        "path": "/var/log/suricata/eve.json*",
         "watch": true,
         "readmode": "watermark",
         "offset": "start"
@@ -86,19 +86,16 @@
 				"url" : "mongodb://boxica4:27017/boxica",
 				"retry" : true,
 				"collection" : "events${dbcol}",
-				"format" : {
-					"timestamp" : "${ts}", "et" : "${et}",
-					"evtdate" : "${evtdate}", "evttime" : "${evttime}",
-					"type" : "${type}", "res" : "${res}", "subres" : "${subres}",
-					"et" : "${et}", "st" : "${st}",
-					"sip": "${sip}", "sp" : "${sp}",
-          "dip" : "${dip}", "dp" : "${dp}",
-					"basemsg" : "${basemsg}", "ei" : "${ei}",
-          "p" : "${p}", "pn":"${pn}", "fn" : "${fn}",
-					"ct1" : "${ct1}",	"ct2" : "${ct2}",	"ct3" : "${ct3}",
-					"ct4" : "${ct4}",	"ct5" : "${ct5}",	"ct6" : "${ct6}",
-					"ct7" : "${ct7}",	"ct8" : "${ct8}",	"ct9" : "${ct9}"
-				}
+				"indexes" : [
+	        {"basemsg":1}, {"timestamp":1}, {"evtdate":1}, {"evttime":1},
+	        {"et":1}, {"evt":1}, {"rn":1}, {"sn":1}, {"st":1}, {"pn":1},
+	        {"res":1}, {"subres":1}, {"sev":1}, {"p":1}, {"sip":1},
+	        {"shn":1}, {"sp":1}, {"sun":1}, {"dip":1}, {"dhn":1}, {"dp":1},
+	        {"dun":1}, {"fn":1}, {"ei.extra":1}, {"ct1":1}, {"ct2":1},
+	        {"ct3":1}, {"ct4":1}, {"ct5":1}, {"ct6":1}, {"ct7":1},
+	        {"ct8":1}, {"ct9":1}, {"dbtimestamp":1}, {"type":1},
+	        {"queue":1}, {"rule":1}, {"ruleset":1}, {"subevents":1}
+				]
 			}
 		},
 		"logger" : {

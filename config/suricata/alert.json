@@ -3,7 +3,7 @@
     "alert_event": {
       "type": "properties",
       "config": {
-				"extend" : false,				
+				"extend" : false,
         "set": {
 					"dbcol" : "${dbcol}",
 					"timestamp" : "${ts}",
@@ -36,6 +36,6 @@
     }
   },
   "flows": [
-    {"from": "${type}=='alert'", "processors": "alert_event", "transporters":"mongo"}
+    {"from": "${type}=='alert'", "processors": "alert_event", "transporters":"$publish"}
   ]
 }

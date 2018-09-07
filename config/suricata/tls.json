@@ -3,7 +3,7 @@
     "tls_event": {
       "type": "properties",
       "config": {
-				"extend" : false,								
+				"extend" : false,
         "set": {
 					"dbcol" : "${dbcol}",
 					"timestamp" : "${ts}",
@@ -34,6 +34,6 @@
     }
   },
   "flows": [
-    {"from": "${type}=='tls'", "processors": "tls_event", "transporters":"mongo"}
+    {"from": "${type}=='tls'", "processors": "tls_event", "transporters":"$publish"}
   ]
 }

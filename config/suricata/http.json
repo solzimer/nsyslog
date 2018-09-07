@@ -5,7 +5,7 @@
       "config": {
 				"extend" : false,
         "set": {
-					"dbcol" : "${dbcol}",					
+					"dbcol" : "${dbcol}",
 					"timestamp" : "${ts}",
 					"et" : "${timestamp}",
 					"evtdate" : "${evtdate}",
@@ -35,6 +35,6 @@
     }
   },
   "flows": [
-    {"from": "${type}=='http'", "processors": "http_event", "transporters":"mongo"}
+    {"from": "${type}=='http'", "processors": "http_event", "transporters":"$publish"}
   ]
 }

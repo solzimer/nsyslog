@@ -98,11 +98,26 @@
 				]
 			}
 		},
+		"kafka" : {
+			"type" : "kafka",
+			"config" : {
+				"url" : "kafka://boxica4:9092",
+				"topic" : "event__${type}",
+				"mode" : "roundrobin"
+			}
+		},
 		"logger" : {
 			"type" : "console",
 			"config" : {
 				"format" : "${JSON}"
 			}
+		}
+	},
+
+	"transporterGroups" : {
+		"publish" : {
+			"transporters" : ["mongo","kafka"],
+			"mode" : "parallel"
 		}
 	},
 

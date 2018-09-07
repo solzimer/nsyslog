@@ -32,6 +32,6 @@
     }
   },
   "flows": [
-    {"from": "${type}=='dns'", "processors": "dns_event", "transporters":"mongo"}
+    {"from": "${type}=='dns'", "processors": "dns_event", "transporters":"$publish"}
   ]
 }

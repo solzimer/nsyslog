@@ -19,7 +19,7 @@
           "dip" : "${dest_ip}",
           "dp" : "${dest_port}",
           "p" : "${proto}",
-          "fn" : "${http.filename}",
+          "fn" : "${http.url}",
 					"ct1" : "${http.hostname}",
 					"ct2" : "${http.url}",
 					"ct3" : "${http.http_user_agent}",

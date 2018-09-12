@@ -1,0 +1,41 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog"
+	},
+
+	"inputs" : {
+		"cmd" : {
+			"type" : "command",
+			"config" : {
+				"cmd" : "ls -1 | wc -l",
+				"interval" : 2000,
+				"options" : {
+					"cwd" : "/"
+				}
+			}
+		}
+	},
+
+	"processors" : {
+		"json" : {
+			"type" : "jsonparser",
+			"config" : {
+				"field" : "${originalMessage}",
+				"output" : "originalMessage"
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		}
+	},
+
+	"flows" : [
+		{"from":"cmd", "transporters":"console"}
+	]
+}

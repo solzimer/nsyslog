@@ -14,6 +14,7 @@ This is the core set of included inputs:
 
 * [Standard Input](stdin.md)
 * [File Watcher](file.md)
+* [HTTP Client](http.md)
 * [Syslog UDP, TCP and TLS](syslog.md)
 * [Apache Kafka](kafka.md)
 * [Redis](redis.md)

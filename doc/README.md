@@ -39,6 +39,7 @@ Since all the codebase is written in NodeJS, it has a very small memory footprin
 ## Inputs
 * [Standard Input](inputs/stdin.md)
 * [File Watcher](inputs/file.md)
+* [HTTP Client](inputs/http.md)
 * [Syslog UDP, TCP and TLS](inputs/syslog.md)
 * [Apache Kafka](inputs/kafka.md)
 * [Redis](inputs/redis.md)

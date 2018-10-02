@@ -10,7 +10,7 @@
 					"et" : "${timestamp}",
 					"evtdate" : "${evtdate}",
 					"evttime" : "${evttime}",
-					"type" : "${type}",
+					"type" : "${etype}",
 					"res" : "${res}",
 					"subres" : "${in_iface}",
           "st" : "${st}",
@@ -32,6 +32,6 @@
     }
   },
   "flows": [
-    {"from": "${type}=='dns'", "processors": "dns_event", "transporters":"$publish"}
+    {"from": "${etype}=='dns'", "processors": "dns_event", "transporters":"$publish"}
   ]
 }

@@ -19,6 +19,7 @@
       "type": "file",
       "config": {
         "path": "/var/log/suricata/eve.json*",
+				"exclude" : "",
         "watch": true,
         "readmode": "watermark",
         "offset": "start"
@@ -72,7 +73,7 @@
         "set": {
 					"input" : "event",
           "st": "IDS",
-					"type" : "${event_type}",
+					"etype" : "${event_type}",
 					"res" : "${event_type}"
         }
       }

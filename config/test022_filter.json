@@ -9,7 +9,7 @@
 		"file" : {
 			"type" : "file",
 			"config" : {
-				"path" : "/var/log/**/*.log",
+				"path" : "/var/log/**/*.json",
 				"watch" : false,
 				"readmode" : "offset",
 				"offset" : "start"
@@ -18,15 +18,32 @@
 	},
 
 	"processors" : {
-		"timestamp" : {
-			"type" : "timestamp",
+		"json" : {
+			"type" : "jsonparser",
 			"config" : {}
 		},
-		"filter" : {
+		"timestamp" : {
+			"type" : "timestamp",
+			"config" : {
+				"output" : "ets"
+			}
+		},
+
+		"filter_flow" : {
 			"type" : "filter",
 			"config" : {
 				"mode" : "accept",
-				"filter" : "/awstats/.test(${originalMessage})"
+				"filter" : "${event_type}=='flow'"
+			}
+		},
+
+		"aggregate" : {
+			"type" : "filter",
+			"config" : {
+				"mode" : "every",
+				"every" : 100,
+				"key" : "${src_ip}",
+				"output" : "count"
 			}
 		}
 	},
@@ -35,7 +52,7 @@
 		"console" : {
 			"type" : "console",
 			"config" : {
-				"format" : "${JSON}"
+				"format" : "${src_ip} - ${dest_ip}: ${count}"
 			}
 		},
 		"null" : {
@@ -44,6 +61,6 @@
 	},
 
 	"flows" : [
-		{"from":"${input}=='file'", "processors":["filter"], "transporters":["console"], "mode":"parallel"}
+		{"from":"file", "processors":["json","filter_flow","aggregate"], "transporters":["console"], "mode":"parallel"}
 	]
 }

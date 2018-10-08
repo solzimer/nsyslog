@@ -11,7 +11,8 @@
 		"./http.json",
 		"./alert.json",
 		"./dns.json",
-		"./tls.json"
+		"./tls.json",
+		"./flows.json"
 	],
 
   "inputs": {
@@ -118,6 +119,10 @@
 	"transporterGroups" : {
 		"publish" : {
 			"transporters" : ["mongo","kafka"],
+			"mode" : "parallel"
+		},
+		"send" : {
+			"transporters" : ["kafka"],
 			"mode" : "parallel"
 		}
 	},

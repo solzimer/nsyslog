@@ -36,6 +36,26 @@ key has been aggregated.
 }
 ```
 
+Same as before, but now with aggregation stats
+```json
+"aggregate" : {
+	"type" : "filter",
+	"config" : {
+		"mode" : "every",
+		"every" : 100,
+		"key" : "${src_ip}",
+		"output" : "aggr",
+		"aggregate" : {
+			"count" : 1,
+			"tx_packet" : "${flow.pkts_toserver}",
+			"rx_packet" : "${flow.pkts_toclient}",
+			"tx_bytes" : "${flow.bytes_toserver}",
+			"rx_bytes" : "${flow.bytes_toclient}"
+		}
+	}
+}
+
+```
 ## Configuration parameters
 * **mode** : There are three modes:
 	* accept : The entry is accepted as an output if matches the filter.
@@ -44,4 +64,5 @@ key has been aggregated.
 * **key** : Expression for the aggregation key.
 * **every** : How many entries aggregate before next entry output.
 * **first** : *true* or *false*. If true, the first entry is sent, and the next ones are aggregated.
-* **output** : Field to store the aggregation count.
+* **output** : Field to store the aggregation results.
+* **aggregate** : Expression object that describes the aggregations to be done.

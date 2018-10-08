@@ -1,0 +1,72 @@
+{
+  "processors": {
+		"flow_aggregate" : {
+			"type" : "filter",
+			"config" : {
+				"mode" : "every",
+				"every" : 10,
+				"key" : "${src_ip}_${dest_ip}",
+				"aggregate" : {
+					"count" : 1,
+					"tx_packet" : "${flow.pkts_toserver}",
+					"rx_packet" : "${flow.pkts_toclient}",
+					"tx_bytes" : "${flow.bytes_toserver}",
+					"rx_bytes" : "${flow.bytes_toclient}"
+				},
+				"output" : "aggr"
+			}
+		},
+
+    "flow_event": {
+      "type": "properties",
+      "config": {
+				"extend" : false,
+        "set": {
+					"dbcol" : "${dbcol}",
+					"timestamp" : "${ts}",
+					"et" : "${timestamp}",
+					"evtdate" : "${evtdate}",
+					"evttime" : "${evttime}",
+					"type" : "${etype}",
+					"res" : "${res}",
+					"subres" : "${in_iface}",
+          "st" : "${st}",
+          "sip": "${src_ip}",
+          "sp" : "${src_port}",
+          "dip" : "${dest_ip}",
+          "dp" : "${dest_port}",
+          "p" : "${proto}",
+					"sev" : "0",
+					"basemsg" : "Flow from ${src_ip} to ${dest_ip}",
+					"ct1" : "${aggr.count}",
+					"ct2" : "${tcp.tcp_flags}",
+					"ct3" : "${tcp.tcp_flags_ts}",
+					"ct4" : "${tcp.tcp_flags_tc}",
+					"ct5" : "${aggr.tx_packet}",
+					"ct6" : "${aggr.rx_packet}",
+					"ct7" : "${aggr.tx_bytes}",
+					"ct8" : "${aggr.rx_bytes}",
+					"ct9" : "AGGREGATED",
+					"ei" : {
+						"flow" : {
+							"aggregate" : "${aggr.count}",
+							"pkts_toserver": "${aggr.tx_packet}",
+							"pkts_toclient": "${aggr.rx_packet}",
+							"bytes_toserver": "${aggr.tx_bytes}",
+							"bytes_toclient": "${aggr.rx_bytes}",
+							"start": "${flow.start}",
+							"end": "${flow.end}",
+							"age": "${flow.age}",
+							"state": "${flow.state}",
+							"reason": "${flow.reason}",
+							"alerted": "${flow.alerted}"
+						}
+					}
+        }
+      }
+    }
+  },
+  "flows": [
+    {"from": "${etype}=='flow'", "processors": ["flow_aggregate","flow_event"], "transporters":"$send"}
+  ]
+}

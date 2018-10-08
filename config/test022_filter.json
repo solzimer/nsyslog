@@ -41,9 +41,16 @@
 			"type" : "filter",
 			"config" : {
 				"mode" : "every",
-				"every" : 100,
+				"every" : 10,
 				"key" : "${src_ip}",
-				"output" : "count"
+				"aggregate" : {
+					"count" : 1,
+					"tx_packet" : "${flow.pkts_toserver}",
+					"rx_packet" : "${flow.pkts_toclient}",
+					"tx_bytes" : "${flow.bytes_toserver}",
+					"rx_bytes" : "${flow.bytes_toclient}"
+				},
+				"output" : "aggr"
 			}
 		}
 	},
@@ -52,7 +59,7 @@
 		"console" : {
 			"type" : "console",
 			"config" : {
-				"format" : "${src_ip} - ${dest_ip}: ${count}"
+				"format" : "${JSON}"
 			}
 		},
 		"null" : {

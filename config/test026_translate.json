@@ -1,0 +1,62 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog"
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/suricata/eve.json",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"json" : {
+			"type" : "jsonparser",
+			"config" : {
+				"field" : "${originalMessage}"
+			}
+		},
+		"filter" : {
+			"type" : "filter",
+			"config" : {
+				"mode" : "accept",
+				"filter" : "${event_type}=='http'"
+			}
+		},
+		"trans" : {
+			"type" : "translate",
+			"config" : {
+				"file" : "./data/http_codes.json",
+				"map" : {
+					"200" : "OK",
+					"304" : "Redirect",
+					"500" : "Internal Server Error",
+					"101" : "Pues no lo se",
+					"*" : "Codigo desconocido"
+				},
+				"fields" : [
+					{"input" : "${http.status}", "output" : "http.statusString"}
+				]
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "HTTP CODE : ${http.status} = ${http.statusString}"
+			}
+		}
+	},
+
+	"flows" : [
+		{"from":"*", "processors":["json","filter","trans"], "transporters":"console"}
+	]
+}

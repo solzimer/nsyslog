@@ -57,6 +57,7 @@ Since all the codebase is written in NodeJS, it has a very small memory footprin
 * [Filter](processors/filter.md)
 * [Sequence](processors/sequence.md)
 * [Timestamp](processors/timestamp.md)
+* [Translate](processors/translate.md)
 * [Split](processors/split.md)
 * [Array](processors/array.md)
 * [Multilang Protocol](processors/multilang.md)

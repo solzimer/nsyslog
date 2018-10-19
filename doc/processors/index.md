@@ -17,6 +17,7 @@ This is the core set of included processors:
 * [Filter](filter.md)
 * [Sequence](sequence.md)
 * [Timestamp](timestamp.md)
+* [Translate](translate.md)
 * [Split](split.md)
 * [Array](array.md)
 * [Multilang Protocol](multilang.md)

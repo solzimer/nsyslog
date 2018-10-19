@@ -1,0 +1,7 @@
+{
+	"200" : "Status OK",
+	"304" : "Moved",
+	"500" : "Internal Server Error",
+	"101" : "Codigo raro",
+	"*" : "UNKNOWN"
+}

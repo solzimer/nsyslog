@@ -1,0 +1,102 @@
+{
+  "config": {
+    "datadir": "/tmp/suitemon",
+    "input": {"maxPending": 1000},
+    "buffer": {"maxPending": 1000},
+    "processor": {"maxPending": 1000},
+    "transporter": {"maxPending": 1000}
+  },
+
+	"register" : [
+		{"type":"input","id":"suricata","require":"custom/eve.js"},
+		{"type":"transporter","id":"count","require":"custom/count.js"}
+	],
+
+  "include" : [
+		"./flows.json"
+	],
+
+  "inputs": {
+    "suricata": {
+      "type": "suricata",
+      "config": {}
+    }
+  },
+  "processors": {
+    "json": {
+      "type": "jsonparser"
+    },
+		"filter" : {
+			"type" : "filter",
+			"config" : {
+				"mode" : "reject",
+				"filter" : "${type}=='stats'"
+			}
+		},
+		"timestamp" : {
+			"type" : "timestamp",
+			"config" : {
+				"output" : "ts"
+			}
+		},
+		"date" : {
+			"type" : "dateformat",
+			"config" : {
+				"field" : "${ts}",
+				"format" : "YYYY-MM-DD",
+				"output" : "evtdate"
+			}
+		},
+		"time" : {
+			"type" : "dateformat",
+			"config" : {
+				"field" : "${ts}",
+				"format" : "HH:mm:ss",
+				"output" : "evttime"
+			}
+		},
+		"dbcol" : {
+			"type" : "dateformat",
+			"config" : {
+				"field" : "${timestamp}",
+				"format" : "YYYYMMDD",
+				"output" : "dbcol"
+			}
+		},
+    "props": {
+      "type": "properties",
+      "config": {
+        "set": {
+					"input" : "event",
+          "st": "IDS",
+					"etype" : "${event_type}",
+					"res" : "${event_type}"
+        }
+      }
+    }
+  },
+
+	"transporters" : {
+		"logger" : {
+			"type" : "count",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		}
+	},
+
+	"transporterGroups" : {
+		"publish" : {
+			"transporters" : ["logger"],
+			"mode" : "parallel"
+		},
+		"send" : {
+			"transporters" : ["logger"],
+			"mode" : "parallel"
+		}
+	},
+
+  "flows": [
+    {"from": "suricata", "processors" : ["json","filter","timestamp","props","date","time","dbcol"], "transporters": "#"}
+  ]
+}

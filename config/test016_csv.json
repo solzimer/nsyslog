@@ -1,6 +1,6 @@
 {
 	"config" : {
-		"datadir" : "/tmp/nsyslog2",
+		"datadir" : "/tmp/nsyslog1",
 		"input" : {"maxPending" : 1000},
 		"buffer" : {"maxPending": 1000},
 		"processor" : {"maxPending": 1000},

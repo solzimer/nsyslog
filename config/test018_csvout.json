@@ -11,9 +11,9 @@
 		"file" : {
 			"type" : "file",
 			"config" : {
-				"path" : "/var/log/**/*.log",
+				"path" : "/var/log/test.log",
 				"watch" : true,
-				"readmode" : "offset",
+				"readmode" : "watermark",
 				"offset" : "start"
 			}
 		}

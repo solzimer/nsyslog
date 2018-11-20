@@ -78,9 +78,9 @@
 
 	"transporters" : {
 		"logger" : {
-			"type" : "count",
+			"type" : "console",
 			"config" : {
-				"format" : "${JSON}"
+				"format" : "${sip} : ${dip} => ${ct1}"
 			}
 		}
 	},

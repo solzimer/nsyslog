@@ -1,0 +1,43 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog"
+	},
+
+	"register" : [
+		{"type":"processor","id":"myproc","require":"custom/custom-asymmetric.js"}
+	],
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"myproc" : {
+			"type" : "myproc",
+			"config" : {
+
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		}
+	},
+
+	"flows" : [
+		{"from":"*", "processors":["myproc"], "transporters":"console"}
+	]
+}

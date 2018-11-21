@@ -4,7 +4,7 @@
 			"type" : "filter",
 			"config" : {
 				"mode" : "every",
-				"every" : 5,
+				"every" : 100,
 				"first" : true,
 				"key" : "${src_ip}_${dest_ip}",
 				"window" : 5000,

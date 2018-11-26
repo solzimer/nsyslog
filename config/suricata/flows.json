@@ -4,10 +4,10 @@
 			"type" : "filter",
 			"config" : {
 				"mode" : "every",
-				"every" : 100,
-				"first" : true,
+				"every" : 20,
+				"first" : false,
 				"key" : "${src_ip}_${dest_ip}",
-				"window" : 5000,
+				"ttl" : 300000,
 				"aggregate" : {
 					"count" : 1,
 					"tx_packet" : "${flow.pkts_toserver}",

@@ -36,6 +36,22 @@ key has been aggregated.
 }
 ```
 
+Aggregate entries by the 'src_ip' field. Output only when 100 entries matching the same
+key has been aggregated, or a timeout window (in ms) has been reached
+```json
+	"aggregate" : {
+		"type" : "filter",
+		"config" : {
+			"mode" : "every",
+			"every" : 100,
+			"ttl" : 300000,			
+			"key" : "${src_ip}",
+			"output" : "count"
+		}
+	}
+}
+```
+
 Same as before, but now with aggregation stats
 ```json
 "aggregate" : {
@@ -63,6 +79,7 @@ Same as before, but now with aggregation stats
 	* every : The entries that matches the filter are aggregated by a key.
 * **key** : Expression for the aggregation key.
 * **every** : How many entries aggregate before next entry output.
+* **ttl** : Timeout (ms) window for an aggregation. When the timeout is reached, the aggregated results for a key will output event if **every** has not been reached.
 * **first** : *true* or *false*. If true, the first entry is sent, and the next ones are aggregated.
 * **output** : Field to store the aggregation results.
 * **aggregate** : Expression object that describes the aggregations to be done.

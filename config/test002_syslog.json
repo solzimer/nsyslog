@@ -72,6 +72,6 @@
 	},
 
 	"flows" : [
-		{"from":"${input}=='file'", "processors":["timestamp","props"], "transporters":["syslog","logger"], "mode":"parallel"}
+		{"from":"file", "processors":["timestamp","props"], "transporters":["syslog","logger"], "mode":"parallel"}
 	]
 }

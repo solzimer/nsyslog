@@ -1,6 +1,6 @@
 ## Timestamp Processor
 
-Places a timestamp to the input object
+Places a timestamp to the input object, or parses an existing expression into a Date object.
 
 ## Examples
 
@@ -9,6 +9,8 @@ Places a timestamp to the input object
 	"timestamp" : {
 		"type" : "timestamp",
 		"config" : {
+			"input" : "${tsstring}",
+			"format" : "HH:mm:ss YYYY-MM-DD",
 			"field" : "timestamp"
 		}
 	}
@@ -16,4 +18,7 @@ Places a timestamp to the input object
 ```
 
 ## Configuration parameters
+* **input** : Optional. If specified, expression where fetch a timestamp string to be parsed. If not specified, the processor will use the actual timestamp.
+* **format** : If input is specified. Format expression of the input to be parsed, following [MomentJS expression](https://momentjs.com/docs/#/displaying/format/)
 * **field** : Field where timestamp is stored
+* **unix** : If true, timestamp will be stored as a long number instead of a javascript Date object.

@@ -8,19 +8,19 @@ A processor can ben synchronous or asynchronous. Either way, entries alwais mant
 
 This is the core set of included processors:
 
-* [Properties](properties.md)
-* [Generic parser](parser.md)
-* [Syslog parser](syslogparser.md)
-* [XML parser](xmlparser.md)
-* [CSV parser](csvparser.md)
+* [Array](array.md)
 * [CSV output](csvout.md)
+* [CSV parser](csvparser.md)
 * [Filter](filter.md)
+* [Generic parser](parser.md)
+* [Multilang Protocol](multilang.md)
+* [Properties](properties.md)
 * [Sequence](sequence.md)
+* [Split](split.md)
+* [Syslog parser](syslogparser.md)
 * [Timestamp](timestamp.md)
 * [Translate](translate.md)
-* [Split](split.md)
-* [Array](array.md)
-* [Multilang Protocol](multilang.md)
+* [XML parser](xmlparser.md)
 
 ## Configuration
 Every processor is configured the same way in the JSON configuration file:

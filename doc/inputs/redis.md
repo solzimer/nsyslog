@@ -4,7 +4,7 @@ Redis Input allows the reading of several Redis pub/sub channels simultaneously.
 
 ## Examples
 
-Kafka subscription to 'logline__.\*' pattern. Will watch for new topics that match the pattern.
+Redis subscription to several channels.
 ```json
 "inputs" : {
 	"redis" : {

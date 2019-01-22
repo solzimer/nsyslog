@@ -9,10 +9,12 @@ A processor can ben synchronous or asynchronous. Either way, entries alwais mant
 This is the core set of included processors:
 
 * [Array](array.md)
+* [Date format](dateformat.md)
 * [CSV output](csvout.md)
 * [CSV parser](csvparser.md)
 * [Filter](filter.md)
 * [Generic parser](parser.md)
+* [JSON parser](jsonparser.md)
 * [Multilang Protocol](multilang.md)
 * [Properties](properties.md)
 * [Sequence](sequence.md)

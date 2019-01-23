@@ -1,4 +1,4 @@
-## Timestamp Processor
+## Date / Time Formatter
 
 Formats a date. Date must be a javascript Date object or an ISO timestamp (YYYY-MM-DDTHH:mm:ss)
 

@@ -14,3 +14,6 @@ Places an increaing sequence the input object
 	}
 }
 ```
+
+## Configuration parameters
+* **start** : Start value

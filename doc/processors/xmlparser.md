@@ -38,4 +38,4 @@ XML multiline parsing with multithreading enabled (if supported by nodejs). XML 
 * **cores** : Number of threads if multithreading is supported by nodejs
 * **output** : Output field
 * **multiline** : XML data is contained in more than one entry. If enabled, **tag** is mandatory.
-* **tag** : XML tags that delimiter XML data to be parsed.
+* **tag** : XML tags that delimite XML data to be parsed.

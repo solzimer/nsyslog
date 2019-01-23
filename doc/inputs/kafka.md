@@ -22,13 +22,14 @@ Kafka subscription to 'logline__.\*' pattern. Will watch for new topics that mat
 ```
 
 ## Configuration parameters
-* **url** : String or array of strings. List of Kafka hosts to connect to.
+* **url** : String or array of strings. List of Kafka hosts to connect to (kafka://host:port or kafkas://host:port for TLS connection).
 * **topics** : String or array. List of kafka topics to subscribe to. If a topic is embraced between '/' characters, it will
 be interpreted as a regular expression to be matched against.
 * **format** : Can be either of **raw** or **json**. When **raw** is used, the raw content of the message will be put in the 'originalMessage' field of the entry. Otherwise, if **json** is used, the content will be parsed as a JSON object and placed into de 'originalMessage' field.
 * **offset** : Can be one of **earliest** or **latest**. Initial offset when start reading a new topic.
 * **group** : Consumer group ID (to keep track of the topics offsets)
 * **watch** : If **true**, the Kafka input will search periodically for new topics that matches the patterns, and start reading from them.
+* **tls** : TLS/SSL options as described in [NodeJS documentation](https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options)
 
 ## Output
 Each read will generate an object with the following schema:

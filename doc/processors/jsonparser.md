@@ -1,4 +1,4 @@
-## CSV Parser
+## JSON Parser
 
 Parses a JSON expression.
 

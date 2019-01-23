@@ -21,8 +21,8 @@
 			"type" : "kafka",
 			"config" : {
 				"url" : "kafka://localhost:9092",
-				"topics" : ["/logline__.*/"],
-				"format" : "json",
+				"topics" : ["nsyslog"],
+				"format" : "raw",
 				"offset" : "earliest",
 				"group" : "nsyslog",
 				"watch" : true
@@ -49,7 +49,7 @@
 	},
 
 	"flows" : [
-		{"from":"${input}=='file'", "transporters":["syslog"]},
-		{"from":"${input}=='kafka'", "transporters":["null"]}
+		{"from":"${input}=='file'","disabled":true, "transporters":["syslog"]},
+		{"from":"${input}=='kafka'", "transporters":["console"]}
 	]
 }

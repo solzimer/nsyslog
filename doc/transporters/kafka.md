@@ -8,8 +8,8 @@ Sends to a kafka cluster with roundrobin on its topic partitions
 
 ```json
 "transporters" : {
-	"file" : {
-		"type" : "file",
+	"kafka" : {
+		"type" : "kafka",
 		"config" : {
 			"url" : ["kafka://host1:9092","kafka://host2:9092"],
 			"format" : "${originalMessage}",
@@ -24,8 +24,8 @@ Sends to a kafka cluster (secure protocol), using a hashed field to distribute l
 
 ```json
 "transporters" : {
-	"file" : {
-		"type" : "file",
+	"kafka" : {
+		"type" : "kafka",
 		"config" : {
 			"url" : ["kafkas://host1:9092","kafkas://host2:9092"],
 			"format" : "${originalMessage}",

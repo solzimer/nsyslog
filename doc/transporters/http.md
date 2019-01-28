@@ -6,8 +6,8 @@ Sends data through HTTP/S post or put method.
 
 ```json
 "transporters" : {
-	"file" : {
-		"type" : "file",
+	"http" : {
+		"type" : "http",
 		"config" : {
 			"url" : "http://foo.bar/logs/put",
 			"method" : "put",

@@ -1,0 +1,38 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100}
+	},
+
+	"register" : [
+		{"type":"input","id":"debug","require":"custom/debug-input.js"}
+	],
+
+	"inputs" : {
+		"debug" : {
+			"type" : "debug",
+			"config" : {
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		},
+		"redis" : {
+			"type" : "redis",
+			"config" : {
+				"url" : "redis://localhost",
+				"channel" : "nsyslog"
+			}
+		}
+	},
+
+	"flows" : [
+		{"from":"*", "transporters":"redis"}
+	]
+}

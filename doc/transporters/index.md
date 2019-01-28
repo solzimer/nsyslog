@@ -12,7 +12,7 @@ This is the core set of included transporters:
 * [File](file.md)
 * [Syslog](syslog.md)
 * [HTTP/S](http.md)
-* [MongoDB](mongodb.md)
+* [MongoDB](mongo.md)
 * [ZeroMQ](zmq.md)
 
 ## Configuration

@@ -3,19 +3,25 @@
 		{"type":"input","id":"mypush","require":"custom/push-input.js"},
 		{"type":"input","id":"mypull","require":"custom/pull-input.js"},
 		{"type":"processor","id":"myproc","require":"custom/custom-processor.js"},
-		{"type":"transporter","id":"mytrans","require":"custom/custom-transporter.js"}
+		{"type":"transporter","id":"mytrans","require":"custom/custom-transporter.js"},
+		{"type":"transporter","id":"mytransblock","require":"custom/custom-transporter-block.js"}
 	],
 
 	"config" : {
-		"datadir" : "/tmp/nsyslog"
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending" : 1000},
+		"processor" : {"maxPending" : 1000},
+		"transporter" : {"maxPending" : 1000}
+
 	},
 
 	"inputs" : {
 		"pusher" : {
-			"type" : "mypush",
+			"type" : "mypull",
 			"config" : {
-				"interval" : 10,
-				"threshold" : 0.5
+				"interval" : 1,
+				"threshold" : 1
 			}
 		}
 	},
@@ -31,8 +37,8 @@
 	},
 
 	"transporters" : {
-		"console" : {
-			"type" : "mytrans",
+		"block" : {
+			"type" : "mytransblock",
 			"config" : {
 				"format" : "${seq}: ${originalMessage}"
 			}
@@ -40,6 +46,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["multi"], "transporters":["console"], "mode":"parallel"}
+		{"from":"*", "transporters":["block"], "mode":"parallel"}
 	]
 }

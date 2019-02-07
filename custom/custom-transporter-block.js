@@ -14,9 +14,11 @@ class MyTransporter extends Transporter {
 	}
 
 	transport(entry, callback) {
+		/*
 		setTimeout(()=>{
 			callback(null,entry);
-		},10);
+		},10000);
+		*/
 	}
 }
 

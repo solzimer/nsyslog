@@ -9,10 +9,10 @@
 
 	"config" : {
 		"datadir" : "/tmp/nsyslog",
-		"input" : {"maxPending" : 1000},
-		"buffer" : {"maxPending" : 1000},
-		"processor" : {"maxPending" : 1000},
-		"transporter" : {"maxPending" : 1000}
+		"input" : {"maxPending" : 100},
+		"buffer" : {"maxPending" : 100},
+		"processor" : {"maxPending" : 100},
+		"transporter" : {"maxPending" : 100}
 
 	},
 
@@ -28,10 +28,11 @@
 
 	"processors" : {
 		"multi" : {
-			"type" : "myproc",
+			"type" : "properties",
 			"config" : {
-				"filter" : "${originalMessage}.match(/[02468]$/)",
-				"duplicate" : "${originalMessage}.match(/[13579]$/)"
+				"set" : {
+					"test" : 0
+				}
 			}
 		}
 	},
@@ -46,6 +47,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "transporters":["block"], "mode":"parallel"}
+		{"from":"*", "processors":"multi","transporters":["block"], "mode":"parallel"}
 	]
 }

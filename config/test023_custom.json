@@ -3,6 +3,7 @@
 		{"type":"input","id":"mypush","require":"custom/push-input.js"},
 		{"type":"input","id":"mypull","require":"custom/pull-input.js"},
 		{"type":"processor","id":"myproc","require":"custom/custom-processor.js"},
+		{"type":"processor","id":"myprocblock","require":"custom/custom-processor-block.js"},
 		{"type":"transporter","id":"mytrans","require":"custom/custom-transporter.js"},
 		{"type":"transporter","id":"mytransblock","require":"custom/custom-transporter-block.js"}
 	],
@@ -20,7 +21,7 @@
 		"pusher" : {
 			"type" : "mypull",
 			"config" : {
-				"interval" : 1,
+				"interval" : 0,
 				"threshold" : 1
 			}
 		}
@@ -28,11 +29,15 @@
 
 	"processors" : {
 		"multi" : {
-			"type" : "properties",
+			"type" : "myprocblock",
 			"config" : {
-				"set" : {
-					"test" : 0
-				}
+				"block" : false
+			}
+		},
+		"multi2" : {
+			"type" : "myprocblock",
+			"config" : {
+				"block" : false
 			}
 		}
 	},
@@ -41,12 +46,13 @@
 		"block" : {
 			"type" : "mytransblock",
 			"config" : {
-				"format" : "${seq}: ${originalMessage}"
+				"format" : "${seq}: ${originalMessage}",
+				"block" : false
 			}
 		}
 	},
 
 	"flows" : [
-		{"from":"*", "processors":"multi","transporters":["block"], "mode":"parallel"}
+		{"from":"*", "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"}
 	]
 }

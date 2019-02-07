@@ -10,15 +10,13 @@ class MyTransporter extends Transporter {
 	configure(config,callback) {
 		config = config || {};
 		this.format = jsexpr.expression(config.format);
+		this.block = config.block || false;
 		callback();
 	}
 
 	transport(entry, callback) {
-		/*
-		setTimeout(()=>{
+		if(!this.block)
 			callback(null,entry);
-		},10000);
-		*/
 	}
 }
 

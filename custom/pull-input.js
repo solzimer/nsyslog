@@ -8,7 +8,7 @@ class MyPullInput extends Input {
 
 	configure(config,callback) {
 		config = config || {};
-		this.interval = parseInt(config.interval) || 100;
+		this.interval = parseInt(config.interval) || 0;
 		this.threshold = parseFloat(config.threshold) || 0.5;
 		callback();
 	}
@@ -18,13 +18,24 @@ class MyPullInput extends Input {
 	}
 
 	next(callback) {
-		setTimeout(()=>{
-			let rnd = Math.random();
-			if(rnd < this.threshold)
-				callback(null,{originalMessage : `This is a pull input: ${rnd}`});
-			else
-				callback(`Threshold error: ${rnd}`);
-		}, this.interval);
+		if(this.interval) {
+			setTimeout(()=>{
+				let rnd = Math.random();
+				if(rnd < this.threshold)
+					callback(null,{originalMessage : `This is a pull input: ${rnd}`});
+				else
+					callback(`Threshold error: ${rnd}`);
+			}, this.interval);
+		}
+		else {
+			setImmediate(()=>{
+				let rnd = Math.random();
+				if(rnd < this.threshold)
+					callback(null,{originalMessage : `This is a pull input: ${rnd}`});
+				else
+					callback(`Threshold error: ${rnd}`);
+			});
+		}
 	}
 
 	key(entry) {

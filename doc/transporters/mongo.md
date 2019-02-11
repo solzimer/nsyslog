@@ -18,6 +18,10 @@ Sends object to a mongodb database. Also creates indexes.
 				{"compound1" : 1, "compound2" : 1}
 			],
 			"retry" : true,
+			"options" : {
+				"bypassDocumentValidation" : true,
+				"ordered" : false
+			},
 			"format" : {
 				"seq" : "${seq}",
 				"line" : "${originalMessage}",
@@ -33,6 +37,7 @@ Sends object to a mongodb database. Also creates indexes.
 ## Configuration parameters
 * **url** : MongoDB Endpoint (mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]])
 * **collection** : Database collection (allows expression)
+* **options** : Options object passed to the [insert mongo operation](http://mongodb.github.io/node-mongodb-native/3.1/api/Collection.html#insertMany)
 * **indexes** : Indexes to create on the collection
 * **retry** : Retry on error
 * **format** : Format expression

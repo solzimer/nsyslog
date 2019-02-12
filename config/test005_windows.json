@@ -12,10 +12,10 @@
 		"windows" : {
 			"type" : "windows",
 			"config" : {
-				"readmode" : "watermark",
+				"readmode" : "offset",
 				"offset" : "begin",
 				"channel" : "Application",
-				"batchsize" : 5000
+				"batchsize" : 50
 			}
 		}
 	},

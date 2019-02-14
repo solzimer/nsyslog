@@ -1,0 +1,18 @@
+rule "Rule1" {
+	when {
+		e : Entry e.originalMessage.indexOf("root")>=0;
+	}
+	then {
+		e.originalMessage = 'I am gROOT';
+		emit(e);
+	}
+}
+
+rule "Retract" {
+	when {
+		e : Entry;
+	}
+	then {
+		retract(e);
+	}
+}

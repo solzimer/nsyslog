@@ -1,0 +1,49 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 10},
+		"process" : {"maxPending": 10}
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"when" : {
+				"filter" : "${originalMessage}.startsWith('{')",
+				"match" : "block",
+				"nomatch" : "process"
+			},
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : false,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"nools" : {
+			"type" : "nools",
+			"config" : {
+				"path" : "config/data/ruleset01.nools"
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"file", "processors":["nools"], "transporters":["console"], "mode":"parallel"}
+	]
+}

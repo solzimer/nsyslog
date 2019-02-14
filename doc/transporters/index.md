@@ -22,6 +22,10 @@ Every transporter is configured the same way in the JSON configuration file:
 "transporters" : {
 	"mongo" : {
 		"type" : "mongo",
+		"when" : {
+			"filter" : "${write}==true",
+			"nomatch" : "block"
+		},
 		"config" : {
 			"url" : "mongodb://localhost:27017/test",
 			"retry" : true,
@@ -41,6 +45,10 @@ Let's look at each section of the JSON configuration:
 * **ID** : The first key (*mongo*, *null*) is the ID / Reference of the transporter. It can be whatever name you like (following JSON rules), and will be used as a reference in other sections.
 * **type** : The type of the transporter (as seen before).
 * **config** : These are the particular configuration parameters of each processor type.
+* **when** : Optional. It defines a very first filter for entries.
+	* **filter** : Can be an expression or *false*. If an entry match the expression, it will be sent to flows; otherwise the entry is ignored.
+	* **match** : Can be *process* (default), *bypass* or *block*. If *process*, when entry match the filter expression, it is processed by the component. On *bypass* mode, the component ignores the entry and sends it to the next component in the flow. if *block*, the entry is completely ignored.
+	* **nomatch** : Can be *process*, *bypass* or *block*. Action to perform when the entry doesn't match the filter.
 
 ## Serial and Parallel modes
 A flow can have multiple transporters, so entries can be written to multiple endpoints. Unlike processors, that must be run in a sequential (serial) order, transporters can be run in serial or parallel order, so you can write simultaneously to all endpoints, or chain them.

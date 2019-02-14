@@ -1,0 +1,51 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 1000},
+		"process" : {"buffer": 1000}
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"when" : {
+				"filter" : "${originalMessage}.startsWith('{')",
+				"match" : "process",
+				"nomatch" : "block"
+			},
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : false,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"prop1" : {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"ROOT" : true
+				}
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"file", "processors":["prop1"], "transporters":["console"], "mode":"parallel"}
+	]
+}

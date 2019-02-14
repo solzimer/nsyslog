@@ -31,6 +31,10 @@ Every processor is configured the same way in the JSON configuration file:
 "processors" : {
 	"parser" : {
 		"type" : "csvparser",
+		"when" : {
+			"filter" : "${originalMessage}.startsWith('a')",
+			"nomatch" : "block"
+		},
 		"config" : {
 			"output" : "csv",
 			"cores" : 4,
@@ -54,6 +58,10 @@ Let's look at each section of the JSON configuration:
 * **ID** : The first key (*parser*) is the ID / Reference of the processor. It can be whatever name you like (following JSON rules), and will be used as a reference in other sections.
 * **type** : The type of the processor (as seen before).
 * **config** : These are the particular configuration parameters of each processor type.
+* **when** : Optional. It defines a very first filter for entries.
+	* **filter** : Can be an expression or *false*. If an entry match the expression, it will be sent to flows; otherwise the entry is ignored.
+	* **match** : Can be *process* (default), *bypass* or *block*. If *process*, when entry match the filter expression, it is processed by the component. On *bypass* mode, the component ignores the entry and sends it to the next component in the flow. if *block*, the entry is completely ignored.
+	* **nomatch** : Can be *process*, *bypass* or *block*. Action to perform when the entry doesn't match the filter.
 
 ## Processor Groups
 A chain of processors can be grouped under a single ID, so it's easy to reference it, using this single ID instead of the complete list of processor IDs:

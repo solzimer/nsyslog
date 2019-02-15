@@ -1,10 +1,29 @@
-rule "Rule1" {
+rule "Rule_New_Window" {
 	when {
-		e : Entry e.originalMessage.indexOf("root")>=0;
+		e : Entry e.originalMessage.length>20;
+		not(w : Window w.name=='Rule1_window' && w.match(e));
 	}
 	then {
-		e.originalMessage = 'I am gROOT';
-		emit(e);
+		let win = new Window('Rule1_window',"${path}", e ,10000, 0);
+		win.on('destroy',()=>retract(win));
+		assert(win);
+	}
+}
+
+rule "Rule_Add_Window" {
+	when {
+		e : Entry e.originalMessage.length>20;
+		w : Window w.name=='Rule1_window' && w.match(e);
+	}
+	then {
+		w.add(e);
+		w.value().then(val=>{
+			if(val>=1000) {
+				publish({msg:`Han saltado 1000 lineas desde ${w.keyval} en 10 segundos`});
+				retract(w);
+			}
+			next();
+		});
 	}
 }
 

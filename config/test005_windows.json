@@ -15,7 +15,7 @@
 				"readmode" : "offset",
 				"offset" : "begin",
 				"channel" : "Application",
-				"batchsize" : 50
+				"batchsize" : 100
 			}
 		}
 	},

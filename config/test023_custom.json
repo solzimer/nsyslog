@@ -53,6 +53,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"}
+		{"from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"}
 	]
 }

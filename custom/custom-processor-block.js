@@ -10,11 +10,17 @@ class MyProcessor extends Processor {
 	configure(config,callback) {
 		callback();
 		this.block = config.block || false;
+		this.cpu = config.cpu || 0;
 	}
 
 	process(entry, callback) {
-		if(!this.block)
+		if(!this.block) {
+
+			for(let i=0;i<this.cpu;i++)
+				Math.sqrt(Math.random()*1000);
+
 			callback(null,entry);
+		}
 	}
 }
 

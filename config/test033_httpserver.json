@@ -1,0 +1,47 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog2",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"http" : {
+			"type" : "httpserver",
+			"config" : {
+				"url" : "http://0.0.0.0:8888/setp",
+				"format" : "json"
+			}
+		},
+		"https" : {
+			"type" : "httpserver",
+			"config" : {
+				"url" : "https://0.0.0.0:8889/setps",
+				"format" : "json"
+			}
+		}
+	},
+
+	"processors" : {
+
+	},
+
+	"transporters" : {
+		"logger" : {
+			"type" : "console",
+			"config" : {
+				"level" : "debug",
+				"format" : "${JSON}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"*", "transporters":"logger"}
+	]
+}

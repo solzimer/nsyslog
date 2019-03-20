@@ -15,8 +15,9 @@ class MyTransporter extends Transporter {
 	}
 
 	transport(entry, callback) {
-		if(!this.block)
+		if(!this.block) {
 			callback(null,entry);
+		}
 	}
 }
 

@@ -7,28 +7,14 @@ const
 	program = require("commander"),
 	logger = require('./lib/logger'),
 	Config = require("./lib/config"),
-	NSyslog = require("./lib/nsyslog"),
-	StatsDB = require("./lib/stats");
+	Stats = require('./lib/stats'),
+	NSyslog = require("./lib/nsyslog");
 
 program.version('0.0.1')
 	.option('-f, --file [file]', 'Config file')
 	.parse(process.argv);
 
-const stats = {
-	input : {},
-	processor : {},
-	transporter : {}
-};
-
-function timer(t) {
-	return new Promise(ok=>setTimeout(ok,t));
-}
-
-function stat(stage,module) {
-	let id = module.instance.id;
-	stats[stage][id] = stats[stage][id] || {id:id, ack:0, fail:0, emit:0};
-	return stats[stage][id];
-}
+const stats = Stats.fetch('main');
 
 async function initialize() {
 	try {
@@ -39,31 +25,31 @@ async function initialize() {
 		var nsyslog = new NSyslog(cfg);
 
 		nsyslog.on('ack',(stage,flow,module,entry)=>{
-			let st = stat(stage,module);
-			st.ack++;
+			stats.ack(stage,module);
 		});
 
 		nsyslog.on('data',(stage,flow,module,entry)=>{
-			let st = stat(stage,module);
-			st.emit++;
-
-			/*
-			if(module.instance.id=="block" && st.emit==100000) {
-				let tf = Date.now();
-				console.log(`*************** PROCESS TAKE ${tf-ti} ms *************`);
-				process.exit(0);
-			}
-			*/
+			stats.emit(stage,module);
 		});
 
 		nsyslog.on('error',(stage,flow,module,error)=>{
-			let st = stat(stage,module);
-			st.fail++;
+			stats.fail(stage,module);
 			logger.error(error);
 		});
 
+		nsyslog.on('stats',other=>{
+			stats.merge(other);
+		});
+
 		setInterval(()=>{
-			logger.info(`${new Date()} : ${JSON.stringify(stats)}`);
+			logger.info(`${new Date()} : ${JSON.stringify(stats.all())}`);
+			/*
+			let tf = Date.now();
+			if(tf-ti>=30000) {
+				console.log(stats.all());
+				process.exit(0);
+			}
+			*/
 		},1000);
 
 		await nsyslog.start();

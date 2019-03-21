@@ -20,7 +20,6 @@
 	"inputs" : {
 		"pusher" : {
 			"type" : "mypull",
-			"attach" : ["fork1","fork2","fork3"],
 			"config" : {
 				"interval" : 0,
 				"threshold" : 1
@@ -56,8 +55,8 @@
 	},
 
 	"flows" : [
-		{"id":"fork1", "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
-		{"id":"fork2", "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
-		{"id":"fork3", "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"}
+		{"id":"fork1", "disabled":false, "from":"*", "fork":"roundrobin", "cores":2,  "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
+		{"id":"fork2", "disabled":true,  "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
+		{"id":"fork3", "disabled":true,  "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"}
 	]
 }

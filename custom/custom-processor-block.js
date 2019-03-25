@@ -15,10 +15,17 @@ class MyProcessor extends Processor {
 
 	process(entry, callback) {
 		if(!this.block) {
-
-			for(let i=0;i<this.cpu;i++)
-				Math.sqrt(Math.random()*1000);
-
+			if(this.cpu=='timer') {
+				setTimeout(()=>callback(null,entry),Math.random()*1000);
+			}
+			else {
+				let cpu = Math.floor(Math.random()*this.cpu);
+				for(let i=0;i<cpu;i++)
+					Math.sqrt(Math.random()*1000);
+				callback(null,entry);
+			}
+		}
+		else {
 			callback(null,entry);
 		}
 	}

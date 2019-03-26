@@ -55,7 +55,7 @@
 	},
 
 	"flows" : [
-		{"id":"fork1", "disabled":false, "from":"*", "fork":"roundrobin", "cores":4,  "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
+		{"id":"fork1", "disabled":false, "from":"*", "fork":"balanced", "cores":4,  "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
 		{"id":"fork2", "disabled":true,  "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
 		{"id":"fork3", "disabled":true,  "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"}
 	]

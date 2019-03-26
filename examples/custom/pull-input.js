@@ -1,4 +1,4 @@
-const Input = require('../lib/nsyslog').Core.Input;
+const Input = require('../../lib/nsyslog').Core.Input;
 
 class MyPullInput extends Input {
 	constructor(id) {

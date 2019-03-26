@@ -1,4 +1,4 @@
-const Input = require('../lib/nsyslog').Core.Input;
+const Input = require('../../lib/nsyslog').Core.Input;
 
 const EVT = {
 	"timestamp":"2018-09-04T11:10:38.000220+0100","flow_id":727167390401089,"event_type":"flow",

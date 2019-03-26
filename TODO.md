@@ -38,14 +38,15 @@
 * [x] XML Parser
 * [x] Redis Input
 * [x] Group Filter
-* [ ] Fix FlowStream highWaterMark
-* [ ] Fix BypassStream highWaterMark
-* [ ] Stdout Transporter
+* [x] Fix FlowStream highWaterMark
+* [x] Fix BypassStream highWaterMark
 * [ ] Stdin input decide string
 * [ ] LevelDB transporter
-* [ ] Bypass processors and transporters
+* [x] Bypass processors and transporters
 * [ ] Fix Parallel Transporter Groups
 * [ ] Entry get key
-* [ ] Nools processor
+* [x] Nools processor
 * [ ] Generic Parser Multithread
-* [ ] Factory processor capture exception
+* [x] Factory processor capture exception
+* [ ] Fork reemit
+* [ ] Reemit direct

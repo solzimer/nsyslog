@@ -54,7 +54,7 @@
 		"tokenize" : {
 			"type" : "multilang",
 			"config" : {
-				"path" : "node /opt/nsyslog/multilang/js/split.js",
+				"path" : "node examples/multilang/js/split.js",
 				"cores" : 1,
 				"wire" : "shuffle",
 				"module" : false,

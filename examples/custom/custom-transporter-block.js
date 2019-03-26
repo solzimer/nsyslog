@@ -1,22 +1,23 @@
 const
-	Transporter = require('../lib/nsyslog').Core.Transporter,
+	Transporter = require('../../lib/nsyslog').Core.Transporter,
 	jsexpr = require('jsexpr');
 
 class MyTransporter extends Transporter {
 	constructor(id) {
 		super(id);
-		this.count = 0;
 	}
 
 	configure(config,callback) {
+		config = config || {};
+		this.format = jsexpr.expression(config.format);
+		this.block = config.block || false;
 		callback();
 	}
 
 	transport(entry, callback) {
-		this.count++;
-		if((this.count%100)==0)
-			console.log(`Output => ${this.count}`);
-		callback(null,entry);
+		if(!this.block) {
+			callback(null,entry);
+		}
 	}
 }
 

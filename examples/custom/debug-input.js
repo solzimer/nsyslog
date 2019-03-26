@@ -1,4 +1,4 @@
-const Input = require('../lib/input');
+const Input = require('../../lib/input');
 
 class DebugInput extends Input {
 	constructor(id,type) {

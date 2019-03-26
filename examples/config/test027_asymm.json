@@ -4,7 +4,7 @@
 	},
 
 	"register" : [
-		{"type":"processor","id":"myproc","require":"custom/custom-asymmetric.js"}
+		{"type":"processor","id":"myproc","require":"examples/custom/custom-asymmetric.js"}
 	],
 
 	"inputs" : {

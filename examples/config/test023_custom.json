@@ -1,11 +1,11 @@
 {
 	"register" : [
-		{"type":"input","id":"mypush","require":"custom/push-input.js"},
-		{"type":"input","id":"mypull","require":"custom/pull-input.js"},
-		{"type":"processor","id":"myproc","require":"custom/custom-processor.js"},
-		{"type":"processor","id":"myprocblock","require":"custom/custom-processor-block.js"},
-		{"type":"transporter","id":"mytrans","require":"custom/custom-transporter.js"},
-		{"type":"transporter","id":"mytransblock","require":"custom/custom-transporter-block.js"}
+		{"type":"input","id":"mypush","require":"examples/custom/push-input.js"},
+		{"type":"input","id":"mypull","require":"examples/custom/pull-input.js"},
+		{"type":"processor","id":"myproc","require":"examples/custom/custom-processor.js"},
+		{"type":"processor","id":"myprocblock","require":"examples/custom/custom-processor-block.js"},
+		{"type":"transporter","id":"mytrans","require":"examples/custom/custom-transporter.js"},
+		{"type":"transporter","id":"mytransblock","require":"examples/custom/custom-transporter-block.js"}
 	],
 
 	"config" : {

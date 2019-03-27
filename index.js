@@ -19,7 +19,7 @@ const stats = Stats.fetch('main');
 async function initialize() {
 	try {
 		let ti = Date.now();
-		let cfg = await Config.read(program.file || "./config/cfg001.json");
+		let cfg = await Config.read(program.file || "./examples/config/cfg001.json");
 
 		logger.info(`Config loaded!`);
 		var nsyslog = new NSyslog(cfg);

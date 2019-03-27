@@ -1,0 +1,78 @@
+{
+	"start" : [
+		{
+			"description" : "Match 1",
+			"regex" : "date=(.*) time=(.*) log_id=(.*) msg_id=(.*) device_id=(.*) vd=.(.*). timezone=.(.*). type=(.*) subtype=.(.*). pri=(.*) proto=(.*) service=(.*) status=(.*) reason=(.*) policy=(.*) src=(.*) src_port=(.*) dst=(.*) dst_port=(.*) http_request_time=(.*) http_response_time=(.*) http_request_bytes=(.*) http_response_bytes=(.*) http_method=(.*) http_url=.(.*). http_agent=.(.*). http_retcode=(.*) msg=.(.*). srccountry=.(.*). content_switch_name=.(.*). server_pool_name=.(.*). http_host=.(.*). user_name=.(.*). http_refer=.(.*). http_version=.(.*). dev_id=(.*)" ,
+			"name" : [
+				"evtdate","evttime","_","_","res",
+				"_","_","_","_","ct2",
+				"_","_","evt","_","_",
+				"sip","sp","dip","dp","_",
+				"_","_","_","ct4","fn",
+				"_","ct3","ct5","_","_",
+				"_","dhn"
+			],
+			"set" : [
+				{"key":"ct9", "value":"WAF-R2"},
+				{"key":"sev", "value":1},
+				{"key":"et", "value":"${evtdate} ${evttime}"},
+				{"key":"basemsg", "value":"${dhn} ${ct5} ${evttime}"}
+			]
+		},
+		{
+			"description" : "Full match",
+			"regex" : "date=(.+) time=(.+) log_id=(.+) msg_id=(.+) device_id=(.+) vd=.(.+). timezone=.(.+). type=(.+) subtype=.(.+). pri=(.+) trigger_policy=.(.*). severity_level=(.+) proto=(.+) service=(.+) action=(.+) policy=.(.+). src=(.+) src_port=(.+) dst=(.+) dst_port=(.+) http_method=(.+) http_url=.(.+). http_host=.(.+). http_agent=.(.+). http_session_id=(.+) msg=.(.+). signature_subclass=.(.+). signature_id=.(.+). srccountry=.(.+). content_switch_name=.(.+). server_pool_name=.(.+). false_positive_mitigation=.(.+). user_name=.(.+). monitor_status=.(.+). http_refer=.(.+). http_version=.(.+). dev_id=.(.+). threat_weight=(.+) history_threat_weight=(.+) threat_level=(.+)" ,
+			"name" : [
+				"evtdate","evttime","_","_","res",
+				"_","_","_","ct1","ct2",
+				"_","_","_","p","evt",
+				"subres","sip","sp","dip","dp",
+				"ct4","fn","dhn","_","_",
+				"ct5","ct3","_","_","_"
+			],
+			"set" : [
+				{"key":"ct9", "value":"WAF-R1"},
+				{"key":"sev", "value":4},
+				{"key":"et", "value":"${evtdate} ${evttime}"},
+				{"key":"basemsg", "value":"${dhn} ${ct5} ${evttime}"}
+			]
+		},
+		{
+			"description" : "Catch all 1",
+			"regex" : "date=(.*) time=(.*) log_id=(.*) msg_id=(.*) device_id=(.*) vd=.(.*). timezone=.(.*). type=(.*) subtype=.(.*). (.*)$" ,
+			"name" : [
+				"evtdate","evttime","_","_","res",
+				"_","_","subres","ct1"
+			],
+			"set" : [
+				{"key":"ei","value":"${_}"},
+				{"key":"ct9", "value":"CATCHALL"},
+				{"key":"sev", "value":0},
+				{"key":"et", "value":"${evtdate} ${evttime}"},
+				{"key":"basemsg", "value":"${ei} ${ct9}"}
+			]
+		},
+		{
+			"description" : "Catch all 2",
+			"regex" : "date=([^ ]+) time=([^ ]+) (.*)$" ,
+			"name" : [
+				"evtdate","evttime"
+			],
+			"set" : [
+				{"key":"ei","value":"${_}"},
+				{"key":"ct9", "value":"CATCHALL"},
+				{"key":"sev", "value":0}
+			]
+		},
+		{
+			"description" : "Catch all 3",
+			"regex" : "(.+)$" ,
+			"name" : ["ei"],
+			"set" : [
+				{"key":"ei","value":"${_}"},
+				{"key":"ct9", "value":"CATCHALL"},
+				{"key":"sev", "value":0}
+			]
+		}
+	]
+}

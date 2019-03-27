@@ -26,7 +26,7 @@ class MyProcessor extends Processor {
 			}
 		}
 		else {
-			callback(null,entry);
+			//callback(null,entry);
 		}
 	}
 }

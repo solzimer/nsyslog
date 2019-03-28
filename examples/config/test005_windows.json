@@ -14,7 +14,7 @@
 			"config" : {
 				"readmode" : "offset",
 				"offset" : "begin",
-				"channel" : "Application",
+				"channel" : "System",
 				"batchsize" : 100
 			}
 		}

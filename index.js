@@ -12,9 +12,11 @@ const
 
 program.version('0.0.1')
 	.option('-f, --file [file]', 'Config file')
+	.option('-L, --log-level [level]', 'Debug level')
 	.parse(process.argv);
 
 const stats = Stats.fetch('main');
+logger.setLevel(program.logLevel || 'info');
 
 async function initialize() {
 	try {

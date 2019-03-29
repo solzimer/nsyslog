@@ -50,4 +50,4 @@
 * [x] Factory processor capture exception
 * [ ] Fork reemit
 * [ ] Reemit direct
-* [ ] Test asym Bug
+* [x] Test asym Bug

@@ -39,7 +39,7 @@
 	},
 
 	"flows" : [
-		{"id":"flow1","from":"file", "processors":["myproc"], "transporters":"#"},
-		{"id":"test","from":"${$reemit}","transporters":"console"}
+		{"id":"flow1","from":"file", "processors":["myproc"], "transporters":"#test"},
+		{"id":"test","from":"false","transporters":"console"}
 	]
 }

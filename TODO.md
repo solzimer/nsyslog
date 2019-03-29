@@ -49,5 +49,6 @@
 * [ ] Generic Parser Multithread
 * [x] Factory processor capture exception
 * [ ] Fork reemit
-* [ ] Reemit direct
+* [x] Reemit direct
+* [ ] Reemit direct fork
 * [x] Test asym Bug

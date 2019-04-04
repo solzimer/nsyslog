@@ -45,13 +45,13 @@ async function initialize() {
 
 		setInterval(()=>{
 			logger.info(`${new Date()} : ${JSON.stringify(stats.all())}`);
-			///*
+			/*
 			let tf = Date.now();
 			if(tf-ti>=30000) {
 				console.log(stats.all());
 				process.exit(0);
 			}
-			//*/
+			*/
 		},1000);
 
 		await nsyslog.start();

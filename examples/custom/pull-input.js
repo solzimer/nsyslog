@@ -22,7 +22,7 @@ class MyPullInput extends Input {
 			setTimeout(()=>{
 				let rnd = Math.random();
 				if(rnd < this.threshold)
-					callback(null,{originalMessage : `This is a pull input: ${rnd}`});
+					callback(null,{originalMessage : `This is a pull input: ${rnd}`,interval:this.interval});
 				else
 					callback(`Threshold error: ${rnd}`);
 			}, this.interval);

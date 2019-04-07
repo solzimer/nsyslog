@@ -1,0 +1,64 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 1000},
+		"process" : {"buffer": 1000}
+	},
+
+	"register" : [
+		{"type":"input","id":"mypull","require":"examples/custom/pull-input.js"}
+	],
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : false,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		},
+
+		"pusher" : {
+			"type" : "mypull",
+			"config" : {
+				"interval" : 100,
+				"threshold" : 1
+			}
+		}
+	},
+
+	"processors" : {
+		"aggregate" : {
+			"type" : "filter",
+			"config" : {
+				"mode" : "every",
+				"first" : false,
+				"every" : 1000,
+				"ttl" : 5000,
+				"key" : "A",
+				"aggregate" : {
+					"count" : 1
+				},
+				"output" : "aggr"
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"id":"fork1","from":"pusher", "fork":false, "processors":["aggregate"], "transporters":["console"], "mode":"parallel"}
+	]
+}

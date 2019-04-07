@@ -26,19 +26,6 @@ async function initialize() {
 		logger.info(`Config loaded!`);
 		var nsyslog = new NSyslog(cfg);
 
-		nsyslog.on('ack',(stage,flow,module,entry)=>{
-			stats.ack(stage,module);
-		});
-
-		nsyslog.on('data',(stage,flow,module,entry)=>{
-			stats.emit(stage,module);
-		});
-
-		nsyslog.on('error',(stage,flow,module,error)=>{
-			stats.fail(stage,module);
-			logger.error(error);
-		});
-
 		nsyslog.on('stats',other=>{
 			stats.merge(other);
 		});

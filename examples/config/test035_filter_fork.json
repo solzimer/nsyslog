@@ -12,6 +12,7 @@
 	"inputs" : {
 		"file" : {
 			"type" : "file",
+			"attach" : ["fork1"],
 			"config" : {
 				"path" : "/var/log/**/*.log",
 				"watch" : false,
@@ -35,7 +36,7 @@
 			"config" : {
 				"mode" : "every",
 				"first" : false,
-				"every" : 1000,
+				"every" : 100000,
 				"ttl" : 5000,
 				"key" : "A",
 				"aggregate" : {
@@ -59,6 +60,7 @@
 	},
 
 	"flows" : [
-		{"id":"fork1","from":"pusher", "fork":false, "processors":["aggregate"], "transporters":["console"], "mode":"parallel"}
+		{"id":"fork1","from":"file", "fork":true, "processors":["aggregate"], "transporters":["console"], "mode":"parallel"},
+		{"id":"fork2","from":"pusher", "fork":false, "processors":["aggregate"], "transporters":["console"], "mode":"parallel"}
 	]
 }

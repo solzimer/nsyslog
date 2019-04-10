@@ -12,7 +12,6 @@
 	"inputs" : {
 		"file" : {
 			"type" : "file",
-			"attach" : ["fork1"],
 			"config" : {
 				"path" : "/var/log/**/*.log",
 				"watch" : false,

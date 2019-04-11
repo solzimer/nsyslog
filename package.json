@@ -18,7 +18,7 @@
     "bsd"
   ],
   "dependencies": {
-    "chokidar": "^2.0.4",
+    "chokidar": "^2.1.5",
     "colors": "^1.1.2",
     "commander": "^2.9.0",
     "csv-parse": "^2.5.0",
@@ -38,7 +38,7 @@
     "moment": "^2.22.1",
     "mongodb": "^2.2.27",
     "nools": "^0.4.4",
-    "nsyslog-parser": "^0.8.8",
+    "nsyslog-parser": "^0.9.0",
     "promise-stream-queue": "^0.4.1",
     "request": "^2.87.0",
     "semaphore": "^1.1.0",
@@ -51,7 +51,6 @@
     "zeromq": "^4.6.0"
   },
   "devDependencies": {
-    "line-reader": "^0.4.0",
-    "uglify-js": "^3.4.9"
+    "line-reader": "^0.4.0"
   }
 }

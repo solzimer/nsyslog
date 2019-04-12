@@ -57,6 +57,8 @@ Since all the codebase is written in NodeJS, it has a very small memory footprin
 * [Filter Aggregator](processors/filter.md)
 * [Generic parser](processors/parser.md)
 * [JSON parser](processors/jsonparser.md)
+* [KeyValue parser](processors/keyvalparser.md)
+* [Merge](processors/merge.md)
 * [Multilang Protocol](processors/multilang.md)
 * [Properties](processors/properties.md)
 * [Sequence](processors/sequence.md)

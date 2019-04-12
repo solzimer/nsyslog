@@ -15,6 +15,8 @@ This is the core set of included processors:
 * [Filter](filter.md)
 * [Generic parser](parser.md)
 * [JSON parser](jsonparser.md)
+* [KeyValue parser](keyvalparser.md)
+* [Merge](merge.md)
 * [Multilang Protocol](multilang.md)
 * [Properties](properties.md)
 * [Sequence](sequence.md)

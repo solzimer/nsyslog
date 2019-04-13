@@ -39,7 +39,7 @@
 		"multi2" : {
 			"type" : "myprocblock",
 			"config" : {
-				"block" : true,
+				"block" : false,
 				"cpu" : 0
 			}
 		}
@@ -56,8 +56,8 @@
 	},
 
 	"flows" : [
-		{"id":"fork1", "disabled":false, "from":"*", "fork":true, "cores":4,  "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
-		{"id":"fork2", "disabled":true,  "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
+		{"id":"fork1", "disabled":false, "from":"*", "fork":true, "cores":1,  "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
+		{"id":"fork2", "disabled":true,  "from":"*", "fork":false, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
 		{"id":"fork3", "disabled":true,  "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"}
 	]
 }

@@ -56,8 +56,8 @@
 	},
 
 	"flows" : [
-		{"id":"fork1", "disabled":false, "from":"*", "fork":true, "cores":1,  "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
-		{"id":"fork2", "disabled":true,  "from":"*", "fork":false, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
-		{"id":"fork3", "disabled":true,  "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"}
+		{"id":"fork1", "disabled":false, "from":"*", "fork":true, "cores":1,  "processors":["multi","multi2"],"transporters":["block","#fork3"], "mode":"parallel"},
+		{"id":"fork2", "disabled":false,  "from":"*", "fork":false, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
+		{"id":"fork3", "disabled":false,  "fork":false, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"}
 	]
 }

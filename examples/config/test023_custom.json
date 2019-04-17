@@ -22,7 +22,7 @@
 			"type" : "mypull",
 			"attach" : ["fork1","fork2"],
 			"config" : {
-				"interval" : 100,
+				"interval" : 10,
 				"threshold" : 1
 			}
 		}

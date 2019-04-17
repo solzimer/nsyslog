@@ -4,6 +4,7 @@ class MyPullInput extends Input {
 	constructor(id) {
 		super(id);
 		this.paused = false;
+		this.count = 0;
 	}
 
 	configure(config,callback) {
@@ -22,7 +23,7 @@ class MyPullInput extends Input {
 			setTimeout(()=>{
 				let rnd = Math.random();
 				if(rnd < this.threshold)
-					callback(null,{originalMessage : `This is a pull input: ${rnd}`,interval:this.interval});
+					callback(null,{originalMessage : `This is a pull input: ${rnd}`,interval:this.interval, seq:this.count++, pid:process.pid});
 				else
 					callback(`Threshold error: ${rnd}`);
 			}, this.interval);
@@ -31,7 +32,7 @@ class MyPullInput extends Input {
 			setImmediate(()=>{
 				let rnd = Math.random();
 				if(rnd < this.threshold)
-					callback(null,{originalMessage : `This is a pull input: ${rnd}`});
+					callback(null,{originalMessage : `This is a pull input: ${rnd}`, seq:this.count++, pid:process.pid});
 				else
 					callback(`Threshold error: ${rnd}`);
 			});

@@ -9,7 +9,9 @@
 		"file" : {
 			"type" : "file",
 			"when" : {
-				"filter" : "${originalMessage}.startsWith('{')",
+				"filter" : {
+					"originalMessage" : {"$regex" : "root"}
+				},
 				"match" : "process",
 				"nomatch" : "block"
 			},
@@ -46,6 +48,9 @@
 	},
 
 	"flows" : [
-		{"from":"file", "processors":["prop1"], "transporters":["console"], "mode":"parallel"}
+		{
+			"from":{"originalMessage":{"$regex":"fwar4gen01"}},
+			"processors":["prop1"], "transporters":["console"], "mode":"parallel"
+		}
 	]
 }

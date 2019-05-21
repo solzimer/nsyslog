@@ -52,3 +52,4 @@
 * [x] Reemit direct
 * [ ] Reemit direct fork
 * [x] Test asym Bug
+* [x] Filters with MongoDB Syntax

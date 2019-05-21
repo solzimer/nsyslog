@@ -10,7 +10,7 @@
 			"type" : "file",
 			"when" : {
 				"filter" : {
-					"originalMessage" : {"$regex" : "root"}
+					"$expr" : {"$eval":"${originalMessage}.indexOf('root')>=0"}
 				},
 				"match" : "process",
 				"nomatch" : "block"
@@ -49,7 +49,7 @@
 
 	"flows" : [
 		{
-			"from":{"originalMessage":{"$regex":"fwar4gen01"}},
+			"from":"file",
 			"processors":["prop1"], "transporters":["console"], "mode":"parallel"
 		}
 	]

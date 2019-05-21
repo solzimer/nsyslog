@@ -22,7 +22,7 @@
 			"type" : "mypull",
 			"attach" : ["fork1","fork2"],
 			"config" : {
-				"interval" : 0,
+				"interval" : 10,
 				"threshold" : 1
 			}
 		}
@@ -59,12 +59,18 @@
 				"format" : "${seq}: ${originalMessage}",
 				"block" : false
 			}
+		},
+		"logger" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
 		}
 	},
 
 	"flows" : [
 		{"id":"fork1", "disabled":false, "from":"*", "fork":true, "cores":1,  "processors":["multi","multi2"],"transporters":["block","#fork3"], "mode":"parallel"},
-		{"id":"fork2", "disabled":false,  "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
-		{"id":"fork3", "disabled":false,  "fork":false, "processors":["multi","multi2"],"transporters":["block3"], "mode":"parallel"}
+		{"id":"fork2", "disabled":true,  "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
+		{"id":"fork3", "disabled":false,  "fork":true, "transporters":["block3"], "mode":"parallel"}
 	]
 }

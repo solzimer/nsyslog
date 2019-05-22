@@ -10,8 +10,20 @@
 	],
 
 	"inputs" : {
-		"file" : {
+		"file1" : {
 			"type" : "file",
+			"attach" : ["fork1"],
+			"config" : {
+				"path" : "/var/log/**/*.json",
+				"watch" : false,
+				"readmode" : "watermark",
+				"offset" : "start"
+			}
+		},
+
+		"file2" : {
+			"type" : "file",
+			"attach" : ["fork2"],
 			"config" : {
 				"path" : "/var/log/**/*.log",
 				"watch" : false,
@@ -35,7 +47,7 @@
 			"config" : {
 				"mode" : "every",
 				"first" : false,
-				"every" : 100000,
+				"every" : 50,
 				"ttl" : 5000,
 				"key" : "A",
 				"aggregate" : {
@@ -59,7 +71,7 @@
 	},
 
 	"flows" : [
-		{"id":"fork1","from":"file", "fork":true, "processors":["aggregate"], "transporters":["console"], "mode":"parallel"},
-		{"id":"fork2","from":"pusher", "fork":false, "processors":["aggregate"], "transporters":["console"], "mode":"parallel"}
+		{"id":"fork1","from":"file1", "fork":true, "processors":["aggregate"], "transporters":["null"], "mode":"parallel"},
+		{"id":"fork2","from":"file2", "fork":true, "processors":["aggregate"], "transporters":["null"], "mode":"parallel"}
 	]
 }

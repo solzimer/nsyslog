@@ -24,6 +24,7 @@
     "csv-parse": "^2.5.0",
     "csv-stringify": "^3.1.1",
     "dgram": "^1.0.1",
+    "extend": "^3.0.2",
     "fileq": "^1.4.0",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",

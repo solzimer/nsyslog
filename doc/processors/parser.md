@@ -83,3 +83,5 @@ Use of the previous parser with 4 cores. Extracted values will be stored in a ma
 * **singleval** : Some parsed elements can have multiple values with the same name. When singleval is true, only takes the first element of each name.
 * **input** : Input expression to be parsed.
 * **output** : Output field.
+* **extend** : By default *false*. When set, input object will be extended by the generated properties. Otherwise, it will be replaced with a new object containing only the generated properties.
+* **deep** : By default *false*. When set, and **extend** enabled, generated properties will be merged if their destination already exists. Otherwise, the destination field will be replaced with the newly generated properties.

@@ -11,7 +11,7 @@ const EVT = {
 function randIp() {
 	let res = [];
 	for(let i=0;i<4;i++)
-		res.push(Math.floor(Math.random()*256));
+		res.push(Math.floor(Math.random()*5));
 	return res.join(".");
 }
 

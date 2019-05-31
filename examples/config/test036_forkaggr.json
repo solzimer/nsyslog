@@ -1,0 +1,62 @@
+{
+	"register" : [
+		{"type":"input","id":"mypull","require":"examples/custom/eve.js"}
+	],
+
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 100},
+		"buffer" : {"maxPending" : 100},
+		"processor" : {"maxPending" : 100},
+		"transporter" : {"maxPending" : 100}
+
+	},
+
+	"inputs" : {
+		"pusher" : {
+			"type" : "mypull",
+			"attach" : ["fork1","fork2","fork3"],
+			"config" : {
+			}
+		}
+	},
+
+	"processors" : {
+		"json" : {
+			"type" : "jsonparser"
+		},
+
+		"filter" : {
+			"type" : "filter",
+			"config" : {
+				"mode" : "every",
+				"every" : 100,
+				"ttl" : 30000,
+				"key" : "${src_ip}",
+				"first" : true,
+				"aggregate" : {
+					"count" : 1
+				},
+				"output" : "aggr"
+			}
+		}
+	},
+
+	"transporters" : {
+		"logger" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"id":"fork1", "disabled":false,  "fork":true, "processors":["json","filter"], "transporters":["null"], "mode":"parallel"},
+		{"id":"fork2", "disabled":false,  "fork":true, "processors":["json","filter"], "transporters":["null"], "mode":"parallel"},
+		{"id":"fork3", "disabled":false,  "fork":true, "processors":["json","filter"], "transporters":["null"], "mode":"parallel"}
+	]
+}

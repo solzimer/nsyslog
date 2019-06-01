@@ -1,0 +1,52 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/wifi.log",
+				"watch" : false,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"parser" : {
+			"type" : "parser",
+			"config" : {
+				"path" : "../parser/wifi.json",
+				"map" : true,
+				"singleval" : true
+			}
+		}
+	},
+
+	"transporters" : {
+		"log" : {
+			"type" : "console",
+			"config" : {"format" : "${JSON}", "level" : "log"}
+		},
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/logout${path}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"*","fork":false, "processors":["parser"], "transporters":["log"]}
+	]
+}

@@ -1,0 +1,19 @@
+{
+	"start" : [
+		{
+			"description" : "Match 1",
+			"example" : "Sat Jun  1 23:13:18.903 <kernel> en0: Received EAPOL packet (length = 113)",
+			"regex" : "(\\w+ \\w+ \\d+ \\d+:\\d+:\\d+\\.\\d+) <(kernel)> (\\S+): (.*)" ,
+			"name" : [
+				"timestamp","system","iface","message"
+			]
+		},
+		{
+			"description" : "Otherwise",
+			"regex" : ".*" ,
+			"reject" : true,
+			"name" : [],
+			"set" : []
+		}
+	]
+}

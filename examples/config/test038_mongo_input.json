@@ -1,0 +1,43 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"mongo" : {
+			"type" : "mongo",
+			"config" : {
+				"url" : "mongodb://localhost/logicalog",
+				"collection" : ["/loghost.logline.*/"],
+				"query" : {"line":{"$gt":"${line}"}},
+				"watermark" : {"line":0},
+				"maxCursors" : 10
+			}
+		}
+	},
+
+	"transporters" : {
+		"log" : {
+			"type" : "console",
+			"config" : {"format" : "${JSON}", "level" : "log"}
+		},
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/${collection}.log",
+				"format" : "${null||JSON.stringify(this.originalMessage)}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"*","fork":false, "processors":[], "transporters":["file"]}
+	]
+}

@@ -28,7 +28,7 @@
 		"file" : {
 			"type" : "file",
 			"config" : {
-				"path" : "/var/log/${collection}.log",
+				"path" : "/var/log/mongo/${collection}.log",
 				"format" : "${null||JSON.stringify(this.originalMessage)}"
 			}
 		},

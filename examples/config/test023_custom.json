@@ -18,7 +18,15 @@
 	},
 
 	"inputs" : {
-		"pusher" : {
+		"pusher1" : {
+			"type" : "mypull",
+			"attach" : ["fork1","fork2"],
+			"config" : {
+				"interval" : 1000,
+				"threshold" : 1
+			}
+		},
+		"pusher2" : {
 			"type" : "mypull",
 			"attach" : ["fork1","fork2"],
 			"config" : {
@@ -69,8 +77,8 @@
 	},
 
 	"flows" : [
-		{"id":"fork1", "disabled":false, "from":"*", "fork":true, "cores":1,  "processors":["multi","multi2"],"transporters":["block","#fork3"], "mode":"parallel"},
-		{"id":"fork2", "disabled":true,  "from":"*", "fork":true, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
-		{"id":"fork3", "disabled":false,  "fork":true, "transporters":["block3"], "mode":"parallel"}
+		{"id":"fork1", "disabled":false, "from":"pusher1", "fork":false, "cores":1,  "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
+		{"id":"fork2", "disabled":false,  "from":"pusher2", "fork":false, "processors":["multi","multi2"],"transporters":["block"], "mode":"parallel"},
+		{"id":"fork3", "disabled":true,  "fork":false, "transporters":["block3"], "mode":"parallel"}
 	]
 }

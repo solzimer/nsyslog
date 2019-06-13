@@ -12,7 +12,8 @@ const
 
 program.version('0.0.1')
 	.option('-f, --file [file]', 'Config file')
-	.option('--cli', 'Start CLI session')
+	.option('--cli', 'Starts CLI session')
+	.option('--cli-start', 'Starts CLI session and flows')
 	.option('-L, --log-level [level]', 'Debug level')
 	.parse(process.argv);
 
@@ -21,7 +22,6 @@ logger.setLevel(program.logLevel || 'info');
 
 async function initialize() {
 	try {
-		let ti = Date.now();
 		let cfg = await Config.read(program.file || "./examples/config/cfg001.json");
 
 		logger.info(`Config loaded!`);
@@ -31,44 +31,30 @@ async function initialize() {
 			stats.merge(other);
 		});
 
-		if(program.cli) {
+		if(program.cli || program.cliStart) {
+			if(program.cliStart) {
+				await nsyslog.start();
+			}
+
 			require('./lib/cli')(nsyslog,'nsyslog');
 			process.on('SIGINT',()=>{});
 			process.on('SIGTERM', ()=>{});
 		}
 		else {
-			process.on('SIGTERM', async()=>{
-				try {
-					await nsyslog.stop();
-				}catch(err){
-					logger.error(err);
-				}
+			async function finalize() {
+				try {await nsyslog.stop();}catch(err){logger.error(err);}
 				setTimeout(()=>process.exit(1),500);
-			});
+			}
 
-			process.on('SIGINT', async()=>{
-				try {
-					await nsyslog.stop();
-				}catch(err){
-					logger.error(err);
-				}
-				setTimeout(()=>process.exit(1),500);
-			});
+			process.on('SIGTERM', finalize);
+			process.on('SIGINT', finalize);
 
 			setInterval(()=>{
 				logger.info(`${new Date()} : ${JSON.stringify(stats.all())}`);
-				/*
-				let tf = Date.now();
-				if(tf-ti>=30000) {
-					console.log(stats.all());
-					process.exit(0);
-				}
-				*/
 			},1000);
+
+			await nsyslog.start();
 		}
-
-		await nsyslog.start();
-
 	}catch(err) {
 		logger.error(err);
 		return;

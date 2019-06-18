@@ -1,0 +1,10 @@
+{
+	"inputs" : {
+		"input1" : {
+			"type" : "null"
+		},
+		"input2" : {
+			"type" : "null"
+		}
+	}
+}

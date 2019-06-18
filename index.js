@@ -12,9 +12,10 @@ const
 
 program.version('0.0.1')
 	.option('-f, --file [file]', 'Config file')
+	.option('-t, --test', 'Only validate config file')
+	.option('-L, --log-level [level]', 'Debug level')
 	.option('--cli', 'Starts CLI session')
 	.option('--cli-start', 'Starts CLI session and flows')
-	.option('-L, --log-level [level]', 'Debug level')
 	.parse(process.argv);
 
 const stats = Stats.fetch('main');
@@ -22,7 +23,11 @@ logger.setLevel(program.logLevel || 'info');
 
 async function initialize() {
 	try {
-		let cfg = await Config.read(program.file || "./examples/config/cfg001.json");
+		let cfg = await Config.read(program.file || "./examples/config/cfg001.json",null,program.test);
+
+		if(program.test) {
+			return;
+		}
 
 		logger.info(`Config loaded!`);
 		var nsyslog = new NSyslog(cfg);
@@ -57,7 +62,7 @@ async function initialize() {
 		}
 	}catch(err) {
 		logger.error(err);
-		return;
+		process.exit(1);
 	}
 }
 

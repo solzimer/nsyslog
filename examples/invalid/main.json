@@ -1,0 +1,29 @@
+{
+	"include" : [
+		"./level1a.json"
+	],
+
+	"inputs" : {
+		"input1" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/*.log"
+			}
+		},
+		"input2" : {
+			"type" : "null"
+		},
+		"input3" : {
+			"type" : "null"
+		},
+		"input4" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"*", "processors":["invalid1","invalid2"],"transporters":["trinv1","$trinv2"]},
+		{"id":"flow1","from":{"a":"pepe","$eq":3}, "processors":["invalid1","invalid2"],"transporters":["trinv1","$trinv2"]},
+		{"id":"flow1","from":"*", "processors":["invalid1","invalid2"],"transporters":["trinv1","$trinv2"]}
+	]
+}

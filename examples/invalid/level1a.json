@@ -1,6 +1,7 @@
 {
 	"include" : [
-		"./level2a.json"
+		"./level2a.json",
+		"./level2b.json"
 	],
 
 	"inputs" : {

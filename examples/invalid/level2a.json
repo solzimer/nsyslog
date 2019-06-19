@@ -1,0 +1,22 @@
+{
+	"register" : [
+		{"type":"invalid","id":"mypush","require":"examples/custom/notfound.invalid"},
+		{"type":"input","id":"mypull","require":"examples/custom/pull-input.js"}
+	],
+
+	"inputs" : {
+		"input3" : {
+			"type" : "null"
+		},
+		"input4" : {
+			"type" : "null"
+		},
+		"input5" : {
+			"type" : "not_exist"
+		}
+	},
+
+	"filters" : {
+		"invalid" : "${}rrr"
+	}
+}

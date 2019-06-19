@@ -23,10 +23,27 @@ logger.setLevel(program.logLevel || 'info');
 
 async function initialize() {
 	try {
+		// Read configuration
 		let cfg = await Config.read(program.file || "./examples/config/cfg001.json",null,program.test);
 
+		// Validation errors
+		if(cfg.$$errors) {
+			cfg.$$errors.forEach(err=>{
+				logger[err.sev||'warn'](err);
+				if(err.err) logger.error(err.err);
+			});
+			if(cfg.$$errors.filter(err=>err.sev=='error').length)	{
+				logger.error(`Config file has severe errors. Cannot continue`);
+				process.exit(1);
+			}
+		}
+		else {
+			logger.info('Valid config file');
+		}
+
+		// Only test config. Exit
 		if(program.test) {
-			return;
+			process.exit(0);
 		}
 
 		logger.info(`Config loaded!`);

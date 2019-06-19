@@ -5,6 +5,9 @@
 		},
 		"input4" : {
 			"type" : "null"
-		}
+		},
+		"input5" : 
+			"type" : "null"
+		},
 	}
 }

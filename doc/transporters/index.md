@@ -6,13 +6,15 @@ Since a flow can have more than one transporter, and, since they involve asynchr
 
 This is the core set of included transporters:
 
-* [Null](null.md)
-* [Reemit](reemit.md)
 * [Console](console.md)
 * [File](file.md)
-* [Syslog](syslog.md)
-* [HTTP/S](http.md)
+* [HTTP](http.md)
+* [Kafka](kafka.md)
 * [MongoDB](mongo.md)
+* [Null](null.md)
+* [Redis](redis.md)
+* [Reemit](reemit.md)
+* [Syslog](syslog.md)
 * [ZeroMQ](zmq.md)
 
 ## Configuration

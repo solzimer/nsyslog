@@ -24,6 +24,9 @@ Read from 'Application' channel with watermark, starting at the oldest entry:
 * **readmode** : Can be either of **offset** or **watermark**. When **offset** is used, reads will starts allways at the specified offset, regardless of process restarts. If **watermark** mode is used, the input will remembers last read offsets, so if the process is restarted, it will continue the reads at the last position they where left.
 * **offset** : Can be one of **begin / start**, **end** or a date in *YYYY-MM-DDTHH:mm:ss* format.
 * **batchsize** : How many events read at a time.
+* **remote** : Remote host/ip address to read events from.
+* **username** : Remote host username
+* **password** : Remote host password
 
 ## Output
 Each read will generate an object with the following schema:

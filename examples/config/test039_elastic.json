@@ -1,0 +1,50 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"elastic" : {
+			"type" : "elastic",
+			"config" : {
+				"url" : "http://localhost:9200",
+				"query" : {
+					"bool" : {
+				  	"must": [
+							{"match_all": {} }
+						],
+				  	"filter": [
+							{"range" : { "timestamp" : {"gt" : "${timestamp}"}}}
+						]
+			  	}
+				},
+				"sort" : [
+					{"timestamp":"asc"}
+				],
+				"watermark" : {"timestamp":"2000-01-01T00:00:00.000Z"},
+				"batchsize" : 10,
+				"index" : "kibana_sample_data_logs"
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"*", "transporters":["console"]}
+	]
+}

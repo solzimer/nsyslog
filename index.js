@@ -24,7 +24,8 @@ logger.setLevel(program.logLevel || 'info');
 async function initialize() {
 	try {
 		// Read configuration
-		let cfg = await Config.read(program.file || "./examples/config/cfg001.json",null,program.test);
+		let path = program.file || "./examples/config/cfg001.json";
+		let cfg = await Config.read(path,null,program.test);
 
 		// Validation errors
 		if(cfg.$$errors) {
@@ -47,10 +48,15 @@ async function initialize() {
 		}
 
 		logger.info(`Config loaded!`);
-		var nsyslog = new NSyslog(cfg);
+		let nsyslog = new NSyslog(cfg);
+		let instance = {path,stats,nsyslog};
 
 		nsyslog.on('stats',other=>{
 			stats.merge(other);
+		});
+
+		nsyslog.on('destroy',nsyslog=>{
+			nsyslog.removeAllListeners();
 		});
 
 		if(program.cli || program.cliStart) {
@@ -58,12 +64,13 @@ async function initialize() {
 				await nsyslog.start();
 			}
 
-			require('./lib/cli')(nsyslog,'nsyslog');
+			require('./lib/cli')(instance,'nsyslog');
 			process.on('SIGINT',()=>{});
 			process.on('SIGTERM', ()=>{});
 		}
 		else {
 			async function finalize() {
+				let nsyslog = instance.nsyslog;
 				try {await nsyslog.stop();}catch(err){logger.error(err);}
 				setTimeout(()=>process.exit(1),500);
 			}

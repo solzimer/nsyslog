@@ -50,7 +50,7 @@
 	"flows" : [
 		{
 			"from":"file",
-			"processors":["prop1"], "transporters":["console"], "mode":"parallel"
+			"processors":["prop1"], "transporters":["null"], "mode":"parallel"
 		}
 	]
 }

@@ -15,7 +15,7 @@
 				"bypass": false
 			},
 			"config" : {
-				"path" : "/t/nsyslog/config/data/parser001.log",
+				"path" : "/t/nsyslog/examples/config/data/parser001.log",
 				"watch" : false,
 				"readmode" : "offset",
 				"offset" : "start"
@@ -52,6 +52,6 @@
 	},
 
 	"flows" : [
-		{"from":"*","fork":false, "processors":["parser"], "transporters":["log"]}
+		{"from":"*","fork":false, "processors":["parser"], "transporters":["file"]}
 	]
 }

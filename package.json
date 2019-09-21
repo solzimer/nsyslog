@@ -17,6 +17,9 @@
     "RFC 5424",
     "bsd"
   ],
+	"bin" : {
+		"nsyslog" : "./bin/nsyslog.js"
+	},
   "dependencies": {
     "chokidar": "^3.1.0",
     "colors": "^1.1.2",

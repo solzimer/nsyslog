@@ -1,6 +1,6 @@
 {
   "name": "nsyslog",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Modular new generation syslog server and relay",
   "author": "David Gómez Matarrodona <solzimer@gmail.com>",
   "url": "https://github.com/owner/project/issues",
@@ -17,9 +17,9 @@
     "RFC 5424",
     "bsd"
   ],
-	"bin" : {
-		"nsyslog" : "./bin/nsyslog.js"
-	},
+  "bin": {
+    "nsyslog": "./bin/nsyslog.js"
+  },
   "dependencies": {
     "chokidar": "^3.1.0",
     "colors": "^1.1.2",

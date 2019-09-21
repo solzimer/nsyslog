@@ -20,6 +20,7 @@ logger.setLevel(program.logLevel || 'info');
 async function initialize() {
 	try {
 		// Read configuration
+		logger.warn('NSyslog is on beta status, not ready for production yet!');
 		let path = program.file || `${__dirname}/../data/config.json`;
 		logger.info(`Reading configuration file "${path}"`);
 		let cfg = await Config.read(path,null,program.test);

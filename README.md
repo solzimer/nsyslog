@@ -20,7 +20,27 @@ Since all the codebase is written in NodeJS, it has a very small memory footprin
 * Multicore flows for parallel processing
 
 ### Installation
-As always in node:
+## As a CLI app
+```
+npm install -g nsyslog
+```
+
+Then:
+```
+> nsyslog --help
+Usage: nsyslog [options]
+
+Options:
+  -V, --version            output the version number
+  -f, --file [file]        Config file
+  -t, --test               Only validate config file
+  -L, --log-level [level]  Debug level
+  --cli                    Starts CLI session
+  --cli-start              Starts CLI session and flows
+  -h, --help               output usage information
+```
+
+### As an embedded module
 ```
 npm install -save nsyslog
 ```

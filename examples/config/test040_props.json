@@ -1,0 +1,84 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"wmdir" : "/tmp/wms",
+		"input" : {"buffer" : 1000},
+		"process" : {"buffer": 1000}
+	},
+
+	"include" : [
+		"data/properties.json"
+	],
+
+	"properties" : {
+		"syslog" : {
+			"url" : "udp://localhost:514"
+		}
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"throttle" : {
+			"type" : "throttle",
+			"config" : {
+				"timeout" : 1000
+			}
+		},
+		"timestamp" : {
+			"type" : "timestamp",
+			"config" : {}
+		},
+		"props" : {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"otherfield" : "${timestamp} => ${originalMessage}"
+				}
+			}
+		}
+	},
+
+	"transporters" : {
+		"syslog" : {
+			"type" : "syslog",
+			"config" : {
+				"url" : "@{syslog.url}",
+				"format" : "${originalMessage}",
+				"application" : "${filename}",
+				"hostname" : "localhost",
+				"level" : "info",
+				"facility" : 5,
+				"stream" : true,
+				"tls" : {
+					"key" : "./config/server.key",
+					"cert" : "./config/server.crt"
+				}
+			}
+		},
+		"logger" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}",
+				"level" : "@{logger.level}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"file", "processors":["throttle","timestamp","props"], "transporters":["syslog","logger"], "mode":"parallel"}
+	]
+}

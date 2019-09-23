@@ -5,7 +5,7 @@
 	},
 
 	"register" : [
-		{"type":"input","id":"debug","require":"custom/debug-input.js"}
+		{"type":"input","id":"debug","require":"examples/custom/debug-input.js"}
 	],
 
 	"inputs" : {

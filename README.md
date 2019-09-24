@@ -1,6 +1,6 @@
 <p align="center">
 	<img src="doc/assets/logo-nsyslog-tr.png" alt="Logo" height="250px" style="display:block">
-	The next generation log agent and syslog server!
+	<i><sub>The next generation log agent and syslog server!</sub></i>
 </p>
 
 # nsyslog

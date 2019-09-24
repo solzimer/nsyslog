@@ -79,6 +79,6 @@
 	},
 
 	"flows" : [
-		{"from":"file", "processors":["throttle","timestamp","props"], "transporters":["syslog","logger"], "mode":"parallel"}
+		{"from":"file", "processors":["throttle","timestamp","props"], "transporters":["syslog"], "mode":"parallel"}
 	]
 }

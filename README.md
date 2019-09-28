@@ -4,7 +4,7 @@
 </p>
 
 # nsyslog
-NSyslog is a modern, new generation, log agent and syslog server. It features a modular flow architecture of data collectors (inputs), processors and transporters.
+NSyslog is a modern, new generation, logagent and syslog server. It features a modular flow architecture of data collectors (inputs), processors and transporters.
 
 ![Architecture](doc/assets/nsyslog.png)
 

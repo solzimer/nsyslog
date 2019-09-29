@@ -1,10 +1,10 @@
 <p align="center">
 	<img src="doc/assets/logo-nsyslog-tr.png" alt="Logo" height="250px" style="display:block">
-	<i><sub>The next generation log agent and syslog server!</sub></i>
+	<i><sub>The next generation logagent and syslog server!</sub></i>
 </p>
 
 # nsyslog
-NSyslog is a modern, new generation, log agent and syslog server. It features a modular flow architecture of data collectors (inputs), processors and transporters.
+NSyslog is a modern, new generation, logagent and syslog server. It features a modular flow architecture of data collectors (inputs), processors and transporters.
 
 ![Architecture](doc/assets/nsyslog.png)
 

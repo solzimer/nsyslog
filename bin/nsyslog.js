@@ -1,21 +1,28 @@
 #!/usr/bin/env node
 const
+	path = require('path'),
 	program = require("commander"),
 	logger = require('../lib/logger'),
 	Config = require("../lib/config"),
 	Stats = require('../lib/stats'),
 	NSyslog = require("../lib/nsyslog");
 
+const stats = Stats.fetch('main');
 program.version('0.0.1')
 	.option('-f, --file [file]', 'Config file')
 	.option('-t, --test', 'Only validate config file')
+	.option('-l, --log-file [path]', 'Output log file (default stdout)')
 	.option('-L, --log-level [level]', 'Debug level')
 	.option('--cli', 'Starts CLI session')
 	.option('--cli-start', 'Starts CLI session and flows')
 	.parse(process.argv);
 
-const stats = Stats.fetch('main');
 logger.setLevel(program.logLevel || 'info');
+if(program.logFile) {
+	logger.setFileTransport({
+		file : path.resolve(program.logFile)
+	});
+}
 
 async function initialize() {
 	try {

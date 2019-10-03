@@ -19,8 +19,9 @@ $RECYCLE.BIN/
 
 # NodeJS
 node_modules
-db
-watermarks
+db/
+watermarks/
+logs/
 
 # =========================
 # Operating System Files

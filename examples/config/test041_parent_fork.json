@@ -31,11 +31,14 @@
 			"config" : {
 				"format" : "${JSON}"
 			}
+		},
+		"null" : {
+			"type" : "null"
 		}
 	},
 
 	"flows" : [
-		{"id":"flow1", "from":"file", "fork":true, "processors":["myproc"], "transporters":"#test"},
-		{"id":"test",  "fork":"flow1", "transporters":"console"}
+		{"id":"flow1", "from":"file", "fork":true, "cores":4, "processors":[], "transporters":"#test"},
+		{"id":"test",  "fork":true, "transporters":"null"}
 	]
 }

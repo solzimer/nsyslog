@@ -8,15 +8,6 @@
 	},
 
 	"inputs" : {
-		"file" : {
-			"type" : "file",
-			"config" : {
-				"path" : "/var/log/**/*.log",
-				"watch" : true,
-				"readmode" : "offset",
-				"offset" : "start"
-			}
-		},
 		"kafka" : {
 			"type" : "kafka",
 			"config" : {
@@ -37,19 +28,12 @@
 				"format" : "${JSON}"
 			}
 		},
-		"syslog" : {
-			"type" : "syslog",
-			"config" : {
-				"url" : "udp://localhost:514"
-			}
-		},
 		"null" : {
 			"type" : "null"
 		}
 	},
 
 	"flows" : [
-		{"from":"${input}=='file'","disabled":true, "transporters":["syslog"]},
-		{"from":"${input}=='kafka'", "transporters":["console"]}
+		{"from":"kafka", "transporters":["console"]}
 	]
 }

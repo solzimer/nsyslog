@@ -12,36 +12,9 @@
 		"w_sys" : {
 			"type" : "windows",
 			"config" : {
-				"readmode" : "offset",
+				"readmode" : "watermark",
 				"offset" : "start",
 				"channel" : "System",
-				"batchsize" : 100
-			}
-		},
-		"w_app" : {
-			"type" : "windows",
-			"config" : {
-				"readmode" : "offset",
-				"offset" : "start",
-				"channel" : "Application",
-				"batchsize" : 100
-			}
-		},
-		"w_sec" : {
-			"type" : "windows",
-			"config" : {
-				"readmode" : "offset",
-				"offset" : "start",
-				"channel" : "Security",
-				"batchsize" : 100
-			}
-		},
-		"w_setup" : {
-			"type" : "windows",
-			"config" : {
-				"readmode" : "offset",
-				"offset" : "start",
-				"channel" : "Setup",
 				"batchsize" : 100
 			}
 		}
@@ -51,7 +24,11 @@
 		"console" : {
 			"type" : "console",
 			"config" : {
-				"format" : "${null||JSON.stringify(this,null,2)}"
+				"format" : "${originalMessage}",
+				"json" : {
+					"format" : true,
+					"spaces" : 2
+				}
 			}
 		},
 		"null" : {

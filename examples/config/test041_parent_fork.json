@@ -1,0 +1,41 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100}
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"myproc" : {
+			"type" : "throttle",
+			"config" : {
+				"timeout" : 1000
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		}
+	},
+
+	"flows" : [
+		{"id":"flow1", "from":"file", "fork":true, "processors":["myproc"], "transporters":"#test"},
+		{"id":"test",  "fork":"flow1", "transporters":"console"}
+	]
+}

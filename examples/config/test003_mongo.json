@@ -7,29 +7,54 @@
 		"transporter" : {"maxPending": 1000}
 	},
 
+	"description" : [
+		"This configuration shows the use of mongodb, both as transporter and as an input",
+		"First, we read log files from log collections, and sends them to a dynamic",
+		"collection based on read timestamp",
+		"Input uses a field named 'line' as a watermark"
+	],
+
 	"inputs" : {
-		"mongo" : {
+		"mongoin" : {
 			"type" : "mongo",
 			"config" : {
 				"url" : "mongodb://localhost/nsyslog",
 				"collection" : ["/logs.*/"],
 				"query" : {"line":{"$gt":"${line}"}},
+				"sort" : {"line":1},
 				"watermark" : {"line":0},
 				"maxCursors" : 10
 			}
 		}
 	},
 
+	"processors" : {
+		"timestamp" : {
+			"type" : "timestamp",
+			"config" : {
+				"output" : "ts"
+			}
+		},
+		"date" : {
+			"type" : "dateformat",
+			"config" : {
+				"input" : "${ts}",
+				"output" : "date",
+				"format" : "YYYYMMDD"
+			}
+		}
+	},
 	"transporters" : {
 		"log" : {
 			"type" : "console",
 			"config" : {"format" : "${JSON}", "level" : "log"}
 		},
-		"file" : {
-			"type" : "file",
+		"mongoout" : {
+			"type" : "mongo",
 			"config" : {
-				"path" : "/var/log/mongo/${collection}.log",
-				"format" : "${null||JSON.stringify(this.originalMessage)}"
+				"url" : "mongodb://localhost/nsyslog",
+				"collection" : "out_${date}",
+				"format" : "${originalMessage}"
 			}
 		},
 		"null" : {
@@ -38,6 +63,6 @@
 	},
 
 	"flows" : [
-		{"from":"*","fork":false, "processors":[], "transporters":["log"]}
+		{"from":"*", "processors":["timestamp","date"], "transporters":["log","mongoout"],"mode":"parallel"}
 	]
 }

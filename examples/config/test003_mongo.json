@@ -11,8 +11,8 @@
 		"mongo" : {
 			"type" : "mongo",
 			"config" : {
-				"url" : "mongodb://localhost/logicalog",
-				"collection" : ["/loghost.logline.*/"],
+				"url" : "mongodb://localhost/nsyslog",
+				"collection" : ["/logs.*/"],
 				"query" : {"line":{"$gt":"${line}"}},
 				"watermark" : {"line":0},
 				"maxCursors" : 10
@@ -38,6 +38,6 @@
 	},
 
 	"flows" : [
-		{"from":"*","fork":false, "processors":[], "transporters":["file"]}
+		{"from":"*","fork":false, "processors":[], "transporters":["log"]}
 	]
 }

@@ -45,7 +45,7 @@
 		}
 	},
 	"transporters" : {
-		"log" : {
+		"logger" : {
 			"type" : "console",
 			"config" : {"format" : "${JSON}", "level" : "log"}
 		},
@@ -54,7 +54,9 @@
 			"config" : {
 				"url" : "mongodb://localhost/nsyslog",
 				"collection" : "out_${date}",
-				"format" : "${originalMessage}"
+				"format" : "${originalMessage}",
+				"retry" : true,
+				"maxRetry" : 5
 			}
 		},
 		"null" : {
@@ -63,6 +65,6 @@
 	},
 
 	"flows" : [
-		{"from":"*", "processors":["timestamp","date"], "transporters":["log","mongoout"],"mode":"parallel"}
+		{"from":"*", "processors":["timestamp","date"], "transporters":["logger","mongoout"],"mode":"parallel"}
 	]
 }

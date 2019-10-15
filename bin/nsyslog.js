@@ -13,6 +13,7 @@ program.version('0.0.1')
 	.option('-t, --test', 'Only validate config file')
 	.option('-l, --log-file [path]', 'Output log file (default stdout)')
 	.option('-L, --log-level [level]', 'Debug level')
+	.option('-q, --quiet','Disable stats logging')
 	.option('--cli', 'Starts CLI session')
 	.option('--cli-start', 'Starts CLI session and flows')
 	.parse(process.argv);
@@ -83,9 +84,11 @@ async function initialize() {
 			process.on('SIGTERM', finalize);
 			process.on('SIGINT', finalize);
 
-			setInterval(()=>{
-				logger.info(`${new Date()} : ${JSON.stringify(stats.all())}`);
-			},1000);
+			if(!program.quiet) {
+				setInterval(()=>{
+					logger.info(`${new Date()} : ${JSON.stringify(stats.all())}`);
+				},1000);				
+			}
 
 			await nsyslog.start();
 		}

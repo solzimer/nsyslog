@@ -1,0 +1,42 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"transporters" : {
+		"kafka" : {
+			"type" : "kafka",
+			"config" : {
+				"url" : "kafka://localhost:9092",
+				"topic" : "nsyslog",
+				"mode" : "roundrobin",
+				"retry" : true,
+				"maxRetry" : 2,
+				"format" : "${JSON}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"file", "transporters":["kafka"]}
+	]
+}

@@ -1,0 +1,64 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"description" : [
+			"This examples demonstrates the use of zmq in pub/sub mode",
+			"First, we read logs from files and publish them to a zmq pub endpoint",
+			"Next, we collect them from the zqm subscriber and outputs to the console"
+	],
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"attach" : ["flow1"],
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		},
+		"zmq_sub" : {
+			"type" : "zmq",
+			"attach" : ["flow2"],
+			"config" : {
+				"url" : "tcp://127.0.0.1:9999",
+				"mode" : "sub",
+				"channel" : "my_channel",
+				"format" : "json"
+			}
+		}
+	},
+
+	"transporters" : {
+		"zmq_pub" : {
+			"type" : "zmq",
+			"config" : {
+				"url" : "tcp://127.0.0.1:9999",
+				"mode" : "pub",
+				"channel" : "my_channel",
+				"format" : "${JSON}"
+			}
+		},
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"file", "id":"flow1", "fork":true, "transporters":["zmq_pub"]},
+		{"from":"zmq_sub", "id":"flow2", "fork":true, "transporters":["console"]}
+	]
+}

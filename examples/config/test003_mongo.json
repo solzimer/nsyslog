@@ -54,7 +54,11 @@
 			"config" : {
 				"url" : "mongodb://localhost/nsyslog",
 				"collection" : "out_${date}",
-				"format" : "${originalMessage}",
+				"format" : {
+					"input" : "${input}",
+					"timestamp" : "${ts}",
+					"message" : "${originalMessage}"
+				},
 				"retry" : true,
 				"maxRetry" : 5
 			}

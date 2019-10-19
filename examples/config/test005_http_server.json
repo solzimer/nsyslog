@@ -1,20 +1,14 @@
 {
 	"config" : {
-		"datadir" : "/tmp/nsyslog2"
+		"datadir" : "/tmp/nsyslog"
 	},
 
 	"inputs" : {
 		"http" : {
-			"type" : "http",
+			"type" : "httpserver",
 			"config" : {
-				"url" : "https://jsonplaceholder.typicode.com/posts/${postId+1}/comments",
-				"options" : {
-					"jar" : true
-				},
-				"tls" : {
-					"rejectUnauthorized" : false
-				},
-				"watermark" : {"postId":0}
+				"url" : "http://localhost:8888/store",
+				"format" : "raw"
 			}
 		}
 	},

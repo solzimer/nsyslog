@@ -1,0 +1,64 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog"
+	},
+
+	"inputs" : {
+		"http-fetch" : {
+			"type" : "http",
+			"attach" : ["flow-fetch"],
+			"config" : {
+				"url" : "https://jsonplaceholder.typicode.com/posts/${postId+1}/comments",
+				"options" : {
+					"jar" : true
+				},
+				"tls" : {
+					"rejectUnauthorized" : false
+				},
+				"watermark" : {"postId":0}
+			}
+		},
+		"http-server" : {
+			"type" : "httpserver",
+			"attach" : ["flow-server"],
+			"config" : {
+				"url" : "http://localhost:8888/store",
+				"format" : "json"
+			}
+		}
+	},
+
+	"processors" : {
+		"throttle" : {
+			"type" : "throttle",
+			"config" : {
+				"timeout" : 500
+			}
+		}
+	},
+
+	"transporters" : {
+		"http-trans" : {
+			"type" : "http",
+			"config" : {
+				"url" : "http://localhost:8888/store/${originalMessage.postId}",
+				"format" : "${originalMessage}",
+				"method" : "post",
+				"headers" : {
+					"Content-Type" : "text/plain"
+				}
+			}
+		},
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}"
+			}
+		}
+	},
+
+	"flows" : [
+		{"id":"flow-fetch", "fork":true, "processors":["throttle"],"from":"http-fetch", "transporters":"http-trans"},
+		{"id":"flow-server", "fork":true, "from":"http-server", "transporters":"console"}
+	]
+}

@@ -1,0 +1,44 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog3"
+	},
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"throttle" : {
+			"type" : "throttle",
+			"config" : {
+				"timeout" : 1000
+			}
+		}
+	},
+
+	"transporters" : {
+		"http" : {
+			"type" : "http",
+			"config" : {
+				"url" : "http://localhost:8888/store/${filename}",
+				"format" : "${originalMessage}",
+				"method" : "post",
+				"headers" : {
+					"Content-Type" : "text/plain"
+				}
+			}
+		}
+	},
+
+	"flows" : [
+		{"from":"file", "processors":["throttle"], "transporters":"http"}
+	]
+}

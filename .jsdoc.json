@@ -1,5 +1,5 @@
 {
-    "applicationName": "Demo",
+    "applicationName": "NSyslog",
     "disqus": "",
     "googleAnalytics": "",
     "openGraph": {
@@ -28,6 +28,11 @@
         "private": false,
         "lenient": true,
         "destination": "./docs",
-        "template": "./node_modules/jaguarjs-jsdoc"
-    }
+        "template": "./node_modules/@pixi/jsdoc-template"
+    },
+		"templates" : {
+			"default" : {
+
+			}
+		}
 }

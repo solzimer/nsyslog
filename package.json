@@ -31,8 +31,8 @@
   "bin": {
     "nsyslog": "./bin/nsyslog.js"
   },
-  "script": {
-    "generate-docs": "jsdoc --configure .jsdoc.json --verbose"
+  "scripts": {
+    "docs": "jsdoc --configure .jsdoc.json --verbose"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.4.0",
@@ -75,7 +75,7 @@
     "zeromq": "^4.6.0"
   },
   "devDependencies": {
-    "jaguarjs-jsdoc": "^1.1.0",
+    "@pixi/jsdoc-template": "^2.4.3",
     "line-reader": "^0.4.0"
   }
 }

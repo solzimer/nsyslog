@@ -59,7 +59,7 @@
     "moment": "^2.22.1",
     "mongodb": "^3.3.3",
     "nools": "^0.4.4",
-    "nsyslog-parser": "^0.9.0",
+    "nsyslog-parser": "^0.9.5",
     "promise-stream-queue": "^0.4.1",
     "request": "^2.87.0",
     "semaphore": "^1.1.0",

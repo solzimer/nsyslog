@@ -1,0 +1,106 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"description" : [
+		"This configuration shows the use of syslog, both as transporter and as an input",
+		"First, we read log files from log folder, and sends them to a syslog endpoint.",
+		"Then, we create a syslog server that receives the messages, parse them and",
+		"show them on screen"
+	],
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"attach" : ["main"],
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		},
+		"syslog" : {
+			"type" : "syslog",
+			"config" : {
+				"url" : "udp://localhost:514"
+			}
+		}
+	},
+
+	"processors" : {
+		"timestamp" : {
+			"type" : "timestamp",
+			"config" : {
+				"output" : "timestamp"
+			}
+		},
+		"parser" : {
+			"type" : "syslogparser",
+			"config" : {
+				"input" : "${originalMessage}"
+			}
+		}
+	},
+
+	"transporters" : {
+		"syslog" : {
+			"type" : "syslog",
+			"config" : {
+				"url" : "udp://localhost:514",
+				"format" : "${originalMessage}",
+				"application" : "${filename}",
+				"hostname" : "localhost",
+				"level" : "info",
+				"facility" : 5,
+				"stream" : true,
+				"tls" : {
+					"key" : "./config/server.key",
+					"cert" : "./config/server.crt"
+				}
+			}
+		},
+		"logger" : {
+			"type" : "console",
+			"config" : {
+				"level" : "info",
+				"format" : "${null||process.pid}: ${originalMessage}"
+			}
+		},
+		"debug" : {
+			"type" : "console",
+			"config" : {
+				"level" : "debug",
+				"format" : "${null||process.pid}: ${originalMessage}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{
+			"id" : "main", "from":"file", "fork":true, "processors":["timestamp"], "transporters":["syslog"], "mode":"parallel",
+			"children" : [
+				{
+					"id" : "child1",
+					"when" : {"originalMessage" : {"$regex":"Installer"}},
+					"processors" : ["parser"],
+					"transporters" : ["logger"]
+				},
+				{
+					"id" : "child2",
+					"when" : {"originalMessage" : {"$regex":"error"}},
+					"processors" : ["parser"],
+					"transporters" : ["debug"]
+				}
+			]
+		}
+	]
+}

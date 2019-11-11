@@ -27,6 +27,7 @@
 		},
 		"syslog" : {
 			"type" : "syslog",
+			"attach" : ["server"],
 			"config" : {
 				"url" : "udp://localhost:514"
 			}
@@ -85,20 +86,20 @@
 	},
 
 	"flows" : [
-		{
-			"id" : "main", "from":"file", "fork":true, "processors":["timestamp"], "transporters":["syslog"], "mode":"parallel",
-			"children" : [
+		{"id" : "nofork", "from":"*", "fork":false, "processors":["timestamp"], "transporters":["null"], "mode":"parallel"},
+		{"id" : "main", "from":"file", "fork":true, "processors":["timestamp"], "transporters":["syslog"], "mode":"parallel"},
+		{"id" : "server", "from":"syslog", "fork":true, "children" : [
 				{
 					"id" : "child1",
-					"when" : {"originalMessage" : {"$regex":"Installer"}},
+					"when" : {"originalMessage" : {"$regex":"traffic"}},
 					"processors" : ["parser"],
-					"transporters" : ["logger"]
+					"transporters" : ["null"]
 				},
 				{
 					"id" : "child2",
 					"when" : {"originalMessage" : {"$regex":"error"}},
 					"processors" : ["parser"],
-					"transporters" : ["debug"]
+					"transporters" : ["null"]
 				}
 			]
 		}

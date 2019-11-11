@@ -10,6 +10,7 @@
 	"inputs" : {
 		"file" : {
 			"type" : "file",
+			"attach" : ["flow_fork1"],
 			"config" : {
 				"path" : "/var/log/**/*.log",
 				"watch" : true,
@@ -20,16 +21,12 @@
 	},
 
 	"processors" : {
-		"fork1" : {"type":"properties",	"config":{"set":{"filename":"file1.log"}}},
-		"fork2" : {"type":"properties",	"config":{"set":{"filename":"file2.log"}}},
-		"fork3" : {"type":"properties",	"config":{"set":{"filename":"file3.log"}}},
-		"fork4" : {"type":"properties",	"config":{"set":{"filename":"file4.log"}}},
-		"fork5" : {"type":"properties",	"config":{"set":{"filename":"file5.log"}}},
-		"fork6" : {"type":"properties",	"config":{"set":{"filename":"file6.log"}}},
-		"fork7" : {"type":"properties",	"config":{"set":{"filename":"file7.log"}}},
-		"fork8" : {"type":"properties",	"config":{"set":{"filename":"file8.log"}}},
-		"fork9" : {"type":"properties",	"config":{"set":{"filename":"file9.log"}}},
-		"fork10" : {"type":"properties", "config":{"set":{"filename":"file10.log"}}}
+		"throttle" : {
+			"type" : "throttle",
+			"config" : {
+				"timeout" : 1000
+			}
+		}
 	},
 
 	"transporters" : {
@@ -43,11 +40,16 @@
 		"null" : {
 			"type" : "null",
 			"config" : {}
+		},
+		"logger" : {
+			"type" : "console",
+			"config" : {
+				"format" : "------> ${null || new Date()} => ${originalMessage}"
+			}
 		}
 	},
 
 	"flows" : [
-		{"id":"flow_fork1", "from":"*", "fork":false, "processors":["fork1"], "transporters":"null"},
-		{"id":"flow_fork2", "from":"*", "fork":false, "processors":["fork2"], "transporters":"null"}
+		{"id":"flow_fork1", "from":"*", "fork":true, "processors":["throttle"], "transporters":"logger"}
 	]
 }

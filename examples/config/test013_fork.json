@@ -44,7 +44,7 @@
 		"logger" : {
 			"type" : "console",
 			"config" : {
-				"format" : "------> ${null || new Date()} => ${originalMessage}"
+				"format" : "[${null||process.pid}] ------> ${null || new Date()} => ${originalMessage}"
 			}
 		}
 	},

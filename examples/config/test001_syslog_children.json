@@ -35,6 +35,12 @@
 	},
 
 	"processors" : {
+		"throttle" : {
+			"type" : "throttle",
+			"config" : {
+				"timeout" : 1000
+			}
+		},
 		"timestamp" : {
 			"type" : "timestamp",
 			"config" : {

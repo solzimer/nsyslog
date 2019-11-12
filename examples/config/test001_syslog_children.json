@@ -88,22 +88,6 @@
 		},
 		"null" : {
 			"type" : "null"
-		},
-		"null2" : {
-			"type" : "null"
-		},
-		"null3" : {
-			"type" : "null"
-		},
-		"null4" : {
-			"type" : "null"
-		}
-	},
-
-	"transporterGroups" : {
-		"group1" : {
-			"mode" : "serial",
-			"transporters" : ["null3","null4"]
 		}
 	},
 
@@ -114,13 +98,13 @@
 					"id" : "child1",
 					"when" : {"originalMessage" : {"$regex":"traffic"}},
 					"processors" : ["parser"],
-					"transporters" : ["null"]
+					"transporters" : ["logger"]
 				},
 				{
 					"id" : "child2",
 					"when" : {"originalMessage" : {"$regex":"error"}},
 					"processors" : ["parser"],
-					"transporters" : ["$group1"]
+					"transporters" : ["debug"]
 				}
 			]
 		}

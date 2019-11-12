@@ -92,7 +92,7 @@
 	},
 
 	"flows" : [
-		{"id" : "nofork", "from":"*", "fork":false, "processors":["timestamp"], "transporters":["null"], "mode":"parallel"},
+		{"id" : "nofork", "from":"*", "disabled":true, "fork":false, "processors":["timestamp"], "transporters":["null"], "mode":"parallel"},
 		{"id" : "main", "from":"file", "fork":true, "processors":["timestamp"], "transporters":["syslog"], "mode":"parallel"},
 		{"id" : "server", "from":"syslog", "fork":true, "children" : [
 				{

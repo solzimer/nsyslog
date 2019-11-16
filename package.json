@@ -1,6 +1,6 @@
 {
   "name": "nsyslog",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "Modular new generation log agent. Reads, transform, aggregate, correlate and send logs from sources to destinations",
   "author": "David Gómez Matarrodona <solzimer@gmail.com>",
   "url": "https://github.com/solzimer/nsyslog",
@@ -59,7 +59,7 @@
     "moment": "^2.22.1",
     "mongodb": "^3.3.3",
     "nools": "^0.4.4",
-    "nsyslog-parser": "^0.9.5",
+    "nsyslog-parser": "^0.9.6",
     "promise-stream-queue": "^0.4.1",
     "request": "^2.87.0",
     "semaphore": "^1.1.0",

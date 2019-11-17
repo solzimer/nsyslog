@@ -20,6 +20,10 @@ Sends the message as debug logs
 
 ## Configuration parameters
 * **format** : Output expression of the message being sent
+* **json** : JSON output options
+	* format : true / false
+	* spaces : json indentation
+	* color : true / false. Colorize json (if true, *level* is ignored)
 * **level** : Output level (supports expression). Can be one of:
 	* info : Informational level
 	* debug : Debug lebel

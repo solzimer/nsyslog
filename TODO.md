@@ -44,13 +44,13 @@
 * [ ] LevelDB transporter
 * [x] Bypass processors and transporters
 * [ ] Fix Parallel Transporter Groups
-* [ ] Entry get key
 * [x] Nools processor
 * [ ] Generic Parser Multithread
 * [x] Factory processor capture exception
-* [ ] Fork reemit
 * [x] Reemit direct
-* [ ] Reemit direct fork
+* [x] Reemit direct fork
 * [x] Test asym Bug
 * [x] Filters with MongoDB Syntax
 * [x] Direct Reemit without fork bug
+* [x] Stream pipeline processor
+* [ ] Include namespaces

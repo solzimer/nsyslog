@@ -32,7 +32,7 @@
     "nsyslog": "./bin/nsyslog.js"
   },
   "scripts": {
-    "docs": "jsdoc --configure .jsdoc.json --verbose"
+    "docs": "jsdoc --configure .jsdoc.json --verbose -d jsdoc"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^7.4.0",

@@ -1,0 +1,50 @@
+{
+	"processors" : {
+		"properties" : {
+			"type" : "properties",
+			"config" : {
+				"extend" : true,
+				"deep" : true,
+				"set" : {
+					"csv" : {
+						"PARSED" : true
+					}
+				}
+			}
+		},
+		"parser" : {
+			"type" : "transform",
+			"config" : {
+				"input" : "${syslog}",
+				"output" : "out",
+				"pipeline" : [
+					{"$addFields" : {"idx" : {"$indexOfBytes":["$message",","]}}},
+					{
+						"$addFields" : {
+							"head" : {"$trim": {"input" : {"$substr" : ["$message",0,"$idx"]}}},
+							"content" : {"$trim" : {"input" : {"$substr" : ["$message",{"$add":[1,"$idx"]},-1]}}
+							}
+						}
+					},
+					{
+						"$addFields" : {
+							"csv" : {
+								"$keyval" : {
+									"$map" : {
+										"input" : {"$split" : ["$content",", "]},
+										"as" : "row",
+										"in" : {"$split" : ["$$row",": "]}
+									}
+								}
+							}
+						}
+					}
+				]
+			}
+		}
+	},
+
+	"processorGroups" : {
+		"group" : ["parser", "properties"]
+	}
+}

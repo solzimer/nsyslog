@@ -76,14 +76,14 @@
 			"type" : "console",
 			"config" : {
 				"level" : "info",
-				"format" : "${null||process.pid}: ${originalMessage}"
+				"format" : "[${process.pid}]: ${originalMessage}"
 			}
 		},
 		"debug" : {
 			"type" : "console",
 			"config" : {
 				"level" : "debug",
-				"format" : "${null||process.pid}: ${originalMessage}"
+				"format" : "[${process.pid}]: ${originalMessage}"
 			}
 		},
 		"null" : {

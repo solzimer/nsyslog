@@ -25,7 +25,11 @@
 		"console" : {
 			"type" : "console",
 			"config" : {
-				"format" : "${JSON}"
+				"format" : "${this}",
+				"json" : {
+					"format" : true,
+					"color" : true
+				}
 			}
 		},
 		"null" : {

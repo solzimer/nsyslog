@@ -47,7 +47,7 @@
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
     "ioredis": "^3.2.2",
-    "jsexpr": "^0.7.1",
+    "jsexpr": "^0.7.2",
     "json-colorizer": "^2.2.1",
     "jsonlint": "^1.6.3",
     "kafka-node": "^4.0.0",

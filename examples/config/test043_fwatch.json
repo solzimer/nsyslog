@@ -1,0 +1,44 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100}
+	},
+
+	"inputs" : {
+		"lines" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/slink/file.log",
+				"watch" : true,
+				"readmode" : "watermark",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : {
+					"syslog" : "${syslog}",
+					"props" : "${out.csv}"
+				},
+				"json" : {
+					"format" : true,
+					"spaces" : 2,
+					"color" : true
+				}
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"id":"flow1", "from":"lines", "fork":false, "processors":[], "transporters":"console"}
+	]
+}

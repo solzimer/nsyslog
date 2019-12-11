@@ -10,7 +10,7 @@ class ReverseTransport {
 
 	transport(entry,callback) {
 		var r = Math.random();
-		console.log("RANDOM: "+r)
+		console.log("RANDOM: "+r);
 		if(r>0.5) throw new Error("Me cawen to!");
 		else callback(null,entry);
 	}

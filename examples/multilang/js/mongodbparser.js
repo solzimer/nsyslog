@@ -6,7 +6,7 @@ const LEVELS = {
 	W	: 3,
 	I	: 1,
 	D	: 0
-}
+};
 
 class MongoDBParserBolt extends BasicBolt {
 	constructor() {

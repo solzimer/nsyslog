@@ -4,6 +4,7 @@
 </p>
 
 # nsyslog
+<p><a href="https://www.code-inspector.com/public/project/2177/nsyslog/dashboard"><img src="https://www.code-inspector.com/project/2177/score/svg"/></a></p>
 NSyslog is a modern, new generation, logagent and syslog server. It features a modular flow architecture of data collectors (inputs), processors and transporters.
 
 ![Architecture](doc/assets/nsyslog.png)

@@ -15,6 +15,7 @@
 # limitations under the License.
 require "./storm"
 
+# Splits a line
 class SplitSentenceBolt < Storm::Bolt
   def process(tup)
     tup.values[0].split(" ").each do |word|

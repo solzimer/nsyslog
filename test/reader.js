@@ -27,7 +27,7 @@ program.version('0.0.1')
 	.parse(process.argv);
 
 if(program.mode=="tcp") {
-  var client = new net.Socket();
+  let client = new net.Socket();
   client.connect(program.port||514, program.host||"localhost", ()=>{
     sendFile(program.addr || client.localAddress,(line,last,raw,cb)=>{
       client.write(line,()=>{
@@ -40,7 +40,7 @@ if(program.mode=="tcp") {
 }
 else if(program.mode=="tcps") {
   sendFile(program.addr || client.localAddress,(line,last,raw,cb)=>{
-		var client = new net.Socket();
+		let client = new net.Socket();
 		client.connect(program.port||514, program.host||"localhost", ()=>{
 			client.write(line,()=>{
 				console.log("Sent: ",program.host||"localhost",program.port||514,line);
@@ -51,7 +51,7 @@ else if(program.mode=="tcps") {
   });
 }
 else if(program.mode=="udp"){
-  var client = dgram.createSocket("udp4");
+  let client = dgram.createSocket("udp4");
   sendFile(program.addr || client.localAddress,(line,last,raw,cb)=>{
     var msg = new Buffer(line);
   	try {

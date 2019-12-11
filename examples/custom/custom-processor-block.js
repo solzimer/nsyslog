@@ -20,8 +20,10 @@ class MyProcessor extends Processor {
 			}
 			else {
 				let cpu = Math.floor(Math.random()*this.cpu);
+				let res = 0;
 				for(let i=0;i<cpu;i++)
-					Math.sqrt(Math.random()*1000);
+					res += Math.sqrt(Math.random()*1000);
+				entry.res = res;
 				callback(null,entry);
 			}
 		}

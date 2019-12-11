@@ -18,11 +18,18 @@ program.version('0.0.1')
 	.option('--cli-start', 'Starts CLI session and flows')
 	.parse(process.argv);
 
+let instance = null;
 logger.setLevel(program.logLevel || 'info');
 if(program.logFile) {
 	logger.setFileTransport({
 		file : path.resolve(program.logFile)
 	});
+}
+
+async function finalize() {
+	let nsyslog = instance.nsyslog;
+	try {await nsyslog.stop();}catch(err){logger.error(err);}
+	setTimeout(()=>process.exit(1),500);
 }
 
 async function initialize() {
@@ -55,7 +62,7 @@ async function initialize() {
 
 		logger.info(`Config loaded!`);
 		let nsyslog = new NSyslog(cfg);
-		let instance = {path,stats,nsyslog};
+		instance = {path,stats,nsyslog};
 
 		nsyslog.on('stats',other=>{
 			stats.merge(other);
@@ -75,19 +82,13 @@ async function initialize() {
 			process.on('SIGTERM', ()=>{});
 		}
 		else {
-			async function finalize() {
-				let nsyslog = instance.nsyslog;
-				try {await nsyslog.stop();}catch(err){logger.error(err);}
-				setTimeout(()=>process.exit(1),500);
-			}
-
 			process.on('SIGTERM', finalize);
 			process.on('SIGINT', finalize);
 
 			if(!program.quiet) {
 				setInterval(()=>{
-					logger.info(`${new Date()} : ${JSON.stringify(stats.all())}`);
-				},1000);				
+					logger.debug(`${new Date()} : ${JSON.stringify(stats.all())}`);
+				},1000);
 			}
 
 			await nsyslog.start();

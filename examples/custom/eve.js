@@ -40,9 +40,7 @@ class EveInput extends Input {
 			EVT.dest_ip = randIp();
 			EVT.src_p = randPort();
 			EVT.dest_p = randPort();
-			let msg = {
-				originalMessage : JSON.stringify(EVT)
-			}
+			let msg = {originalMessage : JSON.stringify(EVT)};
 			callback(null,msg);
 		});
 	}

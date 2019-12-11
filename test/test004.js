@@ -1,6 +1,7 @@
 // pubber.js
-var zmq = require('zeromq')
-  , sock = zmq.socket('pub');
+var
+	zmq = require('zeromq'),
+	sock = zmq.socket('pub');
 
 sock.bindSync('tcp://127.0.0.1:9999');
 console.log('Publisher bound to port 9999');

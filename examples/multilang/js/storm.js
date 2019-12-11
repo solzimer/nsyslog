@@ -29,9 +29,7 @@ function Storm() {
     this.taskIdsCallbacks = [];
     this.isFirstMessage = true;
     this.separator = '\nend\n';
-    this.logLevels = {
-        trace: 0, debug: 1, info: 2, warn: 3, error: 4
-    }
+    this.logLevels = {trace: 0, debug: 1, info: 2, warn: 3, error: 4};
 }
 
 Storm.prototype.sendMsgToParent = function(msg) {
@@ -46,7 +44,7 @@ Storm.prototype.sync = function() {
 Storm.prototype.sendPid = function(heartbeatdir) {
     var pid = process.pid;
     fs.closeSync(fs.openSync(heartbeatdir + '/' + pid, 'w'));
-    this.sendMsgToParent({'pid': pid})
+    this.sendMsgToParent({'pid': pid});
 };
 Storm.prototype.sendToLogging = function(args, logLevel) {
     var argArray = Object.keys(args).map(function(key) {
@@ -82,9 +80,9 @@ Storm.prototype.log = Storm.prototype.logInfo;
 Storm.prototype.initSetupInfo = function(setupInfo) {
     var self = this;
     var callback = function() {
-        self.sendPid(setupInfo['pidDir']);
+        self.sendPid(setupInfo.pidDir);
     };
-    this.initialize(setupInfo['conf'], setupInfo['context'], callback);
+    this.initialize(setupInfo.conf, setupInfo.context, callback);
 };
 
 Storm.prototype.startReadingInput = function() {
@@ -94,8 +92,7 @@ Storm.prototype.startReadingInput = function() {
         var messages = self.handleNewChunk(chunk);
         messages.forEach(function(message) {
             self.handleNewMessage(message);
-        })
-
+        });
     });
 };
 
@@ -191,7 +188,7 @@ Storm.prototype.emit = function(messageDetails, onTaskIds) {
     }
 
     if (!onTaskIds) {
-        throw new Error('You must pass a onTaskIds callback when using emit!')
+        throw new Error('You must pass a onTaskIds callback when using emit!');
     }
 
     this.taskIdsCallbacks.push(onTaskIds);
@@ -222,7 +219,7 @@ Storm.prototype.emit = function(messageDetails, onTaskIds) {
  */
 Storm.prototype.emitDirect = function(commandDetails) {
     if (!commandDetails.task) {
-        throw new Error('Emit direct must receive task id!')
+        throw new Error('Emit direct must receive task id!');
     }
     this.__emit(commandDetails);
 };
@@ -305,7 +302,7 @@ BasicBolt.prototype.__emit = function(commandDetails) {
 
 BasicBolt.prototype.handleNewCommand = function(command) {
     var self = this;
-    var tup = new Tuple(command['id'], command['comp'], command['stream'], command['task'], command['tuple']);
+    var tup = new Tuple(command.id, command.comp, command.stream, command.task, command.tuple);
 
     if (tup.isHeartbeatTuple()) {
         self.sync();
@@ -390,26 +387,26 @@ Spout.prototype.handleNewCommand = function(command) {
     var self = this;
     var callback = function() {
         self.sync();
-    }
+    };
 
-    if (command['command'] === 'activate') {
+    if (command.command === 'activate') {
         this.activate(callback);
     }
 
-    if (command['command'] === 'deactivate') {
+    if (command.command === 'deactivate') {
         this.deactivate(callback);
     }
 
-    if (command['command'] === 'next') {
+    if (command.command === 'next') {
         this.nextTuple(callback);
     }
 
-    if (command['command'] === 'ack') {
-        this.ack(command['id'], callback);
+    if (command.command === 'ack') {
+        this.ack(command.id, callback);
     }
 
-    if (command['command'] === 'fail') {
-        this.fail(command['id'], callback);
+    if (command.command === 'fail') {
+        this.fail(command.id, callback);
     }
 };
 

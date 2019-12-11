@@ -1,11 +1,11 @@
 const moment = require('moment');
 const dayjs = require('dayjs');
-const customParseFormat = require('dayjs/plugin/customParseFormat')
+const customParseFormat = require('dayjs/plugin/customParseFormat');
 
 dayjs.extend(customParseFormat)
 const val1 = (new Date()).toISOString();
 const val2 = new Date();
-const val3 = "12/10/2019 12:34:00"
+const val3 = "12/10/2019 12:34:00";
 const MAX = 100000;
 
 function perf(name,fn,val,format) {

@@ -8,7 +8,7 @@
 		"lines" : {
 			"type" : "file",
 			"config" : {
-				"path" : "/var/log/slink/file.log",
+				"path" : "/var/log/slink/file*.log",
 				"watch" : true,
 				"readmode" : "watermark",
 				"offset" : "start"
@@ -22,10 +22,7 @@
 		"console" : {
 			"type" : "console",
 			"config" : {
-				"format" : {
-					"syslog" : "${syslog}",
-					"props" : "${out.csv}"
-				},
+				"format" : "${JSON}",
 				"json" : {
 					"format" : true,
 					"spaces" : 2,

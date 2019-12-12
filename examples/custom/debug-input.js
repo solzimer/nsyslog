@@ -6,7 +6,6 @@ class DebugInput extends Input {
 	}
 
 	configure(config,callback) {
-		config = config || {};
 		callback();
 	}
 

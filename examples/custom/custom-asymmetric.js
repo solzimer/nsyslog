@@ -10,9 +10,6 @@ class MyProcessor extends Processor {
 	}
 
 	configure(config,callback) {
-		config = config || {};
-		callback();
-
 		setInterval(()=>{
 			this.push([
 				{seq:this.i++},
@@ -21,6 +18,8 @@ class MyProcessor extends Processor {
 				{seq:this.i++},
 			]);
 		},1000);
+
+		callback();		
 	}
 
 	process(entry, callback) {

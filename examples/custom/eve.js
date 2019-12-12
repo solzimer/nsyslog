@@ -26,7 +26,6 @@ class EveInput extends Input {
 	}
 
 	configure(config,callback) {
-		config = config || {};
 		callback();
 	}
 

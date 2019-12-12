@@ -1,6 +1,5 @@
 const
-	Transporter = require('../../lib/nsyslog').Core.Transporter,
-	jsexpr = require('jsexpr');
+	Transporter = require('../../lib/nsyslog').Core.Transporter;
 
 class MyTransporter extends Transporter {
 	constructor(id) {

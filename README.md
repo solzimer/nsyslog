@@ -1,10 +1,12 @@
+[![CodeInspector](https://www.code-inspector.com/public/project/2177/nsyslog/dashboard)](https://www.code-inspector.com/project/2177/score/svg)
+[![DeepScan grade](https://deepscan.io/api/teams/6420/projects/8423/branches/100189/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=6420&pid=8423&bid=100189)
+
 <p align="center">
 	<img src="doc/assets/logo-nsyslog-tr.png" alt="Logo" height="250px" style="display:block">
 	<i><sub>The next generation logagent and syslog server!</sub></i>
 </p>
 
 # nsyslog
-<p><a href="https://www.code-inspector.com/public/project/2177/nsyslog/dashboard"><img src="https://www.code-inspector.com/project/2177/score/svg"/></a></p>
 NSyslog is a modern, new generation, logagent and syslog server. It features a modular flow architecture of data collectors (inputs), processors and transporters.
 
 ![Architecture](doc/assets/nsyslog.png)

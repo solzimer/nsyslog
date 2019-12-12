@@ -1,4 +1,4 @@
-[![CodeInspector](https://www.code-inspector.com/public/project/2177/nsyslog/dashboard)](https://www.code-inspector.com/project/2177/score/svg)
+[![CodeInspector grade](https://www.code-inspector.com/project/2177/score/svg)](https://www.code-inspector.com/public/project/2177/nsyslog/dashboard)
 [![DeepScan grade](https://deepscan.io/api/teams/6420/projects/8423/branches/100189/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=6420&pid=8423&bid=100189)
 
 <p align="center">

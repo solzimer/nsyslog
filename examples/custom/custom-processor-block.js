@@ -1,6 +1,5 @@
 const
-	Processor = require('../../lib/nsyslog').Core.Processor,
-	jsexpr = require('jsexpr');
+	Processor = require('../../lib/nsyslog').Core.Processor;
 
 class MyProcessor extends Processor {
 	constructor(id) {

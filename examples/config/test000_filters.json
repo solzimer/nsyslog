@@ -1,0 +1,81 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"description" : [
+		"This configuration shows the use of component filters"
+	],
+
+	"inputs" : {
+		"data" : {
+			"type" : "static",
+			"then" : {
+				"filter" : "/is filtered on input/.test(${originalMessage})",
+				"match" : "block",
+				"nomatch" : "process"
+			},
+			"config" : {
+				"lines" : [
+					"001 - this line is filtered on input",
+					"002 - this line is not filtered",
+					"003 - this line is prefiltered on processor",
+					"004 - this line is postfiltered on processor",
+					"005 - this line is prefiltered on transporter",
+					"006 - this line is not filtered"
+				]
+			}
+		}
+	},
+
+	"processors" : {
+		"throttle" : {
+			"type" : "throttle",
+			"config" : {
+				"timeout" : 10
+			}
+		},
+		"timestamp" : {
+			"type" : "timestamp",
+			"when" : {
+				"filter" : "/prefiltered on processor/.test(${originalMessage})",
+				"match" : "block",
+				"nomatch" : "process"
+			},
+			"then" : {
+				"filter" : "/postfiltered on processor/.test(${originalMessage})",
+				"match" : "block",
+				"nomatch" : "process"
+			},
+			"config" : {
+				"output" : "timestamp"
+			}
+		}
+	},
+
+	"transporters" : {
+		"logger" : {
+			"type" : "console",
+			"when" : {
+				"filter" : "/prefiltered on transporter/.test(${originalMessage})",
+				"match" : "block",
+				"nomatch" : "process"
+			},
+			"config" : {
+				"format" : "${JSON}",
+				"json" : {
+					"format" : true,
+					"color" : true
+				}
+			}
+		}
+	},
+
+	"flows" : [
+		{"id" : "main", "from":"data", "fork":false, "processors":["throttle","timestamp"], "transporters":["logger"], "mode":"parallel"}
+	]
+}

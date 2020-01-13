@@ -14,7 +14,7 @@
 			"config" : {
 				"readmode" : "watermark",
 				"offset" : "start",
-				"channel" : "System",
+				"channel" : "Security",
 				"batchsize" : 100
 			}
 		}

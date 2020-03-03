@@ -131,7 +131,7 @@ Storm.prototype.isTaskIds = function(msg) {
 };
 
 Storm.prototype.handleNewMessage = function(msg) {
-    var parsedMsg = JSON.parse(msg);
+    var parsedMsg = typeof(msg)=='string'? JSON.parse(msg) : msg;
 
     if (this.isFirstMessage) {
         this.initSetupInfo(parsedMsg);

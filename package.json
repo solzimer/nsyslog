@@ -1,6 +1,10 @@
 {
   "name": "nsyslog",
+<<<<<<< HEAD
   "version": "0.6.10",
+=======
+  "version": "0.6.11",
+>>>>>>> 98e18b442002233c486d76926e5dab97de8627e0
   "description": "Modular new generation log agent. Reads, transform, aggregate, correlate and send logs from sources to destinations",
   "author": "David Gómez Matarrodona <solzimer@gmail.com>",
   "url": "https://github.com/solzimer/nsyslog",
@@ -48,7 +52,7 @@
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
     "ioredis": "^3.2.2",
-    "jsexpr": "^0.7.4",
+    "jsexpr": "^0.7.5",
     "json-colorizer": "^2.2.1",
     "jsonlint": "^1.6.3",
     "kafka-node": "^4.0.0",

@@ -1,0 +1,70 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100}
+	},
+
+	"properties" : {
+			"opts1" : {
+				"key1" : "val1",
+				"key2" : "val2",
+				"key3" : "val3"
+			}
+	},
+
+	"register" : [
+		{"id":"custom", "type":"processor", "require":"../custom/custom-processor.js"}
+	],
+
+	"inputs" : {
+		"static" : {
+			"type" : "static",
+			"config" : {
+				"options" : {
+						"$extend" : [
+							"@{opts1}",
+							{
+								"key3" : "vel3_repl",
+								"key4" : "val4"
+							}
+						]
+				},
+				"filter" : "true",
+				"lines" : [
+					{"message":"This is a message"}
+				]
+			}
+		}
+	},
+
+	"processors" : {
+		"custom1" : {
+			"type" : "custom",
+			"config" : {
+				"filter" : "true",
+				"duplicate" : true
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}",
+				"json" : {
+					"format" : true,
+					"spaces" : 2,
+					"color" : true
+				}
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"id":"flow1", "from":"*", "fork":false, "processors":["custom1"], "transporters":"console"}
+	]
+}

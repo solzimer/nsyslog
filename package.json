@@ -51,6 +51,7 @@
     "jsexpr": "^0.7.5",
     "json-colorizer": "^2.2.1",
     "jsonlint": "^1.6.3",
+    "jsonpath-plus": "^3.0.0",
     "kafka-node": "^4.0.0",
     "leveldown": "^5.2.0",
     "levelup": "^4.2.0",

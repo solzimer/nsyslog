@@ -11,7 +11,7 @@ class MyProcessor extends Processor {
 	configure(config,callback) {
 		config = config || {};
 		this.filter = jsexpr.eval(config.filter);
-		this.duplicate = jsexpr.eval(config.duplicate);
+		this.duplicate = typeof(config.duplicate)=='boolean'? config.duplicate : jsexpr.eval(config.duplicate);
 		callback();
 	}
 

@@ -15,7 +15,7 @@
 				"bypass": false
 			},
 			"config" : {
-				"path" : "/t/nsyslog/examples/config/data/parser001.log",
+				"path" : "/opt/nsyslog/examples/config/data/parser001.log",
 				"watch" : false,
 				"readmode" : "offset",
 				"offset" : "start"
@@ -30,7 +30,8 @@
 				"path" : "data/parser001.json",
 				"cores" : 4,
 				"map" : true,
-				"singleval" : true
+				"singleval" : true,
+				"emptyval" : " - "
 			}
 		}
 	},
@@ -42,8 +43,9 @@
 		},
 		"file" : {
 			"type" : "file",
+			"disabled" : true,
 			"config" : {
-				"path" : "/var/logout${path}"
+				"path" : "/var/log/logout${path}"
 			}
 		},
 		"null" : {
@@ -52,6 +54,6 @@
 	},
 
 	"flows" : [
-		{"from":"*","fork":false, "processors":["parser"], "transporters":["file"]}
+		{"from":"*","fork":false, "processors":["parser"], "transporters":["log"]}
 	]
 }

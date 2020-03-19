@@ -11,7 +11,7 @@
 	"hostname" : [
 		{
 			"description": "Source hostname",
-			"name" : "hostname",
+			"name" : ["hostname"],
 			"regex" : "[a-zA-Z][^ =>]+",
 			"next" : "ipaddr"
 		}

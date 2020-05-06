@@ -1,0 +1,128 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100}
+	},
+
+	"inputs" : {
+		"static" : {
+			"type" : "static",
+			"config" : {
+				"lines" : [
+					{"message":"This is a message"}
+				]
+			}
+		}
+	},
+
+	"processors" : {
+		"crypto_hash" : {
+			"type" : "crypto",
+			"config" : {
+				"input" : "${originalMessage.message}",
+				"output" : "hash",
+				"mode" : "hash"
+			}
+		},
+		"crypto_sign" : {
+			"type" : "crypto",
+			"config" : {
+				"input" : "${originalMessage.message}",
+				"output" : "signature",
+				"mode" : "sign"
+			}
+		},
+		"crypto_verify" : {
+			"type" : "crypto",
+			"config" : {
+				"input" : "${originalMessage.message}",
+				"data" : "${signature}",
+				"output" : "verify",
+				"mode" : "verify"
+			}
+		},
+		"crypto_privenc" : {
+			"type" : "crypto",
+			"config" : {
+				"input" : "${originalMessage.message}",
+				"output" : "privenc",
+				"mode" : "privateEncrypt"
+			}
+		},
+		"crypto_pubenc" : {
+			"type" : "crypto",
+			"config" : {
+				"input" : "${originalMessage.message}",
+				"output" : "pubenc",
+				"mode" : "publicEncrypt"
+			}
+		},
+		"crypto_privdec" : {
+			"type" : "crypto",
+			"config" : {
+				"input" : "${pubenc}",
+				"output" : "privdec",
+				"mode" : "privateDecrypt"
+			}
+		},
+		"crypto_pubdec" : {
+			"type" : "crypto",
+			"config" : {
+				"input" : "${privenc}",
+				"output" : "pubdec",
+				"mode" : "publicDecrypt"
+			}
+		},
+		"crypto_cipher" : {
+			"type" : "crypto",
+			"config" : {
+				"input" : "${originalMessage.message}",
+				"output" : "cipher",
+				"mode" : "cipher"
+			}
+		},
+		"crypto_decipher" : {
+			"type" : "crypto",
+			"config" : {
+				"input" : "${cipher}",
+				"output" : "decipher",
+				"mode" : "decipher"
+			}
+		}
+	},
+
+	"processorGroups" : {
+			"crypto" : [
+				"crypto_hash",
+				"crypto_sign",
+				"crypto_verify",
+				"crypto_privenc",
+				"crypto_pubenc",
+				"crypto_privdec",
+				"crypto_pubdec",
+				"crypto_cipher",
+				"crypto_decipher"
+			]
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}",
+				"json" : {
+					"format" : true,
+					"spaces" : 2,
+					"color" : true
+				}
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"id":"flow1", "from":"*", "fork":false, "processors":"$crypto", "transporters":"console"}
+	]
+}

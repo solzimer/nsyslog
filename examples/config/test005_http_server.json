@@ -10,6 +10,16 @@
 				"url" : "http://localhost:8888/store",
 				"format" : "raw"
 			}
+		},
+		"https" : {
+			"type" : "httpserver",
+			"config" : {
+				"url" : "http://localhost:8889/store",
+				"format" : "raw",
+				"tls" : {
+					"cert" : "#{4Ujetc1/vcGV5l0IqeGlSigRiRZBafCo6YL5+Y13kgBDlemub01j96y3NNL6lBjyOKnuLb6GtWTJU1CsjYVlm7nH1PRROP4Ksn3I4DzFNJobPXwLw9xjN/YZMHxdt9gyMCS5oA8mmIwMchbDYtb3gGqOeG++OiExgdmtBA4f4L0=}"
+				}
+			}
 		}
 	},
 

@@ -3,17 +3,27 @@ const
 	path = require('path'),
 	program = require("commander"),
 	logger = require('../lib/logger'),
+	extend = require('extend'),
+	fs = require('fs-extra'),
 	Config = require("../lib/config"),
 	Stats = require('../lib/stats'),
+	TLS = require('../lib/tls'),
 	NSyslog = require("../lib/nsyslog");
 
 const stats = Stats.fetch('main');
 program.version('0.0.1')
+	.allowUnknownOption()
 	.option('-f, --file [file]', 'Config file')
 	.option('-t, --test', 'Only validate config file')
+	.option('-m, --merge [files]', 'Merge with these files (comma separated)')
 	.option('-l, --log-file [path]', 'Output log file (default stdout)')
 	.option('-L, --log-level [level]', 'Debug level')
 	.option('-v, --verbose','Verbose stats logging')
+	.option('--ssl-cert','SSL Private key for encryption')
+	.option('--ssl-key','SSL Private key for decryption')
+	.option('--ssl-key-pass','SSL Private key password for decryption')
+	.option('--encrypt [data]','Data for encryption')
+	.option('--decrypt [data]','Data for decryption')
 	.option('--cli', 'Starts CLI session')
 	.option('--cli-start', 'Starts CLI session and flows')
 	.parse(process.argv);
@@ -28,6 +38,9 @@ function setLogger() {
 }
 
 async function configure() {
+	Config.events.on('file',file=>logger.info(`Reading file: ${file}`));
+	Config.events.on('rawjson',mergeFiles);
+
 	let path = program.file || `${__dirname}/../data/config.json`;
 	logger.info(`Reading configuration file "${path}"`);
 	let cfg = await Config.read(path,null,program.test);
@@ -48,6 +61,23 @@ async function configure() {
 	}
 
 	return cfg;
+}
+
+function mergeFiles(json) {
+	if(program.merge) {
+		program.merge.
+			split(",").
+			map(f=>f.trim()).
+			forEach(f=>{
+				try {
+					let file = JSON.parse(fs.readFileSync(f,'utf-8'));
+					extend(true, json, file);
+				}catch(err) {
+					logger.warn(err);
+					logger.warn(`File '${f}' will be ignored`);
+				}
+			});
+	}
 }
 
 function createInstance(cfg) {
@@ -102,6 +132,16 @@ async function initialize() {
 		// Read configuration
 		setLogger();
 		logger.info(`Welcome to NSyslog`);
+
+		if(program.encrypt) {
+			console.log(TLS.encrypt({cert:program.sslCert}, program.encrypt));
+			process.exit(0);
+		}
+		else if(program.decrypt) {
+			console.log(TLS.decrypt({key:program.sslKey,passphrase:program.sslKeyPass}, program.decrypt));
+			process.exit(0);
+		}
+
 		let cfg = await configure();
 
 		// Only test config. Exit

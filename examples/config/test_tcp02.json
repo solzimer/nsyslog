@@ -1,0 +1,64 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog02",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"description" : [
+		"This configuration shows the use of syslog, both as transporter and as an input",
+		"First, we read log files from log folder, and sends them to a syslog endpoint.",
+		"Then, we create a syslog server that receives the messages, parse them and",
+		"show them on screen"
+	],
+
+	"inputs" : {
+		"syslog" : {
+			"type" : "syslog",
+			"config" : {
+				"url" : "tls://localhost:1514",
+				"tls" : {
+					"key" : "../config/server.key",
+					"cert" : "../config/server.crt"
+				}
+			}
+		}
+	},
+
+	"processors" : {
+		"timestamp" : {
+			"type" : "timestamp",
+			"config" : {
+				"output" : "timestamp"
+			}
+		},
+		"parser" : {
+			"type" : "syslogparser",
+			"config" : {
+				"input" : "${originalMessage}"
+			}
+		}
+	},
+
+	"transporters" : {
+		"logger" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${this}",
+				"json" : {
+					"format" : true,
+					"color" : true
+				}
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"from":"syslog", "processors":["parser"], "transporters":["logger"], "mode":"parallel"}
+	]
+}

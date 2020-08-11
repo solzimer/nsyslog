@@ -1,0 +1,52 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog01",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"description" : [
+		"This configuration shows the use of syslog, both as transporter and as an input",
+		"First, we read log files from log folder, and sends them to a syslog endpoint.",
+		"Then, we create a syslog server that receives the messages, parse them and",
+		"show them on screen"
+	],
+
+	"inputs" : {
+		"file" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/var/log/**/*.log",
+				"watch" : true,
+				"readmode" : "watermark",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"transporters" : {
+		"syslog" : {
+			"type" : "syslog",
+			"config" : {
+				"url" : "tcp://localhost:1514",
+				"format" : "${originalMessage}",
+				"application" : "${filename}",
+				"hostname" : "localhost",
+				"level" : "info",
+				"facility" : 5,
+				"stream" : true,
+				"timeout" : 30000,
+				"tls" : {
+					"key" : "../config/server.key",
+					"cert" : "../config/server.crt"
+				}
+			}
+		}
+	},
+
+	"flows" : [
+		{"from":"file", "transporters":["syslog"], "mode":"parallel"}
+	]
+}

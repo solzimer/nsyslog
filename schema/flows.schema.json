@@ -1,0 +1,60 @@
+{
+	"$id": "#/definitions/flows.schema",
+	"type" : "array",
+	"title" : "Flows",
+	"description" : "A flow describes a processing path from input data to transporters",
+	"items" : {
+		"required": ["from"],
+		"properties" : {
+			"id" : {
+				"type" : "string",
+				"title" : "Flow ID"
+			},
+			"from" : {
+				"type" : "string",
+				"title" : "Flow input",
+				"description" : "Describes what input data enters the flow. It can be an input ID, or a expression that data must match in order to be processed by the flow.\nIt can take '*' as value, so every input data enters the flow, or 'DEFAULT', to indicate that inputs that doesn't match any of the previous flows, must enter de 'default' flow"
+			},
+			"disabled" : {
+				"type" : "boolean",
+				"title" : "Disable flow"
+			},
+			"fork" : {
+				"title" : "Forks a flow as a child process",
+				"description" : "A forked flow runs in a child process, so it can be executed in parallel with the main process",
+				"anyOf" : [
+					{
+						"type" : "boolean"
+					},
+					{
+						"type" : "string"
+					},
+					{
+						"type" : "string",
+						"enum" : ["roundrobin","balanced","all"]
+					}
+				]
+			},
+			"cores" : {
+				"type" : "integer",
+				"title" : "Cores",
+				"description" : "Number of cores of a forked flow. Each core will run in a separated child process"
+			},
+			"processors" : {
+				"anyOf" : [{"type":"array"},{"type":"string"}],
+				"title" : "Processors",
+				"description" : "Processors to be run by the flow\nTo reference a processor group, use the '$' prefix"
+			},
+			"transporters" : {
+				"anyOf" : [{"type":"array"},{"type":"string"}],
+				"title" : "Transporters",
+				"description" : "Transporters to be run by the flow\nTo reference a transporter group, use the '$' prefix"
+			},
+			"mode" : {
+				"type" : "string",
+				"enum" : ["serial","parallel"],
+				"title" : "Transporters execution mode"
+			}
+		}
+	}
+}

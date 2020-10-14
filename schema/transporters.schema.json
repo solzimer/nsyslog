@@ -1,0 +1,359 @@
+{
+	"$id": "#/definitions/transporters.schema",
+	"type" : "object",
+	"title" : "Transporter instances",
+	"patternProperties" : {
+		"[a-zA-Z].*" : {
+			"type" : "object",
+			"title" : "Processor ID",
+			"properties" : {
+				"maxPending" : {"type":"integer","title":"Buffer size","description":"Number of entries allowed in memory buffer before they are processed"},
+				"buffer" : {"type":"boolean","title":"Buffer","description":"If true, data will be buffered on disk before they are passed to the flows"},
+				"when" : {
+					"type":"object",
+					"name" : "When",
+					"description" : "Applies a filter to the entries",
+					"properties" : {
+						"filter" : {"type" : "string", "title":"Filter", "description":"Filter expression to apply to an entry"},
+						"match" : {
+							"type":"string",
+							"enum":["process","bypass","block"],
+							"title" : "Match",
+							"description" : "Action to take when entry matches filter:\n* process (default): Entry is fully processed\n* bypass: Entry is not processed but passed to the next component in the flow\n* block: Entry is ignored and removed from the flow"
+						},
+						"nomatch" : {
+							"type":"string",
+							"enum":["process","bypass","block"],
+							"title" : "No Match",
+							"description" : "Action to take when entry doesn't match filter:\n* process (default): Entry is fully processed\n* bypass: Entry is not processed but passed to the next component in the flow\n* block: Entry is ignored and removed from the flow"
+						}
+					}
+				}
+			},
+			"anyOf" : [
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["syslog"],
+							"type": "string",
+							"title": "Syslog",
+							"description" : "Sends data via syslog protocol."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["url"],
+							"properties" : {
+								"url" : {
+									"type":"string",
+									"example":"udp://localhost:514",
+									"title":"Syslog server URL endpoint",
+									"description":"Connection URL (proto://host:port), where *proto* can be\n* udp : UDP Protocol\n* tcp : TCP protocol\n* tls : TCP through TLS/SSL secure protocol"
+								},
+								"format" : {
+									"type":"string",
+									"title":"Output expression",
+									"description":"Output expression of the message being sent."
+								},
+								"application": {
+									"type":"string",
+									"title":"Application tag",
+									"description":"Syslog header application tag (supports expression)"
+								},
+								"hostname": {
+									"type":"string",
+									"title":"Hostname tag",
+									"description":"Syslog header hostname tag (supports expression)"
+								},
+								"level": {
+									"anyof":[{"type":"string"},{"type":"integer"}],
+									"title":"Level",
+									"description":"*Level* part of the *priority* tag of the syslog header. Supports either name or number, as decribed in [this table](https://en.wikipedia.org/wiki/Syslog#Severity_level) (supports expression)"
+								},
+								"facility": {
+									"anyof":[{"type":"string"},{"type":"integer"}],
+									"title":"Facility",
+									"description":"*Facility* part of the *priority* tag of the syslog header. Supports either name or number, as decribed in [this table](https://en.wikipedia.org/wiki/Syslog#Facility) (supports expression)"
+								},
+								"stream": {
+									"type":"boolean",
+									"title":"Stream",
+									"description":"When protocol is *tcp* or *tls*, messages can be sent, either one per connection, or in stream mode, where the same connection is used to send multiple messages to avoid the overhead of the *connect-send-close* flow on every message. Activate only if your syslog server supports stream mode."
+								},
+								"tls" : {
+									"type":"object",
+									"title": "Generic TLS/SSL options",
+									"description":"https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["console"],
+							"type": "string",
+							"title": "Syslog",
+							"description" : "Sends data to the standard output. Supports level coloring."
+						},
+						"config":{
+							"type" : "object",
+							"require" : ["format"],
+							"properties" : {
+								"format": {
+									"anyof" : [{"type":"string"},{"type":"object"}],
+									"title":"Format",
+									"description":"Output expression of the message being sent"
+								},
+								"level": {
+									"type":"string",
+									"enum" : ["info","debug","log","warn","error"],
+									"title":"Log Level",
+									"description":"Output level (supports expression). Can be one of:\n* info : Informational level\n* debug : Debug lebel\n* log : Log level\n* warn : Warning level\n* error : Error level"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["file"],
+							"type": "string",
+							"title": "Syslog",
+							"description" : "Sends data to a file."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["path"],
+							"properties" : {
+								"format": {
+									"anyof" : [{"type":"string"},{"type":"object"}],
+									"title":"Format",
+									"description":"Output expression of the message being sent"
+								},
+								"path": {
+									"type":"string",
+									"title":"File path",
+									"description":"Output expression of the message being sent"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["http"],
+							"type": "string",
+							"title": "Syslog",
+							"description" : "Sends data through HTTP/S post or put method."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["url"],
+							"properties" : {
+								"format": {
+									"anyof" : [{"type":"string"},{"type":"object"}],
+									"title":"Format",
+									"description":"Output expression of the message being sent"
+								},
+								"url": {
+									"type":"string",
+									"title":"URL Endpoint",
+									"description":"HTTP/S URL Endpoint (proto://host:port/path), where *proto* can be either http or https."
+								},
+								"method" : {
+									"type" : "string",
+									"enum" : ["post","put"],
+									"title" : "HTTP Method",
+									"description" : "Can be either *post* or *put*"
+								},
+								"headers" : {
+									"type" : "object",
+									"title" : "HTTP headers",
+									"description" : "Additional headers to be sent on each http request",
+									"patternProperties" : {
+										"[a-zA-Z].*" : {
+											"type" : "string",
+											"title" : "Header name / value"
+										}
+									}
+								},
+								"tls" : {
+									"type":"object",
+									"title": "Generic TLS/SSL options",
+									"description":"https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["kafka"],
+							"type": "string",
+							"title": "Syslog",
+							"description" : "Sends data via syslog protocol."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["url","topic"],
+							"properties" : {
+								"format": {
+									"anyof" : [{"type":"string"},{"type":"object"}],
+									"title":"Format",
+									"description":"Output expression of the message being sent"
+								},
+								"url": {
+									"type":"string",
+									"title":"Kafka Endpoint",
+									"description":"Kafka Endpoint (proto://host:port/path), where *proto* can be either kafka or kafkas."
+								},
+								"topic": {
+									"type":"string",
+									"title":"Kafka topic",
+									"description":"Kafka topic (allows expression)"
+								},
+								"mode": {
+									"type":"string",
+									"enum" : ["roundrobin","hashed","fixed"],
+									"title":"Partition mode",
+									"description":"Topic partition balance mode:\n* roundrobin : Simple roundrobin mechanism\n* hashed : Partition is assigned using a numeric hash from an entry field\n* fixed : Partition is assigned using a numeric field."
+								},
+								"field": {
+									"type":"string",
+									"title":"Topic Field",
+									"description":"Field expression to be used in *hashed* or *fixed* mode."
+								},
+								"tls" : {
+									"type":"object",
+									"title": "Generic TLS/SSL options",
+									"description":"https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["mongo"],
+							"type": "string",
+							"title": "Syslog",
+							"description" : "Sends data via syslog protocol."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["url","collection"],
+							"properties" : {
+								"format": {
+									"anyof" : [{"type":"string"},{"type":"object"}],
+									"title":"Format",
+									"description":"Output expression of the message being sent"
+								},
+								"url": {
+									"type":"string",
+									"title":"MongoDB Endpoint",
+									"description":"mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]"
+								},
+								"collection" : {
+									"type": "string",
+									"title" : "Collecion name",
+									"description" : "Database collection (allows expression)"
+								},
+								"options" : {
+									"type": "object",
+									"title" : "Insert options",
+									"description" : "Options object passed to the [insert mongo operation](http://mongodb.github.io/node-mongodb-native/3.1/api/Collection.html#insertMany)"
+								},
+								"indexes" : {
+									"type" : "array",
+									"items" : {
+										"type" : "object"
+									},
+									"title" : "Indexes",
+									"description" : "Indexes to create on the collection"
+								},
+								"retry" : {
+									"type" : "boolean",
+									"title" : "Retry",
+									"description" : "Retry on error"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["null"],
+							"type": "string",
+							"title": "Syslog",
+							"description" : "Sends data to nowhere"
+						},
+						"config":{
+							"type" : "object"
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["reemit"],
+							"type": "string",
+							"title": "Syslog",
+							"description" : "Reemit transporter is a special case of transporter that redirects an output entry to the flows input again, This is useful if you want to create a graph of flows.\nReemit transporter desn't need to be declared, as it is internally instantiated by NSyslog, and identified by the # token."
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["zmq"],
+							"type": "string",
+							"title": "Syslog",
+							"description" : "Sends data via syslog protocol."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["url"],
+							"properties" : {
+								"format": {
+									"anyof" : [{"type":"string"},{"type":"object"}],
+									"title":"Format",
+									"description":"Output expression of the message being sent"
+								},
+								"url": {
+									"type":"string",
+									"title":"ZeroMQ entdpoint"
+								},
+								"mode" : {
+									"type" : "string",
+									"enum" : ["push","pub"],
+									"title" : "Mode",
+									"description" : "ZMQ endpoint mode:\n* push : Push messages to the server\n* pub : Publish messages to a server channel"
+								},
+								"channel" : {
+									"type" : "string",
+									"title" : "Channel",
+									"description" : "If *pub* mode, channel expression."
+								}
+							}
+						}
+					}
+				}
+			]
+		}
+	}
+}

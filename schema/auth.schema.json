@@ -1,0 +1,56 @@
+{
+	"$id": "#/definitions/auth.schema",
+	"type" : "object",
+	"title" : "Authentication methods",
+	"properties" : {
+		"internal" : {
+			"type" : "object",
+			"title" : "Internal authentication",
+			"required" : ["initial"],
+			"properties" : {
+				"initial" : {
+					"type" : "object",
+					"title" : "Initial first run credentials",
+					"requires" : ["username","password"],
+					"properties" : {
+						"username" : {"type": "string", "title" : "Username"},
+						"password" : {"type": "string", "title" : "Password"}
+					}
+				}
+			}
+		},
+		"external" : {
+			"type" : "object",
+			"title" : "Delegate to external monitor authentication",
+			"required" : ["url"],
+			"properties" : {
+				"url" : {
+					"type" : "string",
+					"title" : "External monitor URL"
+				}
+			}
+		},
+		"lism" : {
+			"type" : "object",
+			"title" : "Delegate to a LogICA3 or LogICA4 LISM auth server",
+			"required" : ["url"],
+			"properties" : {
+				"url" : {
+					"type" : "string",
+					"title" : "External LISM URL"
+				}
+			}
+		},
+		"suite" : {
+			"type" : "object",
+			"title" : "Delegate to a LogICA5, BoxICA4, ReconDEV auth server",
+			"required" : ["url"],
+			"properties" : {
+				"url" : {
+					"type" : "string",
+					"title" : "External URL"
+				}
+			}
+		}
+	}
+}

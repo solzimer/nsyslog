@@ -1,0 +1,489 @@
+{
+	"$id": "#/definitions/inputs.schema",
+	"type" : "object",
+	"title" : "Input instances",
+	"patternProperties" : {
+		"[a-zA-Z].*" : {
+			"type" : "object",
+			"title" : "Input ID",
+			"properties" : {
+				"maxPending" : {"type":"integer","title":"Buffer size","description":"Number of entries allowed in memory buffer before they are processed"},
+				"buffer" : {"type":"boolean","title":"Buffer","description":"If true, data will be buffered on disk before they are passed to the flows"},
+				"attach" : {"type" : "array",	"title" : "Attach to forked flow","description" : "If present, input will be instanced on the forked flow instead of the main process"},
+				"when" : {
+					"type":"object",
+					"name" : "When",
+					"description" : "Applies a filter to the entries",
+					"properties" : {
+						"filter" : {"type" : "string", "title":"Filter", "description":"Filter expression to apply to an entry"},
+						"match" : {
+							"type":"string",
+							"enum":["process","bypass","block"],
+							"title" : "Match",
+							"description" : "Action to take when entry matches filter:\n* process (default): Entry is fully processed\n* bypass: Entry is not processed but passed to the next component in the flow\n* block: Entry is ignored and removed from the flow"
+						},
+						"nomatch" : {
+							"type":"string",
+							"enum":["process","bypass","block"],
+							"title" : "No Match",
+							"description" : "Action to take when entry doesn't match filter:\n* process (default): Entry is fully processed\n* bypass: Entry is not processed but passed to the next component in the flow\n* block: Entry is ignored and removed from the flow"
+						}
+					}
+				}
+			},
+			"anyOf" : [
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum":["file"],
+							"type":"string",
+							"title":"File reader/monitor",
+							"description":"File Input allows the reading of several files simultaneously, as well as file/folder monitoring in order to detect changes in the read files, or deletion and inclusion of new ones.\nIt also remembers the reading offset of each file in case of process restart."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["path","watch","readmode","offset"],
+							"properties" : {
+								"path" : {
+									"type":"string",
+									"example":"/var/log/**/*.log",
+									"title":"File path",
+									"description":"Glob expression of files to be read (https://en.wikipedia.org/wiki/Glob_(programming))"
+								},
+								"watch" : {
+									"type":"boolean",
+									"example":true,
+									"title" : "Watch files",
+									"description":"If true, file changes are tracked via OS events, allowing for file change, deletion or addition detection. Otherwise, the input will try to read new lines at fixed intervals"
+								},
+								"readmode" : {
+									"type":"string",
+									"enum":["offset","watermark"],
+									"example":"offset",
+									"title" : "Read mode",
+									"description":"Can be either of offset or watermark. When offset is used, reads will starts allways at the specified offset, regardless of process restarts. If **watermark** mode is used, the input will remembers each file offsets, so if the process is restarted, it will continue the reads at the last position they where left."
+								},
+								"offset" : {
+									"type":"string",
+									"enum":["start","end"],
+									"title" : "Read offset",
+									"description" : "Where to start to read the file when input starts",
+									"example":"start"
+								},
+								"encoding" : {
+									"type":"string",
+									"example":"utf-8",
+									"title" : "File encoding"
+								},
+								"blocksize" : {
+									"type":"integer",
+									"example": 1000,
+									"title" : "Read block size",
+									"description":"How many bytes will attempt to be read at once"
+								}
+							}
+						}
+					}
+				},
+
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum":["stdin"],
+							"type":"string",
+							"title":"STDIN input",
+							"description":"Reads raw or json data from the process standard input."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["format"],
+							"properties" : {
+								"format" : {
+									"type":"string",
+									"title" : "Input format",
+									"description" : "raw or json (one json per line)",
+									"enum":["raw","json"]
+								}
+							}
+						}
+					}
+				},
+
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum":["http"],
+							"type":"string",
+							"title":"HTTP(S) REST service fetch",
+							"description" : "Fetch data from an http(s) url, using GET method"
+						},
+						"config":{
+							"type" : "object",
+							"required": ["url"],
+							"properties" : {
+								"url" : {
+									"type":"string",
+									"example":"http://myrest.org/api/rest",
+									"title" : "Fetch URL",
+									"description" : "URL endpoint to fetch data"
+								},
+								"interval" : {
+									"type":"integer",
+									"example":2000,
+									"title" : "Fetch interval",
+									"description" : "Number of milliseconds to fetch next data. Note that if not specified, this input behaves as a pull input (data will be fetched when the flow requires it), and, if set, then will behave as a push input (data will be fetched on an interval basis)"
+								},
+								"options" : {
+									"type":"object",
+									"title" : "Generic HTTP options",
+									"description":"https://www.npmjs.com/package/request#requestoptions-callback"
+								},
+								"tls" : {
+									"type":"object",
+									"title": "Generic TLS/SSL options",
+									"description":"https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options"
+								}
+							}
+						}
+					}
+				},
+
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum":["httpserver"],
+							"type":"string",
+							"title":"HTTP(S) Server",
+							"description" : "Creates an HTTP(S) server that receive POST and PUT requests"
+						},
+						"config":{
+							"type" : "object",
+							"required": ["url"],
+							"properties" : {
+								"url" : {
+									"type":"string",
+									"example":"http://host:post",
+									"title" : "Server bind URL",
+									"description" : "Server bind URL"
+								},
+								"format" : {
+									"type":"string",
+									"enum" : ["json"],
+									"title" : "Format",
+									"description":"Format of the received message body"
+								},
+								"tls" : {
+									"type":"object",
+									"title": "Generic TLS/SSL options",
+									"description":"https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options"
+								}
+							}
+						}
+					}
+				},
+
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum":["redis"],
+							"type":"string",
+							"title":"Redis subscriber",
+							"description":"Redis Input allows the reading of several Redis pub/sub channels simultaneously.\nIt allows both channels and channel patterns."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["url","channels"],
+							"properties" : {
+								"url" : {
+									"anyOf" : [
+										{"type":"string","example":"redis://localhost"},
+										{"type":"array","items":"string","example":["redis://host1:6379","redis://host2:6379"]}
+									],
+									"example":"redis://localhost",
+									"title" : "Redis endpoint/s",
+									"description" : "String or array of strings (redis://host:port). List of Redis hosts to connect to. If cluster is supported in Redis, it will use cluster mode and hosts autodiscover. Otherwise, the first url will be used for connection."
+								},
+								"channels" : {
+									"anyOf" : [
+										{"type":"string","example":"my_pattern*"},
+										{"type":"array","items":"string","example":["channel1","channel1","pattern*"]}
+									],
+									"title" : "Redis Channels",
+									"description" : "String or array. List of Redis channels to subscribe to. Accepts redis channel patterns."
+								},
+								"format" : {
+									"type":"string",
+									"enum" : ["raw","json"],
+									"title" : "Message format",
+									"description":"Can be either of raw or json. When raw is used, the raw content of the message will be put in the 'originalMessage' field of the entry. Otherwise, if **json** is used, the content will be parsed as a JSON object and placed into de 'originalMessage' field."
+								}
+							}
+						}
+					}
+				},
+
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum":["kafka"],
+							"type":"string",
+							"title":"Kafka topics consumer",
+							"description":"Kafka Input allows the reading of several kafka topics simultaneously, as well as topic monitoring for detection of new topics that matches the selected patterns."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["url","topics","offset","group"],
+							"properties" : {
+								"url" : {
+									"anyOf" : [
+										{"type":"string","example":"kafka://localhost"},
+										{"type":"array","items":"string","example":["kafka://host1:9092","redis://host2:9092"]}
+									],
+									"example":"kafka://localhost:9092",
+									"title" : "Kafka endpoint/s",
+									"description" : "String or array of strings (kafka://host:port). List of Kafka hosts to connect to."
+								},
+								"topics" : {
+									"anyOf" : [
+										{"type":"string","example":"/regex_pattern.*/"},
+										{"type":"array","items":"string","example":["topic1","topic2","/regex.*/"]}
+									],
+									"title" : "Kafka Topics",
+									"description" : "String or array. List of Kafka topics to subscribe to. If a topic is embraced between '/' characters, it will be interpreted as a regular expression to be matched against."
+								},
+								"format" : {
+									"type":"string",
+									"enum" : ["raw","json"],
+									"title" : "Message format",
+									"description":"Can be either of raw or json. When raw is used, the raw content of the message will be put in the 'originalMessage' field of the entry. Otherwise, if **json** is used, the content will be parsed as a JSON object and placed into de 'originalMessage' field."
+								},
+								"offset" : {
+									"type" : "string",
+									"enum" : ["earliest","latest"],
+									"title" : "Consumer offset",
+									"description" : "Can be one of earliest or latest. Initial offset when start reading a new topic"
+								},
+								"group" : {
+									"type" : "string",
+									"title": "Consumer Group ID",
+									"description" : "Consumer group ID (to keep track of the topics offsets)"
+								},
+								"watch" : {
+									"type" : "boolean",
+									"title" : "Watch for new topics",
+									"description" : "If true, the Kafka input will search periodically for new topics that matches the patterns, and start reading from them."
+								}
+							}
+						}
+					}
+				},
+
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum":["command"],
+							"type":"string",
+							"title":"Command execution",
+							"description":"Fetch data from a shell command execution"
+						},
+						"config":{
+							"type" : "object",
+							"required":["cmd"],
+							"properties" : {
+								"cmd" : {
+									"type":"string",
+									"example":"ls -la",
+									"title" : "Command to execute"
+								},
+								"interval" : {
+									"type" : "integer",
+									"title" : "Execution interval",
+									"description" : "Number of milliseconds to execute next command. Note that if not specified, this input behaves as a pull input (data will be fetched when the flow requires it), and, if set, then will behave as a push input (data will be fetched on an interval basis)"
+								},
+								"options" : {
+									"type":"object",
+									"title" : "Execution options",
+									"description":"Options passed to the exec command, as described [NodeJS documentation](https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback)"
+								}
+							}
+						}
+					}
+				},
+
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum":["windows"],
+							"type":"string",
+							"title":"Windows events",
+							"description":"Windows Input is cappable of reading Windows Events, and mantain a watermark.\nOnly works with Windows 7 and above, as it depends on the *wevtutil* Windows command line executable."
+						},
+						"config":{
+							"type" : "object",
+							"required": ["channel","readmode","offset"],
+							"properties" : {
+								"channel" : {
+									"type" : "string",
+									"example" : "Application",
+									"title" : "Events channel"
+								},
+								"readmode" : {
+									"type":"string",
+									"enum" : ["offset","watermark"],
+									"title" : "Read mode",
+									"description" : "Can be either of offset or watermark. When offset is used, reads will starts allways at the specified offset, regardless of process restarts. If watermark mode is used, the input will remembers last read offsets, so if the process is restarted, it will continue the reads at the last position they where left."
+								},
+								"offset" : {
+									"anyOf" : [
+										{
+											"type" : "string",
+											"enum" : ["start","end","YYYY-MM-DDTHH:mm:ss"]
+										},
+										{
+											"type" : "string"
+										}
+									],
+									"title" : "Offset",
+									"description" : "Can be one of start, end or a date in YYYY-MM-DDTHH:mm:ss format"
+								},
+								"batchsize" : {
+									"type":"integer",
+									"title" : "Batch size",
+									"description":"How many events read at a time."
+								},
+								"remote" : {
+									"type" : "string",
+									"example" : "192.168.134.18",
+									"title" : "Remote host/ip address to read events from."
+								},
+								"username" : {
+									"type" : "string",
+									"example" : "Username",
+									"title" : "Remote host username"
+								},
+								"password" : {
+									"type" : "string",
+									"example" : "Password",
+									"title" : "Remote host password"
+								}
+							}
+						}
+					}
+				},
+
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum":["zmq"],
+							"type":"string",
+							"title":"ZeroMQ Input",
+							"description":"Creates a ZeroMQ client and reads raw or json data from publisher."
+						},
+						"config":{
+							"type" : "object",
+							"required":["url","mode"],
+							"properties" : {
+								"url" : {
+									"type":"string",
+									"example":"tcp://localhost:9999",
+									"title" : "ZMQ Endpoint",
+									"description" : "ZMQ Endpoint (ie: tcp://127.0.0.1:9999)"
+								},
+								"mode" : {
+									"type" : "string",
+									"enum" : ["pull","sub"],
+									"title" : "Connection mode",
+									"description" : "Can be either pull or sub"
+								},
+								"channel" : {
+									"type":"string",
+									"title" : "Subscription channel",
+									"description":"Only if sub mode is used"
+								},
+								"format" : {
+									"type" : "string",
+									"enum" : ["raw","json"],
+									"title" : "Message format",
+									"description" : "can be raw or json. If json format is used, each received message is interpreted as a single JSON object."
+								}
+							}
+						}
+					}
+				},
+
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum":["ws"],
+							"type":"string",
+							"title":"WebSockets Input",
+							"description":"Creates a WebSocket server and reads raw or json data from clients."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["url"],
+							"properties" : {
+								"url" : {
+									"type":"string",
+									"example":"wss://localhost:9999",
+									"title" : "WebSocket Endpoint",
+									"description" : "WebSocket Endpoint (ie: wss://127.0.0.1:3000)"
+								},
+								"format" : {
+									"type" : "string",
+									"enum" : ["raw","json"],
+									"title" : "Message format",
+									"description" : "can be raw or json. If json format is used, each received message is interpreted as a single JSON object."
+								},
+								"tls" : {
+									"type":"object",
+									"title": "Generic TLS/SSL options",
+									"description":"https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options"
+								}
+							}
+						}
+					}
+				},
+
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum":["syslog"],
+							"type":"string",
+							"title":"Syslog Input",
+							"description":"Syslog input places a server that listens for syslog messages.\nIt supports several transport protocols, but does not parse the received lines. If you want to do syslog parsing, you can use the syslog parser processor."
+						},
+						"config":{
+							"type" : "object",
+							"required": ["url"],
+							"properties" : {
+								"url" : {
+									"type":"string",
+									"example":"udp://localhost:514",
+									"title" : "Syslog Endpoint",
+									"description" : "Syslog Endpoint (ie: udp://127.0.0.1:3000)"
+								},
+								"tls" : {
+									"type":"object",
+									"title": "Generic TLS/SSL options",
+									"description":"https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options"
+								}
+							}
+						}
+					}
+				}
+			]
+		}
+	}
+}

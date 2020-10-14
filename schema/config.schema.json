@@ -1,0 +1,87 @@
+{
+	"definitions": {},
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "http://nsyslog/config.schema.json",
+	"type": "object",
+	"title": "Monitor Configuration",
+
+	"properties": {
+		"config": {
+			"$id": "#/properties/config",
+			"type": "object",
+			"title": "Global Config",
+			"properties": {
+				"datadir": {
+					"type": "string",
+					"title": "Monitor data folder. This folder will store watermark, buffer queues and other temporal or persistent monitor data"
+				},
+				"buffer": {
+					"type": "object",
+					"title": "Global buffer configuration",
+					"properties": {
+						"maxPending": {
+							"type": "integer",
+							"title": "Max entries stored in each queue buffer before they are processed"
+						}
+					}
+				},
+				"input": {
+					"type": "object",
+					"title": "Global inputs configuration",
+					"properties": {
+						"maxPending": {
+							"type": "integer",
+							"title": "Max entries stored in each input buffer before they are processed"
+						}
+					}
+				},
+				"processor": {
+					"type": "object",
+					"title": "Global processors configuration",
+					"properties": {
+						"maxPending": {
+							"type": "integer",
+							"title": "Max entries stored in each processor buffer before they are processed"
+						}
+					}
+				},
+				"transporter": {
+					"type": "object",
+					"title": "Global transporters configuration",
+					"properties": {
+						"maxPending": {
+							"type": "integer",
+							"title": "Max entries stored in each transporter buffer before they are processed"
+						}
+					}
+				},
+				"auth" : {
+					"$ref" : "file:///opt/nsyslog/schema/auth.schema.json"
+				}
+			}
+		},
+
+		"include" : {
+			"type" : "array",
+			"items" : {
+				"type" : "string"
+			}
+		},
+
+		"inputs" : {
+			"$ref" : "file:///opt/nsyslog/schema/inputs.schema.json"
+		},
+
+		"processors" : {
+			"$ref" : "file:///opt/nsyslog/schema/processors.schema.json"
+		},
+
+		"transporters" : {
+			"$ref" : "file:///opt/nsyslog/schema/transporters.schema.json"
+		},
+
+		"flows" : {
+			"$ref" : "file:///opt/nsyslog/schema/flows.schema.json"
+		}
+	}
+}

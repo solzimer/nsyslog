@@ -1,0 +1,62 @@
+{
+    "$schema": "file:///opt/nsyslog/schema/config.schema.json",
+    "config": {
+      "datadir": "/tmp/suitemon",
+      "input": {
+        "maxPending": 1000
+      },
+      "buffer": {
+        "maxPending": 1000
+      },
+      "processor": {
+        "maxPending": 1000
+      },
+      "transporter": {
+        "maxPending": 1000
+      }
+    },
+    "inputs": {
+      "local": {
+        "type": "windows",
+        "config": {
+            "batchsize": 100,
+            "channel": "Application",
+            "readmode": "watermark",
+            "offset" : "start"
+        }
+      }
+    },
+    "processors": {
+    },
+    "transporters": {
+      "syslog" : {
+          "type": "syslog",
+          "config": {
+            "application": "TEST",
+            "facility" : 1,
+            "level" : 3,
+            "format": "${JSON}",
+            "hostname": "david",
+            "url": "tcp://logica5:514"
+          }
+      },
+      "logger": {
+        "type": "console",
+        "config": {
+          "format": "${JSON}"
+        }
+      },
+      "null": {
+        "type": "null",
+        "config": {}
+      }
+    },
+    "flows": [
+      {
+        "disabled": false,
+        "from": "local",
+        "processors": [],
+        "transporters": "syslog"
+      }
+    ]
+  }

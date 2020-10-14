@@ -1,0 +1,681 @@
+{
+	"$id": "#/definitions/processors.schema",
+	"type" : "object",
+	"title" : "Processor instances",
+	"patternProperties" : {
+		"[a-zA-Z].*" : {
+			"type" : "object",
+			"title" : "Processor ID",
+			"properties" : {
+				"maxPending" : {"type":"integer","title":"Buffer size","description":"Number of entries allowed in memory buffer before they are processed"},
+				"buffer" : {"type":"boolean","title":"Buffer","description":"If true, data will be buffered on disk before they are passed to the flows"},
+				"when" : {
+					"type":"object",
+					"name" : "When",
+					"description" : "Applies a filter to the entries",
+					"properties" : {
+						"filter" : {"type" : "string", "title":"Filter", "description":"Filter expression to apply to an entry"},
+						"match" : {
+							"type":"string",
+							"enum":["process","bypass","block"],
+							"title" : "Match",
+							"description" : "Action to take when entry matches filter:\n* process (default): Entry is fully processed\n* bypass: Entry is not processed but passed to the next component in the flow\n* block: Entry is ignored and removed from the flow"
+						},
+						"nomatch" : {
+							"type":"string",
+							"enum":["process","bypass","block"],
+							"title" : "No Match",
+							"description" : "Action to take when entry doesn't match filter:\n* process (default): Entry is fully processed\n* bypass: Entry is not processed but passed to the next component in the flow\n* block: Entry is ignored and removed from the flow"
+						}
+					}
+				}
+			},
+			"anyOf" : [
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["array"],
+							"type": "string",
+							"title": "Array group",
+							"description" : "Inserts entries into an array of fixed size, and outputs them at size or time intervals."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["max","field"],
+							"properties" : {
+								"max" : {
+									"type":"integer",
+									"example":10,
+									"title":"Max Size",
+									"description":"Maximum number of elements in the array."
+								},
+								"field" : {
+									"type":"string",
+									"title":"Output field",
+									"description":"Output field."
+								},
+								"timeout": {
+									"type":"integer",
+									"title":"Timeout",
+									"description":"If specified, number of millisecons of the output interval."
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["csvout"],
+							"type": "string",
+							"title": "CSV Output",
+							"description" : "Outputs entry fields as a flat csv string"
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["output","fields"],
+							"properties" : {
+								"output" : {
+									"type":"string",
+									"example":"csvout",
+									"title":"Output field",
+									"description":"Output field to store the CSV line."
+								},
+								"fields" : {
+									"type":"array",
+									"items": {"type":"string"},
+									"title":"Input fields",
+									"description":"Array of expressions to fetch the CSV fields"
+								},
+								"options": {
+									"type":"object",
+									"title":"Options",
+									"description":"Options object to pass to the [CSV processor](https://csv.js.org/stringify/options/)"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["csvparser"],
+							"type": "string",
+							"title": "CSV Parser",
+							"description" : "Parses a expression into a CSV field array."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["output","input"],
+							"properties" : {
+								"output" : {
+									"type":"string",
+									"example":"csvdata",
+									"title":"Output field",
+									"description":"Output field to store the CSV array."
+								},
+								"input" : {
+									"type":"string",
+									"title":"Input field",
+									"description":"Input field expression."
+								},
+								"options": {
+									"type":"object",
+									"title":"Options",
+									"description":"Options object to pass to the [CSV parser](https://csv.js.org/parse/options/)"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["dateformat"],
+							"type": "string",
+							"title": "Date / Time Formatter",
+							"description" : "Formats a date. Date must be a javascript Date object or an ISO timestamp (YYYY-MM-DDTHH:mm:ss)"
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["output","field","format"],
+							"properties" : {
+								"output" : {
+									"type":"string",
+									"example":"csvdata",
+									"title":"Output field",
+									"description":"Output field to store the formatted date"
+								},
+								"field" : {
+									"type":"string",
+									"title":"Input field",
+									"description":"Input field expression."
+								},
+								"format": {
+									"type":"string",
+									"title":"Format",
+									"description":"Output format following [MomentJS format](https://momentjs.com/docs/#/displaying/format/)"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["filter"],
+							"type": "string",
+							"title": "Filter / Aggregator",
+							"description" : "Filter and aggregate entries based on key and match expression. This processor does mainly two things:\n\n* Accept or reject entries based on a filter expression\n* Aggregate multiple entries based on a key, so only the aggregated entrie is output"
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["mode","key"],
+							"properties" : {
+								"mode" : {
+									"type":"string",
+									"enum":["accept","reject","every"],
+									"example":"accept",
+									"title":"Filter mode",
+									"description":"There are three modes:\n\n* accept : The entry is accepted as an output if matches the filter.\n* reject : the entry is accepted an an output if doesn't match the filter.\n* every : The entries that matches the filter are aggregated by a key."
+								},
+								"key" : {
+									"type":"string",
+									"title":"Aggregation key",
+									"example":"${src_ip}:${src_port}",
+									"description":"Expression for the aggregation key."
+								},
+								"every": {
+									"type":"integer",
+									"example":10,
+									"title":"Aggregation size",
+									"description":"How many entries aggregate before next entry output."
+								},
+								"first": {
+									"type":"boolean",
+									"example":false,
+									"title":"Emit first entry",
+									"description":"If true, the first entry is sent, and the next ones are aggregated."
+								},
+								"ttl": {
+									"type":"integer",
+									"example":5000,
+									"title":"Time window",
+									"description":"Timeout (ms) window for an aggregation. When the timeout is reached, the aggregated results for a key will be emitted event if **every** has not been reached."
+								},
+								"aggregate": {
+									"oneOf":[{"type":"string"},{"type":"object"}],
+									"example": {
+										"count" : 1,
+										"sum" : "${entry.bytes}"
+									},
+									"title":"Aggregation data",
+									"description":"Expression object that describes the aggregations to be done."
+								},
+								"output": {
+									"type":"string",
+									"example":"aggr",
+									"title":"Output field",
+									"description":"Field to store the aggregation results."
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["jsonparser"],
+							"type": "string",
+							"title": "JSON Parser",
+							"description" : "Parses a JSON expression."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["input"],
+							"properties" : {
+								"output" : {
+									"type":"string",
+									"example":"jsondata",
+									"title":"Output field",
+									"description":"Output field to store the formatted date. If not specified, parsed date will be merged with the input entry"
+								},
+								"input" : {
+									"type":"string",
+									"title":"Input field",
+									"description":"Input field expression."
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["keyvalparser"],
+							"type": "string",
+							"title": "Key/Value Parser",
+							"description" : "Parses a expression that has a key=value format and generates a map."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["input"],
+							"properties" : {
+								"output" : {
+									"type":"string",
+									"example":"jsondata",
+									"title":"Output field",
+									"description":"Output field to store the result map"
+								},
+								"input" : {
+									"type":"string",
+									"title":"Input field",
+									"description":"Input field expression."
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["merge"],
+							"type": "string",
+							"title": "Merge",
+							"description" : "Merge several objects into one"
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["fields","output"],
+							"properties" : {
+								"output" : {
+									"type":"string",
+									"example":"jsondata",
+									"title":"Output field",
+									"description":"Output field to store the result object"
+								},
+								"fields" : {
+									"type":"array",
+									"title":"Input fields",
+									"description":"Array of input expressions"
+								},
+								"delete" : {
+									"type":"array",
+									"title":"Delete fields",
+									"description":"Fields to be deleted after the merge"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["multilang"],
+							"type": "string",
+							"title": "Apache Storm Multilang processor",
+							"description" : "Multilang processors allows the use of [Apache Storm Multilang](http://storm.apache.org/releases/1.1.2/Multilang-protocol.html) protocol to call external components for data processing (Apache Storm Bolts).\n\nThis way, it's possible to create external scripts in any language that process the data in an asynchronous, parallell and/or multi-core way."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["path","input","output"],
+							"properties" : {
+								"path" : {
+									"type":"string",
+									"example":"multilang/js/tokenize.js",
+									"title":"Component path",
+									"description":"Command line of the process to execute, or file path if *module* mode is used."
+								},
+								"cores" : {
+									"type":"integer",
+									"title":"Cores",
+									"description":"Number of parallell instances to be run (if multithreaded is supported by nodejs)"
+								},
+								"wire" : {
+									"type":"string",
+									"enum":["shuffle","group"],
+									"title":"Wire mode",
+									"description":"Can be either *shuffle* or *group*. When *shuffle* is used, each data object will be sent randomly to one of the instanced processes. Alternatively, when *group* is used, all objects with the same *field* value will be sent to the same process instance."
+								},
+								"module" : {
+									"type":"boolean",
+									"title":"Module mode",
+									"description":"Only available if the script is written in NodeJS and exports a Bolt component. When *true*, *path* parameter only specifies the script path, and, instead of spawn new processes, multiple bolt instances are created in the main process."
+								},
+								"input": {
+									"type" : "string",
+									"title" : "Input field expression",
+									"description":"Expression used to access a tuple array in the entry data. Input data for multilang components mus be a flat array of values."
+								},
+								"output": {
+									"type" : "string",
+									"title" : "Output field",
+									"description":"Output field for the multilang component."
+								},
+								"field": {
+									"type": "string",
+									"title" : "Group field expression",
+									"description":"Expression used when *group* mode is used."
+								},
+								"options" : {
+									"type" : "object",
+									"title" : "Multilang Configure Options",
+									"description": "JSON object passed to configure the multilang component."
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["parser"],
+							"type": "string",
+							"title": "Generic Parser",
+							"description" : "Parse the entry following a state machine JSON ruleset, giving structure to a text message. Rulesets are based on [Ace Editor Syntax Higlighters](https://ace.c9.io/#nav=higlighter) (and they are based on TextMate grammars)."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["path","input","output"],
+							"properties" : {
+								"path" : {
+									"type" : "string",
+									"example" : "parser.json",
+									"title" : "Path",
+									"description" : "Path to the parser file."
+								},
+								"output" : {
+									"type":"string",
+									"example":"jsondata",
+									"title":"Output field",
+									"description":"Output field to store the formatted date"
+								},
+								"input" : {
+									"type":"string",
+									"title":"Input field",
+									"description":"Input field expression."
+								},
+								"map" : {
+									"type":"boolean",
+									"title":"Map fields",
+									"description":"If true, parsed data will be stored as a map object. Otherwise, it will be an array."
+								},
+								"singleval" : {
+									"type":"boolean",
+									"title":"Single values",
+									"description":"Some parsed elements can have multiple values with the same name. When singleval is true, only takes the first element of each name."
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["properties"],
+							"type": "string",
+							"title": "Properties setter",
+							"description" : "Sets new properties to the input object. Object can be extended with these new properties, or it can be replaced by them."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["set"],
+							"properties" : {
+								"set" : {
+									"type":"object",
+									"title":"Set properties",
+									"description":"Object containing the new properties."
+								},
+								"extend" : {
+									"type":"boolean",
+									"title":"Extend",
+									"description":"By default *true*. When set, input object will be extended by the generated properties. Otherwise, it will be replaced with a new object containing only the generated properties."
+								},
+								"deep" : {
+									"type" : "boolean",
+									"title": "Deep assignation",
+									"description":"By default *false*. When set, and **extend** enabled, generated properties will be merged if their destination already exists. Otherwise, the destination field will be replaced with the newly generated properties."
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["sequence"],
+							"type": "string",
+							"title": "Sequence",
+							"description" : "Places an increaing sequence the input object"
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["start"],
+							"properties" : {
+								"start" : {
+									"type":"integer",
+									"title":"Start value"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["split"],
+							"type": "string",
+							"title": "Split data",
+							"description" : "Splits a expression by a delimiter token."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["input","output","separator"],
+							"properties" : {
+								"input" : {
+									"type":"string",
+									"title":"Input expression"
+								},
+								"output" : {
+									"type":"string",
+									"title":"Output field"
+								},
+								"separator" : {
+									"type":"string",
+									"title":"Separator token"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["syslogparser"],
+							"type": "string",
+							"title": "Syslog Parser",
+							"description" : "Parses a syslog line using the [nsyslog-parser](https://github.com/solzimer/nsyslog-parser) module."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["input"],
+							"properties" : {
+								"field" : {
+									"type":"string",
+									"title":"Input expression",
+									"description":"Expression to be parsed"
+								},
+								"cores" : {
+									"type":"integer",
+									"title":"Cores",
+									"description":"Number of threads if multithreading is supported by nodejs"
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["timestamp"],
+							"type": "string",
+							"title": "Timestamp",
+							"description" : "Places a timestamp to the input object, or parses an existing expression into a Date object."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["output"],
+							"properties" : {
+								"input" : {
+									"type":"string",
+									"title":"Input expression",
+									"description":"Optional. If specified, expression where fetch a timestamp string to be parsed. If not specified, the processor will use the actual timestamp."
+								},
+								"format" : {
+									"type" : "string",
+									"title":"Format",
+									"description":"If input is specified. Format expression of the input to be parsed, following [MomentJS expression](https://momentjs.com/docs/#/displaying/format/)"
+								},
+								"output" : {
+									"type":"string",
+									"title":"Output field"
+								},
+								"unix" : {
+									"type" : "boolean",
+									"title":"Unix timestamp",
+									"description":"If true, timestamp will be stored as a long number instead of a javascript Date object."
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["translate"],
+							"type": "string",
+							"title": "Translate lookup",
+							"description" : "Translate data based on a json file or lookup table"
+						},
+						"config":{
+							"type" : "object",
+							"properties" : {
+								"file" : {
+									"type":"string",
+									"title":"JSON map file",
+									"description":"JSON file with key/value pairs to be translated."
+								},
+								"map" : {
+									"type" : "object",
+									"title":"Inline map",
+									"description":"Inline map of key/value pairs to be translated",
+									"patternProperties" : {
+										".*" : {
+											"type" : "string",
+											"title" : "Key / Value pair"
+										}
+									}
+								},
+								"fields" : {
+									"type":"array",
+									"title":"Fields",
+									"description":"Array of fields to be translated",
+									"items" : {
+										"type" : "object",
+										"title" : "Field",
+										"required" : ["input","output"],
+										"properties" : {
+											"input" : {
+												"type" : "string",
+												"title" : "Input expression"
+											},
+											"output" : {
+												"type" : "string",
+												"title" : "Output field"
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["throttle"],
+							"type": "string",
+							"title": "Throttle",
+							"description" : "Inserts a process delay between entries"
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["timeout"],
+							"properties" : {
+								"input" : {
+									"type":"integer",
+									"title":"Timeout millisecons",
+									"description":"Delay timeout in milliseconds."
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["xmlparser"],
+							"type": "string",
+							"title": "XML Parser",
+							"description" : "Parses XML data"
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["input","output"],
+							"properties" : {
+								"input" : {
+									"type":"string",
+									"title":"Input expression",
+									"description":"Expression to be parsed"
+								},
+								"multiline" : {
+									"type" : "boolean",
+									"title":"Multiline",
+									"description":"XML data is contained in more than one entry. If enabled, **tag** is mandatory."
+								},
+								"tag" : {
+									"type":"string",
+									"title":"XML Tag",
+									"description" : "XML tags that delimite XML data to be parsed."
+								},
+								"cores" : {
+									"type":"integer",
+									"title":"Cores",
+									"description":"Number of threads if multithreading is supported by nodejs"
+								}
+							}
+						}
+					}
+				}
+			]
+		}
+	}
+}

@@ -336,7 +336,7 @@
 								},
 								"url": {
 									"type":"string",
-									"title":"ZeroMQ entdpoint"
+									"title":"ZeroMQ endpoint"
 								},
 								"mode" : {
 									"type" : "string",
@@ -348,6 +348,48 @@
 									"type" : "string",
 									"title" : "Channel",
 									"description" : "If *pub* mode, channel expression."
+								}
+							}
+						}
+					}
+				},
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
+							"enum": ["redis"],
+							"type": "string",
+							"title": "Redis",
+							"description" : "Sends data via Redis."
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["url"],
+							"properties" : {
+								"format": {
+									"anyof" : [{"type":"string"},{"type":"object"}],
+									"title":"Format",
+									"description":"Output expression of the message being sent"
+								},
+								"url": {
+									"type":"string",
+									"title":"Redis endpoint"
+								},
+								"mode" : {
+									"type" : "string",
+									"enum" : ["publish","set","command"],
+									"title" : "Mode",
+									"description" : "Redis endpoint mode:\n* set : Set a key value\n* publish : Publish messages to a server channel\n* command : Custom script command list"
+								},
+								"channel" : {
+									"type" : "string",
+									"title" : "Channel",
+									"description" : "If *publish* mode, channel expression."
+								},
+								"key" : {
+									"type" : "string",
+									"title" : "Redis Key",
+									"description" : "If *set* mode, Redis key expression."
 								}
 							}
 						}

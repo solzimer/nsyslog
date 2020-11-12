@@ -320,6 +320,27 @@
 					"required" : ["type","config"],
 					"properties": {
 						"type" : {
+							"enum": ["acker"],
+							"type": "string",
+							"title": "Acker",
+							"description" : "Acks entry back to the generating input"
+						},
+						"config":{
+							"type" : "object",
+							"required" : ["ack"],
+							"properties" : {
+								"ack": {
+									"type":"object",
+									"title":"Ack key / values"
+								}
+							}
+						}
+					}
+				},				
+				{
+					"required" : ["type","config"],
+					"properties": {
+						"type" : {
 							"enum": ["zmq"],
 							"type": "string",
 							"title": "Syslog",

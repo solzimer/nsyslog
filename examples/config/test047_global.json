@@ -1,0 +1,57 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100}
+	},
+
+	"inputs" : {
+		"static_1" : {
+			"type" : "static",
+			"attach" : ["flow1"],
+			"config" : {
+				"lines" : [
+					"This is a global data"
+				]
+			}
+		},
+		"static_2" : {
+			"type" : "static",
+			"attach" : ["flow2"],
+			"config" : {
+				"lines" : [
+					"null line"
+				]
+			}
+		}
+	},
+
+	"processors" : {
+		"throttle" : {
+			"type" : "throttle",
+			"config" : {
+				"timeout" : 1000
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "Message from flow1 : ${global.test}"
+			}
+		},
+		"global" : {
+			"type" : "global",
+			"config" : {
+				"input" : "${originalMessage}",
+				"output" : "test"
+			}
+		}
+	},
+
+	"flows" : [
+		{"id":"flow1", "from":"static_1", "fork":true, "transporters":["global"],"mode":"serial"},
+		{"id":"flow2", "from":"static_2", "fork":true, "processors":["throttle"], "transporters":["console","#flow2"],"mode":"serial"}
+	]
+}

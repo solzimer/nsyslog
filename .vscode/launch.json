@@ -5,14 +5,24 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Attach by Process ID",
-			"processId": "${command:PickProcess}",
-			"request": "attach",
+			"name": "Launch Program",
+			"program": "${workspaceFolder}/index.js",
+			"args": ["-f", "examples\\config\\test046_httpsm.json"],
+			"request": "launch",
 			"skipFiles": [
 				"<node_internals>/**"
 			],
 			"type": "pwa-node"
-		}
+		},
+	{
+		"name": "Attach by Process ID",
+		"processId": "${command:PickProcess}",
+		"request": "attach",
+		"skipFiles": [
+			"<node_internals>/**"
+		],
+		"type": "pwa-node"
+	}
 	
 	]
 }

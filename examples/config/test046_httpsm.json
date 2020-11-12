@@ -1,0 +1,211 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100}
+	},
+
+	"inputs" : {
+		"httpsm" : {
+			"type" : "httpsm",
+			"config" : {
+				"start" : "login",
+				"states" : {
+					"login" : {
+						"options" : {
+							"method" : "POST",
+							"jar" : true,
+							"url" : "https://my.neushield.net/rs/usr/login",
+							"headers" : {
+								"client_id" : "ndrcloud_webapp_v1"
+							},
+							"json" : {
+								"parameters": {
+									"email": "email",
+									"password": "password",
+									"apiVersion": 4
+								}
+							}
+						},
+						"emit" : [
+							{
+								"when":"${res.statusCode}==200 && ${body.statusCode}==200", 
+								"store" : {
+									"ticket" : "${body.results.loginData.ticket}",
+									"userId" : "${body.data.id}",
+									"loginAccountId" : "${body.results.loginData.id}"
+								},
+								"next":"apilink", 
+								"timeout":100, 
+								"log":{"level":"info","message":"Neushield auth OK (${body.results.loginData.ticket})"}
+							},
+							{
+								"when":"${res.statusCode}!=200 || ${body.statusCode}!=200", 
+								"next":"start", 
+								"timeout":5000, 
+								"log":{"level":"error","message":"Neushield auth ERROR (${body? this.body.message : this.res.statusCode})"}
+							}
+						]
+					},
+					"apilink" : {
+						"options" : {
+							"method" : "POST",
+							"jar" : true,
+							"url" : "https://my.neushield.net/rs/oauth/list",
+							"headers" : {
+								"client_id" : "ndrcloud_webapp_v1"
+							},
+							"json" : {
+								"parameters": {
+									"userId": "${userId}",
+									"loginAccountId": "${loginAccountId}",
+									"loginTicket": "${ticket}",
+									"start": 0,
+									"max": 5
+								}
+							}
+						},
+						"emit" : [
+							{
+								"when":"${res.statusCode}==200 && ${body.statusCode}==200", 
+								"store" : {
+									"link" : "${body.results.links.find(l=>l.settings.match(/socservice/))}"
+								},
+								"next":"authcode",
+								"timeout":100, 
+								"log":{"level":"info","message":"Neushield api links OK"}
+							},
+							{
+								"when":"${res.statusCode}!=200 || ${body.statusCode}!=200", 
+								"next":"start", 
+								"timeout":5000, 
+								"log":{"level":"error","message":"Neushield api links ERROR (${body? this.body.message : this.res.statusCode})"}
+							}
+						]
+					},
+					"authcode" : {
+						"debug" : true,
+						"options" : {
+							"method" : "POST",
+							"jar" : true,
+							"url" : "https://my.neushield.net/oauth2/v1/token",
+							"form" : {
+								"grant_type" : "authorization_code",
+								"code" : "${link.authCode.value}",
+								"client_id" : "${link.clientId}",
+								"client_secret" : "${link.value}",
+								"redirect_uri" : "https://grupoica.com"
+							}
+						},
+						"emit" : [
+							{
+								"when":"${res.statusCode}==200", 
+								"then": "${body}",
+								"store" : {"token":"${body}"},
+								"timeout": 1000, 
+								"next":"refreshtoken",
+								"log":{"level":"info","message":"Neushield grant token OK"}
+							},
+							{
+								"when":"${res.statusCode}!=200", 
+								"next":"renewcode", 
+								"timeout":100, 
+								"log":{"level":"error","message":"Neushield grant token ERROR (${body.error_description}). Will try to renew code"}
+							}
+						]
+					},
+					"refreshtoken" : {
+						"debug" : true,
+						"options" : {
+							"method" : "POST",
+							"jar" : true,
+							"url" : "https://my.neushield.net/oauth2/v1/token",
+							"form" : {
+								"grant_type" : "refresh_token",
+								"refresh_token" : "${token.refresh_token}",
+								"client_id" : "${link.clientId}",
+								"client_secret" : "${link.value}",
+								"redirect_uri" : "https://grupoica.com"
+							}
+						},
+						"emit" : [
+							{
+								"when":"${res.statusCode}==200", 
+								"publish": "${body}",
+								"store" : {"token":"${body}"},
+								"next" : "refreshtoken",
+								"timeout":1000, 
+								"log":{"level":"info","message":"Neushield refresh token OK"}
+							},
+							{
+								"when":"${res.statusCode}!=200", 
+								"next":"renewcode", 
+								"timeout":100, 
+								"log":{"level":"error","message":"Neushield refresh token ERROR (${body.error_description}). Will try to renew code"}
+							}
+						]
+					},					
+					"renewcode" : {
+						"options" : {
+							"method" : "POST",
+							"jar" : true,
+							"url" : "https://my.neushield.net/rs/oauth/request",
+							"headers" : {
+								"client_id" : "ndrcloud_webapp_v1"
+							},
+							"json" : {
+								"parameters":{
+									"userId":"${userId}",
+									"loginAccountId":"${loginAccountId}",
+									"loginTicket":"${ticket}",
+									"linkData":"${link}",
+									"type":"code"
+								}
+							}
+						},
+						"emit" : [
+							{
+								"when":"${res.statusCode}==200 && ${body.statusCode}==200", 
+								"store" : {
+									"link" : "${body.results.apiLink}"
+								},
+								"next":"authcode",
+								"timeout":100, 
+								"log":{"level":"info","message":"Neushield renew auth code OK"}
+							},
+							{
+								"when":"${res.statusCode}!=200 || ${body.statusCode}!=200", 
+								"next":"start", 
+								"timeout":5000, 
+								"log":{"level":"error","message":"Neushield renew code ERROR (${body? this.body.message : this.res.statusCode})"}
+							}
+						]
+					}					
+				}
+			}
+		}
+	},
+
+	"processors" : {
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON}",
+				"json" : {
+					"format" : true,
+					"spaces" : 2,
+					"color" : true
+				}
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"id":"flow1", "from":"*", "fork":false, "transporters":"console"}
+	]
+}

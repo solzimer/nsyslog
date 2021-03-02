@@ -1,0 +1,53 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100}
+	},
+
+	"inputs" : {
+		"static_1" : {
+			"type" : "static",
+			"attach" : ["flow1"],
+			"config" : {
+				"loop" : true,
+				"lines" : [
+					"This is a global data"
+				]
+			}
+		}
+	},
+
+	"processors" : {
+		"props" : {
+			"type" : "properties",
+			"retry" : {
+				"filter" : "${rand}<=0.5",
+				"max" : 5,
+				"timeout" : 1000
+			},
+			"config" : {
+				"set" : {
+					"rand" : "${Math.random()}"
+				}
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON:0}"
+			}
+		}
+	},
+
+	"flows" : [
+		{
+			"id":"flow1", 
+			"from":"static_1", 
+			"processors":["props"],
+			"transporters":["console"]
+		}
+	]
+}

@@ -35,7 +35,7 @@
     "docs": "jsdoc --configure .jsdoc.json --verbose -d jsdoc"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^7.4.0",
+    "@elastic/elasticsearch": "^7.7.1",
     "amqplib": "^0.7.1",
     "chokidar": "^3.1.0",
     "colors": "^1.1.2",

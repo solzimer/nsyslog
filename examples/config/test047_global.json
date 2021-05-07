@@ -38,7 +38,7 @@
 		"console" : {
 			"type" : "console",
 			"config" : {
-				"format" : "Message from flow1 : ${global.test}"
+				"format" : "Message from flow1 : ${_.test} / ${_.itop.asamblea.clientId}"
 			}
 		},
 		"global" : {

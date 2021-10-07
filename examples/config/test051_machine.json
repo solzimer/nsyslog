@@ -1,0 +1,43 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100},
+		"collector" : {
+			"key" : "ctx",
+			"ival" : 1000
+		}
+	},
+
+	"inputs" : {
+		"stats" : {
+			"type" : "machine",
+			"config" : {
+			}
+		}
+	},
+
+	"processors" : {
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"attach" : ["flow1"],
+			"config" : {
+				"format" : "${JSON:originalMessage.memory}",
+				"json" : {
+					"format" : true,
+					"spaces" : 2,
+					"color" : true
+				}
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"id":"flow1", "from":"stats", "fork":true, "processors":[], "transporters":"console"}
+	]
+}

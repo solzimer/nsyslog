@@ -1,0 +1,44 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100}
+	},
+
+	"inputs" : {
+		"lines" : {
+			"type" : "file",
+			"config" : {
+				"path" : "/opt/nsyslog/examples/config/data/replaceProblem.txt",
+				"readmode" : "offset",
+				"offset" : "start"
+			}
+		}
+	},
+
+	"processors" : {
+		"replace" : {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"parsed" : "${originalMessage.replace(/(\\\\\\\\)/g,'\\\\').replace(/(\\\\)r(\\\\)n/g,' ')}"
+				}
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${parsed}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"id":"flow1", "from":"lines", "fork":false, "processors":["replace"], "transporters":"console"}
+	]
+}

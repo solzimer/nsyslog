@@ -47,6 +47,7 @@
     "fileq": "^1.4.1",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
+    "heapdump": "^0.3.15",
     "ioredis": "^3.2.2",
     "jsexpr": "^0.10.3",
     "json-colorizer": "^2.2.1",

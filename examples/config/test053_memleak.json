@@ -1,0 +1,67 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100},
+		"thresholds" : {
+			"memory" : 300
+		}
+	},
+
+	"register" : [
+		{"type":"processor","id":"leak","require":"../custom/custom-processor-leak.js"}
+	],
+
+	"inputs" : {
+		"lines" : {
+			"type" : "static",
+			"attach" : ["flow1"],
+			"config" : {
+				"loop" : true,
+				"lines" : [
+					"<188>0 2019-11-13T01:03:54+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 45.227.254.30:59674(aggregate1.21) to 79.170.8.238:135(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 45.227.254.30, category: Scanner, reputation score 100, hit-count: 1(in the last 5 seconds)",
+					"<188>0 2019-11-13T01:03:56+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 185.173.35.41:63867(aggregate1.21) to 79.170.8.139:1521(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 185.173.35.41, category: Scanner, reputation score 68, hit-count: 1(in the last 5 seconds)",
+					"<188>0 2019-11-13T01:03:57+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 107.189.11.160:54320(aggregate1.21) to 79.170.8.248:23(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 107.189.11.160, category: Scanner/Brute-Forcer, reputation score 84, hit-count: 1(in the last 5 seconds)",
+					"<188>0 2019-11-13T01:03:58+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 93.174.95.106:25932(aggregate1.21) to 79.170.8.35:49(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: High, detected low reputation ip: 93.174.95.106, category: Bot, reputation score 68, hit-count: 1(in the last 5 seconds)",
+					"<188>0 2019-11-13T01:03:58+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 119.147.144.22:46831(aggregate1.21) to 79.170.8.234:445(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 119.147.144.22, category: Scanner, reputation score 68, hit-count: 1(in the last 5 seconds)",
+					"<188>0 2019-11-13T01:03:59+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 77.73.48.14:57594(aggregate1.21) to 79.170.8.163:1433(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 77.73.48.14, category: Scanner, reputation score 84, hit-count: 1(in the last 5 seconds)",
+					"<188>0 2019-11-13T01:03:59+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 185.94.111.1:52385(aggregate1.21) to 79.170.8.66:161(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/UDP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 185.94.111.1, category: Scanner/DDos-Attacker, reputation score 92, hit-count: 1(in the last 6 seconds)",
+					"<188>0 2019-11-13T01:03:59+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 185.209.0.18:56942(aggregate1.21) to 79.170.8.13:4323(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 185.209.0.18, category: Scanner, reputation score 55, hit-count: 1(in the last 5 seconds)",
+					"<188>0 2019-11-13T01:03:59+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 185.173.35.53:50013(aggregate1.21) to 79.170.8.237:1434(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/UDP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 185.173.35.53, category: Scanner, reputation score 68, hit-count: 1(in the last 6 seconds)",
+					"<188>0 2019-11-13T01:04:00+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 89.248.169.17:36669(aggregate1.21) to 79.170.8.176:9000(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 89.248.169.17, category: Scanner/Brute-Forcer, reputation score 68, hit-count: 6(in the last 11 seconds)",
+					"<188>0 2019-11-13T01:04:01+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 111.93.214.78:56731(aggregate1.21) to 79.170.8.57:445(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 111.93.214.78, category: Scanner, reputation score 68, hit-count: 1(in the last 5 seconds)",
+					"<188>0 2019-11-13T01:04:02+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 186.42.182.40:47004(aggregate1.21) to 79.170.8.46:1433(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 186.42.182.40, category: Scanner, reputation score 68, hit-count: 1(in the last 5 seconds)",
+					"<188>0 2019-11-13T01:04:02+01:00 172.26.200.6 2812027172003338(root) - - -  46809403 Threat@FLOW: From 37.49.230.18:51308(aggregate1.21) to 79.170.8.57:80(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 37.49.230.18, category: Scanner, reputation score 68, hit-count: 1(in the last 5 seconds)"
+				]
+			}
+		}
+	},
+
+	"processors" : {
+		"leak" : {
+			"type" : "leak",
+			"config" : {
+			}
+		}
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${out}",
+				"json" : {
+					"format" : true,
+					"spaces" : 2,
+					"color" : true
+				}
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"id":"flow1", "from":"lines", "fork":true, "processors":["leak"], "transporters":"null"}
+	]
+}

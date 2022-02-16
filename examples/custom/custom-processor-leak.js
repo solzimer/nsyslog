@@ -10,6 +10,9 @@ class MyProcessor extends Processor {
 
 	configure(config,callback) {
 		config = config || {};
+		setInterval(()=>{
+			console.log('LEAK: ',this.arr.length);
+		},1000);
 		callback();
 	}
 

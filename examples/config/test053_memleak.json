@@ -3,7 +3,9 @@
 		"datadir" : "/tmp/nsyslog",
 		"input" : {"buffer" : 100},
 		"thresholds" : {
-			"memory" : 300
+			"memory" : 300,
+			"heapdump" : false,
+			"cpu" : 0
 		}
 	},
 

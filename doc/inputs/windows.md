@@ -13,7 +13,8 @@ Read from 'Application' channel with watermark, starting at the oldest entry:
 			"readmode" : "watermark",
 			"offset" : "begin",
 			"channel" : "Application",
-			"batchsize" : 5000
+			"batchsize" : 5000,
+      "idfilter" : [902,903]
 		}
 	}
 }
@@ -24,6 +25,8 @@ Read from 'Application' channel with watermark, starting at the oldest entry:
 * **readmode** : Can be either of **offset** or **watermark**. When **offset** is used, reads will starts allways at the specified offset, regardless of process restarts. If **watermark** mode is used, the input will remembers last read offsets, so if the process is restarted, it will continue the reads at the last position they where left.
 * **offset** : Can be one of **begin / start**, **end** or a date in *YYYY-MM-DDTHH:mm:ss* format.
 * **batchsize** : How many events read at a time.
+* **interval** : Read interval when no data available
+* **idfilter** : Array of windows events ID to be read (optional)
 * **remote** : Remote host/ip address to read events from.
 * **username** : Remote host username
 * **password** : Remote host password

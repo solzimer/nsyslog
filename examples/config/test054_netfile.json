@@ -1,0 +1,37 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100}
+	},
+
+	"inputs" : {
+		"lines" : {
+			"type" : "file",
+			"config" : {
+				"watch" : true,
+				"path" : "/var/log/**/*",
+				"readmode" : "watermark",
+				"offset" : "end"
+			}
+		}
+	},
+
+	"processors" : {
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${path} - ${ln}"
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"id":"flow1", "from":"lines", "fork":false, "processors":[], "transporters":"console"}
+	]
+}

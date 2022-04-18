@@ -9,13 +9,34 @@
 	},
 
 	"inputs" : {
-		"w_sys" : {
+		"w_1" : {
 			"type" : "windows",
 			"config" : {
-				"readmode" : "watermark",
+				"readmode" : "offset",
 				"offset" : "start",
 				"channel" : "Security",
-				"batchsize" : 100
+				"batchsize" : 5000,
+				"format" : "xml"
+			}
+		},
+		"w_2" : {
+			"type" : "windows",
+			"config" : {
+				"readmode" : "offset",
+				"offset" : "start",
+				"channel" : "Application",
+				"batchsize" : 5000,
+				"format" : "xml"
+			}
+		},
+		"w_3" : {
+			"type" : "windows",
+			"config" : {
+				"readmode" : "offset",
+				"offset" : "start",
+				"channel" : "System",
+				"batchsize" : 5000,
+				"format" : "xml"
 			}
 		}
 	},
@@ -37,6 +58,6 @@
 	},
 
 	"flows" : [
-		{"from":"${type}=='windows'", "fork":false, "transporters":["console"]}
+		{"from":"${type}=='windows'", "fork":false, "transporters":["null"]}
 	]
 }

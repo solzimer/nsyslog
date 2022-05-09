@@ -3,13 +3,13 @@
 		"datadir" : "/tmp/nsyslog",
 		"input" : {"buffer" : 100},
 		"collector" : {
-			"key" : "ctx",
+			"_key" : "ctx",
 			"ival" : 1000
 		}
 	},
 
 	"inputs" : {
-		"stats" : {
+		"_monitor_ctx_stats" : {
 			"type" : "machine",
 			"config" : {
 			}
@@ -17,6 +17,45 @@
 	},
 
 	"processors" : {
+		"_monitor_ctx_evtmem" : {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"event" : {
+						"sip" : "@setp:sender@",
+						"res" : "${originalMessage.hostname}",
+						"subres" : "MonitorStats",
+						"evt" : "MONITOR_MEM",
+						"ct1" : "${originalMessage.sysUpTime}",
+						"ct2" : "${originalMessage.memory.total/(1024*1024)}",
+						"ct3" : "${originalMessage.memory.free/(1024*1024)}",
+						"ct5" : "${originalMessage.platform}",
+						"ct6" : "${originalMessage.arch}",
+						"pn" : "${originalMessage.os.version}/${originalMessage.os.release}"	
+					}
+				}
+			}
+		},
+		"_monitor_ctx_evtcpu" : {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"event" : {						
+						"sip" : "@setp:sender@",
+						"res" : "${originalMessage.hostname}",
+						"subres" : "MonitorStats",
+						"evt" : "MONITOR_CPU",
+						"ct1" : "${originalMessage.sysUpTime}",
+						"ct2" : "${originalMessage.cpuLoad.min1}",
+						"ct3" : "${originalMessage.cpuLoad.min5}",
+						"ct4" : "${originalMessage.cpuLoad.min15}",
+						"ct5" : "${originalMessage.platform}",
+						"ct6" : "${originalMessage.arch}",
+						"pn" : "${originalMessage.os.version}/${originalMessage.os.release}"	
+					}
+				}
+			}
+		}
 	},
 
 	"transporters" : {
@@ -24,7 +63,7 @@
 			"type" : "console",
 			"attach" : ["flow1"],
 			"config" : {
-				"format" : "${JSON:originalMessage.memory}",
+				"format" : "${JSON:event}",
 				"json" : {
 					"format" : true,
 					"spaces" : 2,
@@ -38,6 +77,13 @@
 	},
 
 	"flows" : [
-		{"id":"flow1", "from":"stats", "fork":true, "processors":[], "transporters":"console"}
+		{
+			"id":"_monitor_ctx_mem", "from":"_monitor_ctx_stats", "fork":true, 
+			"children" : [
+				{"processors":["_monitor_ctx_evtmem"], "transporters":"console"},
+				{"processors":["_monitor_ctx_evtcpu"], "transporters":"console"}
+			]			
+			
+		}
 	]
 }

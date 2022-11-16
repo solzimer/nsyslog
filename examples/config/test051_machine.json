@@ -55,7 +55,20 @@
 					}
 				}
 			}
-		}
+		},
+		"win_discard_user": {
+			"type": "properties",
+			"config": {},
+			"when": {
+				"filter": {
+					"$and": [
+						{"$expr":{"$eval":"${evt.ct5.indexOf('logagent.exe')} <= 0"}}
+					]
+				},
+				"match": "bypass",
+				"nomatch": "block"
+			}
+		}		
 	},
 
 	"transporters" : {
@@ -78,10 +91,10 @@
 
 	"flows" : [
 		{
-			"id":"_monitor_ctx_mem", "from":"_monitor_ctx_stats", "fork":true, 
+			"id":"_monitor_ctx_mem", "from":"_monitor_ctx_stats", "fork":false, 
 			"children" : [
-				{"processors":["_monitor_ctx_evtmem"], "transporters":"console"},
-				{"processors":["_monitor_ctx_evtcpu"], "transporters":"console"}
+				{"processors":["_monitor_ctx_evtmem","win_discard_user"], "transporters":"console"},
+				{"processors":["_monitor_ctx_evtcpu","win_discard_user"], "transporters":"console"}
 			]			
 			
 		}

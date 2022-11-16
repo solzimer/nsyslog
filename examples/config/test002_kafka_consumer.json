@@ -8,17 +8,25 @@
 	},
 
 	"inputs" : {
-		"kafka" : {
-			"type" : "kafka",
-			"config" : {
-				"url" : "kafka://localhost:9092",
-				"topics" : ["nsyslog"],
-				"format" : "raw",
-				"offset" : "earliest",
-				"group" : "nsyslog",
-				"watch" : true
-			}
-		}
+		"reader_kafka_oracleaudit": {
+            "Description": "Attach va de flujo de entrada",
+            "attach": [
+                "pump_kafka_oracleaudit"
+            ],
+            "type" : "kafka",
+            "disabled" : false,
+            "config" : {
+                "url" : "kafka://localhost:9090",
+                "topics" : [
+                    "logline__6299ca1a5ebcd503f5431752", "logline__6299cab65ebcd503f5431953",
+                    "logline__6299caf75ebcd503f5431991", "logline__6299cb8f5ebcd503f5431a18"
+                ],
+                "format" : "json",
+                "offset" : "earliest",
+                "group" : "monitor_oracleaudit_test",
+                "watch" : false
+            }
+        }
 	},
 
 	"transporters" : {
@@ -38,6 +46,6 @@
 	},
 
 	"flows" : [
-		{"from":"kafka", "transporters":["console"]}
+		{"id":"pump_kafka_oracleaudit", "from":"reader_kafka_oracleaudit", "transporters":["null"]}
 	]
 }

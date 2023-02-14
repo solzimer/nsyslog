@@ -1,0 +1,87 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100},
+		"collector" : {
+			"_key" : "ctx",
+			"ival" : 1000
+		}
+	},
+
+	"inputs" : {
+		"lines" : {
+			"type" : "static",
+			"attach" : ["myflow"],
+			"config" : {
+				"loop" : true,
+				"interval" : 1000,
+				"lines" : [
+					{"res":"MAL","ct3":"4688","dun":"user$", "ct5":"algo asi como logagent.exe jejeje"},
+					{"res":"BIEN","ct3":"4688","dun":"user$","ct5":"Este tiene que pasar!"}
+				]
+			}
+		}
+	},
+
+	"processors" : {
+		"event": {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"evt" : "${originalMessage}"
+				}
+			}
+		},
+		"pid": {
+			"type" : "properties",
+			"config" : {
+				"extend" : true,
+				"deep" : true,
+				"set" : {
+					"evt" : {
+						"pid" : "${process.pid}"
+					}
+				}
+			}
+		},
+		"win_discard_user": {
+			"type": "properties",
+			"config": {},
+			"when": {
+				"filter": {
+					"$and": [
+						{"evt.ct3": { "$in": ["4688"] }},
+						{"evt.dun": {"$endsWith":["$"]}},		
+						{"$expr":{"$eval":"${evt.ct5.indexOf('logagent.exe')} > 0"}}
+					]
+				},
+				"match": "block",
+				"nomatch": "bypass"
+			}
+		}		
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"attach" : ["flow1"],
+			"config" : {
+				"format" : "${JSON:evt}",
+				"json" : {
+					"format" : true,
+					"spaces" : 2,
+					"color" : true
+				}
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{
+			"id":"myflow", "from":"lines", "fork":true, "processors" : ["event","pid","win_discard_user"], "transporters":"console"
+		}
+	]
+}

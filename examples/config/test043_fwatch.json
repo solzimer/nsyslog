@@ -8,10 +8,15 @@
 		"lines" : {
 			"type" : "file",
 			"config" : {
-				"path" : "/var/log/slink/file*.log",
+
+				"path" : "/var/log/apache.log",
 				"watch" : true,
 				"readmode" : "watermark",
-				"offset" : "start"
+				"offset" : "end",
+				"options": {
+					"usePolling": true,
+					"interval": 100
+				}
 			}
 		}
 	},
@@ -22,7 +27,7 @@
 		"console" : {
 			"type" : "console",
 			"config" : {
-				"format" : "${JSON}",
+				"format" : "${originalMessage}",
 				"json" : {
 					"format" : true,
 					"spaces" : 2,
@@ -36,6 +41,6 @@
 	},
 
 	"flows" : [
-		{"id":"flow1", "from":"lines", "fork":false, "processors":[], "transporters":"console"}
+		{"id":"flow1", "from":"lines", "fork":false, "processors":[], "transporters":"null"}
 	]
 }

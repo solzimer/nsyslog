@@ -1,0 +1,94 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"buffer" : 100},
+		"collector" : {
+			"_key" : "ctx",
+			"ival" : 1000
+		}
+	},
+
+	"inputs" : {
+		"lines" : {
+			"type" : "static",
+			"attach" : ["flow1"],
+			"config" : {
+				"loop" : true,
+				"lines" : [
+					{"res":"BIEN","ct3":"4688","dun":"user$","ct5":"Este tiene que pasar!"}
+				]
+			}
+		}
+	},
+
+	"processors" : {
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"attach" : ["flow1"],
+			"config" : {
+				"format" : "${JSON:2}",
+				"json" : {
+					"format" : true,
+					"spaces" : 2,
+					"color" : true
+				}
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{
+			"id": "flow1", "from":"lines", 
+			"when" : {
+				"radek" : {"$or":[{"originalMessage.res" : "MAL"},{"originalMessage.res" : "BIEN"}]}
+			},
+			"children" : [
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"},{"originalMessage.res" : "BIEN"}]}, "transporters" : ["null"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]},
+				{"when" : {"$or":[{"originalMessage.res" : "MAL"}]}, "transporters" : ["console"]}
+			]
+		}
+	]
+}

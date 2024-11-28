@@ -83,7 +83,7 @@
   },
   "optionalDependencies": {
     "msnodesqlv8": "^2.2.0",
-    "mssql": "^7.2.1",
+    "mssql": "^9.0.1",
     "zeromq": "^5.2.0",
     "amqplib": "^0.7.1"
   },

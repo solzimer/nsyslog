@@ -13,7 +13,7 @@ UDP Syslog server with buffer flow control
 		"maxPending" : 1000,
 		"buffer" : true,
 		"config" : {
-			"url" : "udp://0.0.0.0:514",
+			"url" : "udp://0.0.0.0:514"
 		}
 	}
 }
@@ -28,7 +28,7 @@ TCP Syslog server without buffer flow control
 		"maxPending" : 1000,
 		"buffer" : false,
 		"config" : {
-			"url" : "tcp://0.0.0.0:514",
+			"url" : "tcp://0.0.0.0:514"
 		}
 	}
 }
@@ -45,7 +45,8 @@ Secure TLS Syslog server with private key and certificate
 			"url" : "tls://0.0.0.0:1514",
 			"tls" : {
 				"key" : "./config/server.key",
-				"cert" : "./config/server.crt"
+				"cert" : "./config/server.crt",
+				"rejectUnauthorized" : false
 			}
 		}
 	}
@@ -53,8 +54,13 @@ Secure TLS Syslog server with private key and certificate
 ```
 
 ## Configuration parameters
-* **url** : Server URL bind pattern. Takes the form of *&lt;protocol&gt;://&lt;bind host&gt;:&lt;bind port&gt;*. Allowed protocols are: **udp**,**udp6**,**tcp**,**tcp6**,**tls** and **tls6**.
-* **tls** : Object passed to the TLS server socket, as described in [NodeJS documentation](https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options)
+* **url** : Server URL bind pattern. Takes the form of *&lt;protocol&gt;://&lt;bind host&gt;:&lt;bind port&gt;*. Allowed protocols are: **udp**, **udp6**, **tcp**, **tcp6**, **tls**, and **tls6**.
+* **maxPending** : Maximum number of pending messages in the buffer. Defaults to `1000`.
+* **buffer** : Boolean. If `true`, enables buffering of incoming messages.
+* **tls** : Object passed to the TLS server socket, as described in [NodeJS documentation](https://nodejs.org/api/tls.html#tls_tls_createsecurecontext_options). Includes:
+  - **key** : Path to the private key file.
+  - **cert** : Path to the certificate file.
+  - **rejectUnauthorized** : Boolean. If `false`, allows self-signed certificates.
 
 ## Output
 Each syslog message will generate an object with the following schema:
@@ -65,14 +71,13 @@ Each syslog message will generate an object with the following schema:
 	timestamp : Date.now(),
 	originalMessage : '<syslog message>',
 	server : {
-		{
-			protocol : '<bind protocol>',
-			port : '<bind port>',
-			host : '<bind host>'
-		}
+		protocol : '<bind protocol>',
+		port : '<bind port>',
+		host : '<bind host>'
 	},
 	client : {
-		address : '<client address>'
+		address : '<client address>',
+		port : '<client port>' // Added client port for completeness
 	}
 }
 ```

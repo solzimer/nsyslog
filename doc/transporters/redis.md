@@ -1,6 +1,6 @@
-## Redis Pub Transporter
+## Redis Transporter
 
-Sends data through a Redis channel
+Sends data through a Redis channel.
 
 ## Examples
 
@@ -18,6 +18,6 @@ Sends data through a Redis channel
 ```
 
 ## Configuration parameters
-* **url** : Redis Endpoint (redis://host:port)
-* **format** : Output expression of the message being sent
-* **channel** : Redis publish channel (allows expression)
+* **url** : Redis endpoint(s) (e.g., `redis://host:port`).
+* **format** : Output expression of the message being sent.
+* **channel** : Redis publish channel (supports expressions).

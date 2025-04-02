@@ -1,3 +1,9 @@
+## Stat Transporter
+
+Logs the number of messages received after a specified threshold.
+
+## Examples
+
 ```json
 "transporters" : {
 	"stat" : {
@@ -8,3 +14,6 @@
 	}
 }
 ```
+
+## Configuration parameters
+* **threshold** : The message count threshold for logging. Defaults to 1000.

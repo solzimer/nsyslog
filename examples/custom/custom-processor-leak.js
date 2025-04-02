@@ -17,7 +17,8 @@ class MyProcessor extends Processor {
 	}
 
 	process(entry, callback) {
-		this.arr.push(entry);
+		for(let i=0;i<1000;i++)
+			this.arr.push(entry);
 		callback(null, entry);
 	}
 }

@@ -3,7 +3,7 @@
 		"datadir" : "/tmp/nsyslog",
 		"input" : {"buffer" : 100},
 		"collector" : {
-			"_key" : "ctx",
+			"key" : "ctx",
 			"ival" : 1000
 		}
 	},

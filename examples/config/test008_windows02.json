@@ -56,7 +56,7 @@
         "disabled": false,
         "from": "local",
         "processors": [],
-        "transporters": "syslog"
+        "transporters": "logger"
       }
     ]
   }

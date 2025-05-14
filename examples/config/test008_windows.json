@@ -11,45 +11,66 @@
 	"inputs" : {
 		"w_1" : {
 			"type" : "windows",
+			"disabled" : false,
 			"config" : {
-				"readmode" : "offset",
+				"readmode" : "watermark",
 				"offset" : "start",
 				"channel" : "Security",
 				"batchsize" : 5000,
-				"format" : "xml"
+				"idfilter": [
+                    5376,5377,5453,6273,6274,6275,6276,6277,6278,6279,6280,6416,4965,4976,4977,4978,4983,4984,5038,
+					5122,5123,5124,5140,5142,5143,5144,5145,5156,4866,4867,4882,4885,4890,4892,4896,4905,4907,4908,
+					4912,4934,4960,4961,4963,4964,4757,4758,4759,4764,4767,4768,4769,4770,4771,4772,4776,4777,4780,
+					4794,4816,4865,4735,4737,4738,4739,4740,4741,4742,4743,4744,4745,4746,4747,4749,4754,4755,4756,
+					4717,4718,4720,4722,4723,4724,4725,4726,4727,4728,4729,4730,4731,4732,4733,4734,4688,4692,4693,
+					4697,4698,4699,4700,4701,4702,4704,4705,4706,4713,4714,4715,4716,4625,4634,4648,4656,4657,4658,
+					4659,4660,4662,4663,4672,4673,4674,4675,4624	
+                ],
+				"format" : "json"
 			}
 		},
 		"w_2" : {
 			"type" : "windows",
+			"disabled" : false,
 			"config" : {
-				"readmode" : "offset",
+				"readmode" : "watermark",
 				"offset" : "start",
 				"channel" : "Application",
 				"batchsize" : 5000,
-				"_idfilter" : [902,903],
-				"format" : "xml"
+				"idfilter" : [902,903],
+				"format" : "json"
 			}
 		},
 		"w_3" : {
 			"type" : "windows",
+			"disabled" : false,
 			"config" : {
-				"readmode" : "offset",
+				"readmode" : "watermark",
 				"offset" : "start",
 				"channel" : "System",
 				"batchsize" : 5000,
-				"format" : "xml"
+				"format" : "json"
 			}
 		}
 	},
 
 	"processors" : {
-		"parse" : {
+		"_parse" : {
 			"type" : "winevtparser",
 			"config" : {
 				"input" : "${originalMessage}",
 				"output" : "windows"
 			}
+		},
+		"parse" : {
+			"type" : "properties",
+			"config" : {
+				"set" : {
+					"windows" : "${originalMessage}"
+				}
+			}
 		}
+
 	},
 
 	"transporters" : {
@@ -69,6 +90,6 @@
 	},
 
 	"flows" : [
-		{"from":"${type}=='windows'","fork":false, "processors":["parse"], "transporters":["console"]}
+		{"from":"${type}=='windows'","fork":false, "processors":["parse"], "transporters":["null"]}
 	]
 }

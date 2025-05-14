@@ -1,0 +1,49 @@
+{
+	"config" : {
+		"datadir" : "/tmp/nsyslog",
+		"input" : {"maxPending" : 1000},
+		"buffer" : {"maxPending": 1000},
+		"processor" : {"maxPending": 1000},
+		"transporter" : {"maxPending": 1000}
+	},
+
+	"inputs" : {
+		"reader_kafka": {
+            "Description": "Attach va de flujo de entrada",
+            "attach": [
+                "pump_kafka"
+            ],
+            "type" : "kafka",
+            "disabled" : false,
+            "config" : {
+                "url" : "kafka://localhost:9090",
+                "topics" : ["loglines"],
+                "format" : "json",
+                "offset" : "earliest",
+                "group" : "monitor_test",
+                "watch" : false,
+				"noDataError" : 60000
+            }
+        }
+	},
+
+	"transporters" : {
+		"console" : {
+			"type" : "console",
+			"config" : {
+				"format" : "${JSON:2}",
+				"json" : {
+					"format" : true,
+					"color" : true
+				}
+			}
+		},
+		"null" : {
+			"type" : "null"
+		}
+	},
+
+	"flows" : [
+		{"id":"pump_kafka", "from":"reader_kafka", "fork":true, "transporters":["console"]}
+	]
+}

@@ -338,46 +338,424 @@ await fileInput.configure({
 });
 ```
 
-## Métricas de Rendimiento
+## Análisis del Flujo de Ejecución
 
-### Fortalezas
-- ✅ Gestión eficiente de memoria con buffers configurables
-- ✅ Lectura no bloqueante con semáforos
-- ✅ Persistencia de estado para recuperación rápida
-- ✅ Soporte para múltiples archivos simultáneos
+### Caso de Uso: Monitoreo de Logs con Estructura de Fechas
 
-### Áreas de Mejora
-- ⚠️ Acumulación de líneas en memoria sin límites
-- ⚠️ Falta de métricas de rendimiento integradas
-- ⚠️ No hay throttling para archivos que cambian muy rápido
+Para el caso específico de monitorizar archivos bajo la ruta `/ica/logroot/${YYYY-MM-DD}/*.log`, analizaremos el flujo completo de ejecución desde la inicialización hasta el procesamiento continuo.
 
-## Recomendaciones de Seguridad
-
-### 1. **Validación de Rutas**
+#### Configuración del Caso de Uso
 ```javascript
-// Validar que las rutas estén dentro de directorios permitidos
-const isPathSafe = (path) => {
-    const resolved = Path.resolve(path);
-    return allowedPaths.some(allowed => resolved.startsWith(allowed));
+const fileInput = new FileInput('daily-logs', 'file');
+await fileInput.configure({
+    path: '/ica/logroot/${YYYY-MM-DD}/*.log',
+    watch: true,
+    readmode: 'watermark',
+    offset: 'end',
+    encoding: 'utf8',
+    blocksize: 65536, // 64KB para archivos de log grandes
+    options: {
+        persistent: true,
+        recursive: false
+    }
+});
+```
+
+### 🔄 Flujo de Ejecución Detallado
+
+#### **Fase 1: Inicialización (constructor + configure)**
+
+```mermaid
+graph TD
+    A[Constructor FileInput] --> B[Inicializar propiedades]
+    B --> C[configure() llamado]
+    C --> D[Parsear expresión de ruta con jsexpr]
+    D --> E[Configurar parámetros]
+    E --> F[Callback de configuración]
+```
+
+**1.1 Constructor**
+```javascript
+// Estado inicial
+this.files = {};                    // Mapa de archivos abiertos
+this.list = { read: {}, avail: {} }; // Listas de control
+this.sem = new Semaphore(1);        // Control de concurrencia
+this.watermark = null;              // Sistema de marcas de agua
+this.wm = null;                     // Datos de watermarks
+this.monitors = new Map();          // Monitores de directorios
+```
+
+**1.2 Configuración**
+```javascript
+// La expresión jsexpr se evalúa dinámicamente
+this.path = jsexpr.expr('/ica/logroot/${YYYY-MM-DD}/*.log');
+// Resultado: función que genera rutas como "/ica/logroot/2025-07-08/*.log"
+```
+
+#### **Fase 2: Inicio del Sistema (start)**
+
+```mermaid
+graph TD
+    A[start() llamado] --> B[Inicializar Watermark]
+    B --> C[Cargar watermarks existentes]
+    C --> D{watch = true?}
+    D -->|Sí| E[Iniciar watchFiles]
+    D -->|No| F[Buscar archivos con glob]
+    E --> G[Configurar intervalo de monitoreo]
+    F --> H[Abrir archivos encontrados]
+    G --> I[Configurar guardado automático]
+    H --> I
+    I --> J[Sistema listo]
+```
+
+**2.1 Inicialización de Watermarks**
+```javascript
+try {
+    this.watermark = new Watermark(this.config.$datadir);
+    await this.watermark.start();
+    this.wm = await this.watermark.get(this.id); // Obtener watermarks de "daily-logs"
+} catch(err) {
+    return callback(err);
+}
+```
+
+**2.2 Inicio del Monitoreo**
+```javascript
+if(this.watch) {
+    await this.watchFiles(); // Primera ejecución
+    this.ivalWatch = setInterval(async()=>{
+        await this.watchFiles(); // Cada 5 segundos
+    }, 5000);
+}
+```
+
+**2.3 Configuración de Guardado Automático**
+```javascript
+this.wmival = setInterval(this.save.bind(this), 60000); // Cada 60 segundos
+```
+
+#### **Fase 3: Monitoreo de Directorios (watchFiles)**
+
+```mermaid
+graph TD
+    A[watchFiles ejecutado] --> B[Evaluar expresión de ruta]
+    B --> C[Resolver ruta: /ica/logroot/2025-07-08]
+    C --> D{Monitor existe?}
+    D -->|No| E[Crear nuevo Monitor]
+    D -->|Sí| F[Continuar con monitor existente]
+    E --> G[Configurar eventos del monitor]
+    G --> H[monitor.start con opciones]
+    H --> I[Escuchar eventos 'new' y 'ready']
+    F --> I
+```
+
+**3.1 Evaluación Dinámica de Rutas**
+```javascript
+const path = slash(Path.resolve(config.$path, this.path("")));
+// Resultado: "/ica/logroot/2025-07-08" (fecha actual)
+```
+
+**3.2 Creación del Monitor**
+```javascript
+if(!this.monitors.has(path)) {
+    const monitor = new Monitor(this.files);
+    this.monitors.set(path, monitor);
+    monitor.start(path, this.options);
+    
+    // Eventos del monitor
+    monitor.on('new', path => this.openFile(path));    // Nuevo archivo detectado
+    monitor.on('ready', path => {                      // Archivo listo para lectura
+        this.list.read[path] = true;
+    });
+}
+```
+
+#### **Fase 4: Detección y Apertura de Archivos (openFile)**
+
+```mermaid
+graph TD
+    A[Nuevo archivo detectado] --> B[openFile llamado]
+    B --> C{Archivo excluido?}
+    C -->|Sí| D[Ignorar archivo]
+    C -->|No| E[Adquirir semáforo]
+    E --> F{Archivo ya abierto?}
+    F -->|Sí| G[Retornar instancia existente]
+    F -->|No| H[Abrir descriptor de archivo]
+    H --> I[Obtener estadísticas del archivo]
+    I --> J[Determinar offset inicial]
+    J --> K[Crear instancia File]
+    K --> L[Actualizar estructuras de datos]
+    L --> M[Liberar semáforo]
+```
+
+**4.1 Exclusión de Archivos**
+```javascript
+// Para nuestro caso: /ica/logroot/2025-07-08/application.log
+if (this.exclude && minimatch(path, this.exclude)) {
+    logger.info(`${path} is excluded`);
+    return;
+}
+```
+
+**4.2 Determinación del Offset**
+```javascript
+if (this.readmode == MODE.watermark) {
+    if (wm[path]) {
+        // Archivo conocido - continuar desde watermark
+        offset = wm[path].offset || 0;
+        tail = wm[path].tail || "";
+        line = wm[path].line || 0;
+        lines = wm[path].lines || [];
+    } else {
+        // Archivo nuevo - empezar desde el final (offset: 'end')
+        offset = stats.size;
+    }
+}
+```
+
+**4.3 Creación de la Instancia File**
+```javascript
+files[path] = new File(path, fd, stats, offset, buffer, tail, line, lines);
+files[path].ready = true;
+this.list.read[path] = true;  // Marcar para lectura
+extend(true, wm, { [path]: files[path].toJSON() });
+```
+
+#### **Fase 5: Procesamiento Continuo (next + readlines)**
+
+```mermaid
+graph TD
+    A[next() llamado] --> B[fetchLine()]
+    B --> C{Líneas disponibles?}
+    C -->|Sí| D[Retornar línea]
+    C -->|No| E[readlines()]
+    E --> F[Para cada archivo en lectura]
+    F --> G[Leer buffer del archivo]
+    G --> H[Procesar contenido]
+    H --> I[Dividir en líneas]
+    I --> J[Actualizar watermarks]
+    J --> K[fetchLine() nuevamente]
+    K --> L{Líneas disponibles?}
+    L -->|Sí| M[Retornar línea]
+    L -->|No| N[Retornar false]
+```
+
+**5.1 Lectura de Archivos (readlines)**
+```javascript
+// Para cada archivo marcado para lectura
+let files = this.watch?
+    Object.keys(this.list.read).map(k=>this.files[k]) :
+    Object.keys(this.files).map(k=>this.files[k]);
+
+// Lectura asíncrona paralela
+let all = files.filter(Boolean).map(async(file)=>{
+    await this.openFile(file.path);
+    await file.sem.take();
+    
+    // Leer desde la posición actual
+    let res = await fs.read(file.fd, file.buffer, 0, file.buffer.length, file.offset);
+    file.tail += res.buffer.toString('utf8', 0, res.bytesRead);
+    file.offset += res.bytesRead;
+    
+    // Procesar líneas completas
+    let lines = file.tail.split("\n");
+    while(lines.length) {
+        let line = lines.shift();
+        if(lines.length) {
+            file.line++;
+            file.lines.push({ln:file.line, line});
+        } else {
+            file.tail = line; // Línea incompleta
+        }
+    }
+    
+    file.sem.leave();
+    return file;
+});
+```
+
+**5.2 Manejo de Casos Especiales**
+```javascript
+// Detección de truncamiento o rotación
+if(res.bytesRead == 0) {
+    let fstat = await fs.stat(file.path);
+    if((fstat.size < file.offset) || (fstat.ino != file.stats.ino)) {
+        if(fstat.ino != file.stats.ino) {
+            logger.warn(`File ${file.path} seems to be another file. Reseting reference.`);
+        } else {
+            logger.warn(`File ${file.path} has been truncated. Reseting watermark`);
+        }
+        file.offset = 0; // Reiniciar desde el principio
+        // Cerrar y reabrir el archivo
+    }
+}
+```
+
+#### **Fase 6: Entrega de Datos (fetchLine)**
+
+```mermaid
+graph TD
+    A[fetchLine llamado] --> B[Limpiar listas]
+    B --> C{Archivos disponibles?}
+    C -->|No| D[Retornar false]
+    C -->|Sí| E[Selección aleatoria de archivo]
+    E --> F[Extraer primera línea]
+    F --> G[Formar objeto de datos]
+    G --> H[Actualizar listas]
+    H --> I[Retornar datos]
+```
+
+**6.1 Estructura de Datos Retornada**
+```javascript
+// Para archivo: /ica/logroot/2025-07-08/application.log, línea 1542
+let data = {
+    type: 'file',
+    path: '/ica/logroot/2025-07-08/application.log',
+    filename: 'application.log',
+    ln: 1542,
+    originalMessage: '2025-07-08 14:30:45 INFO [main] Application started successfully'
 };
 ```
 
-### 2. **Límites de Recursos**
+### 🕐 Cronología de Eventos para el Caso de Uso
+
+#### **T+0s: Inicialización**
+```
+14:00:00 - Constructor FileInput('daily-logs', 'file')
+14:00:00 - configure() con path '/ica/logroot/${YYYY-MM-DD}/*.log'
+14:00:00 - start() iniciado
+14:00:01 - Watermark cargado desde disco
+14:00:01 - watchFiles() - monitorear /ica/logroot/2025-07-08/
+```
+
+#### **T+1s: Detección Inicial**
+```
+14:00:02 - Monitor detecta: application.log, error.log, access.log
+14:00:02 - openFile(/ica/logroot/2025-07-08/application.log)
+14:00:02 - openFile(/ica/logroot/2025-07-08/error.log)
+14:00:02 - openFile(/ica/logroot/2025-07-08/access.log)
+14:00:03 - Archivos listos para lectura
+```
+
+#### **T+5s: Primera Lectura**
+```
+14:00:05 - next() llamado por primera vez
+14:00:05 - readlines() lee buffers de los 3 archivos
+14:00:05 - 47 líneas procesadas de application.log
+14:00:05 - 12 líneas procesadas de error.log
+14:00:05 - 156 líneas procesadas de access.log
+14:00:05 - fetchLine() retorna línea de access.log
+```
+
+#### **T+5s-60s: Procesamiento Continuo**
+```
+14:00:06 - next() → fetchLine() → línea de application.log
+14:00:07 - next() → fetchLine() → línea de error.log
+...
+14:00:30 - Monitor detecta nuevo archivo: debug.log
+14:00:30 - openFile(/ica/logroot/2025-07-08/debug.log)
+...
+14:01:00 - save() automático ejecutado
+14:01:00 - Watermarks persistidos para 4 archivos
+```
+
+#### **T+24h: Rotación Diaria**
+```
+00:00:00 - watchFiles() evalúa nueva fecha
+00:00:00 - Nueva ruta: /ica/logroot/2025-07-09/
+00:00:01 - Nuevo monitor creado para directorio 2025-07-09
+00:00:05 - Archivos del día anterior siguen siendo monitoreados
+00:00:10 - Nuevos archivos detectados en directorio actual
+```
+
+### 📊 Métricas de Rendimiento del Flujo
+
+#### **Latencia de Detección**
+- **Nuevos archivos**: ~1-2 segundos (intervalo del monitor del filesystem)
+- **Nuevas líneas**: ~0-100ms (dependiente de la frecuencia de `next()`
+- **Rotación de archivos**: ~1-5 segundos
+
+#### **Throughput**
+- **Lectura secuencial**: ~10-50 MB/s (dependiente del disco)
+- **Líneas por segundo**: ~1000-10000 (dependiente del tamaño de línea)
+- **Archivos simultáneos**: Sin límite teórico (limitado por descriptores de archivo del SO)
+
+#### **Uso de Memoria**
 ```javascript
-const LIMITS = {
-    maxFileSize: 100 * 1024 * 1024, // 100MB
-    maxFiles: 1000,
-    maxLineLength: 10000
+// Estimación para el caso de uso
+const memoryUsage = {
+    watermarks: '~1KB por archivo',
+    fileDescriptors: '~8KB por archivo abierto',
+    buffers: '64KB × número de archivos activos',
+    lineas_memoria: 'variable (riesgo de acumulación)'
 };
 ```
 
-### 3. **Sanitización de Datos**
+### ⚠️ Consideraciones Específicas del Caso de Uso
+
+#### **1. Gestión de Directorios por Fecha**
+- **Ventaja**: Organización clara y rotación natural
+- **Desafío**: Necesidad de múltiples monitores activos
+- **Recomendación**: Limitar monitores a N días recientes
+
+#### **2. Patrones de Crecimiento de Logs**
 ```javascript
-// Sanitizar contenido antes de procesar
-const sanitizeLine = (line) => {
-    return line.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+// Patrón típico diario
+const growthPattern = {
+    '00:00-06:00': 'Bajo (mantenimiento)',
+    '06:00-09:00': 'Creciente (inicio de actividad)',
+    '09:00-17:00': 'Alto (actividad normal)',
+    '17:00-00:00': 'Decreciente'
 };
 ```
+
+#### **3. Optimizaciones Específicas**
+```javascript
+// Configuración optimizada para logs diarios
+const optimizedConfig = {
+    blocksize: 131072,        // 128KB para archivos de log grandes
+    watch: true,
+    readmode: 'watermark',
+    offset: 'end',
+    options: {
+        persistent: true,
+        recursive: false,      // No buscar en subdirectorios
+        awaitWriteFinish: {    // Esperar que termine la escritura
+            stabilityThreshold: 2000,
+            pollInterval: 100
+        }
+    }
+};
+```
+
+### 🔍 Puntos de Monitoreo y Debug
+
+#### **Métricas Clave a Monitorear**
+```javascript
+const metrics = {
+    files_monitored: 'Número de archivos bajo monitoreo',
+    lines_processed: 'Líneas procesadas por segundo',
+    watermark_lag: 'Diferencia entre tamaño de archivo y watermark',
+    memory_usage: 'Uso de memoria del proceso',
+    file_descriptors: 'Número de descriptores abiertos',
+    monitor_directories: 'Directorios bajo monitoreo activo'
+};
+```
+
+#### **Logs de Debug Útiles**
+```javascript
+// Habilitar en desarrollo
+logger.level = 'silly';
+
+// Logs específicos a buscar:
+// "Found ${path} in watermarks" - Archivo conocido
+// "Not found ${path} in watermarks" - Archivo nuevo  
+// "File ${path} has been truncated" - Rotación detectada
+// "Reading ${file.path} from ${file.offset}" - Lectura activa
+// "Nothing to read from ${file.path}" - Archivo sin cambios
+```
+
+Este análisis proporciona una visión completa del flujo de ejecución para el caso de uso específico, identificando los puntos críticos, optimizaciones posibles y métricas de rendimiento esperadas.
 
 ## Conclusiones
 

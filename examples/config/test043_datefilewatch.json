@@ -9,6 +9,7 @@
 			"type" : "file",
 			"config" : {
 				"path" : "C:\\ica\\data\\logroot\\${DATE:YYYY-MM-DD_mm}\\*.log",
+				"_path" : "C:\\ica\\data\\logroot\\*.log",
 				"watch" : true,
 				"readmode" : "watermark",
 				"offset" : "start",

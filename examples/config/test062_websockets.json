@@ -35,8 +35,8 @@
         "loop": true,
         "interval": 100,
         "lines": [
-          {"url":"ws://localhost:6540/logs", "host":"APP1", "message": "<188>0 2025-11-13T01:03:54+01:00 172.26.200.6 APP1(root) - - -  46809403 Threat@FLOW: From 45.227.254.30:59674(aggregate1.21) to 79.170.8.238:135(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 45.227.254.30, category: Scanner, reputation score 100, hit-count: 1(in the last 5 seconds)"},
-          {"url":"ws://localhost:6550/logs", "host":"APP2", "message": "<188>0 2025-11-13T01:03:56+01:00 172.26.200.6 APP2(root) - - -  46809403 Threat@FLOW: From 185.173.35.41:63867(aggregate1.21) to 79.170.8.139:1521(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 185.173.35.41, category: Scanner, reputation score 68, hit-count: 1(in the last 5 seconds)"}
+          {"url":"wss://localhost:8443", "host":"APP1", "message": "<188>0 2025-11-13T01:03:54+01:00 172.26.200.6 APP1(root) - - -  46809403 Threat@FLOW: From 45.227.254.30:59674(aggregate1.21) to 79.170.8.238:135(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 45.227.254.30, category: Scanner, reputation score 100, hit-count: 1(in the last 5 seconds)"},
+          {"url":"wss://localhost:8443", "host":"APP2", "message": "<188>0 2025-11-13T01:03:56+01:00 172.26.200.6 APP2(root) - - -  46809403 Threat@FLOW: From 185.173.35.41:63867(aggregate1.21) to 79.170.8.139:1521(-), threat name: Blacklist-IP, threat type: Attack, threat subtype: Risk IP, App/Protocol: IPv4/TCP, action: DROP, defender: PTF, severity: Low, detected low reputation ip: 185.173.35.41, category: Scanner, reputation score 68, hit-count: 1(in the last 5 seconds)"}
         ]
       }
     }
@@ -49,6 +49,9 @@
       "config": {
         "url": "${originalMessage.url}",
         "format": "${originalMessage}",
+        "options": {
+          "rejectUnauthorized": false
+        },
         "reconnect": {
           "enabled": true,
           "maxRetries": 10,

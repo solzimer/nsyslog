@@ -27,7 +27,8 @@
 		"syslog" : {
 			"type" : "syslog",
 			"config" : {
-				"url" : "udp://localhost:514"
+				"url" : "tcp://localhost:514",
+				"delimiter" : "priority"
 			}
 		}
 	},
@@ -67,7 +68,7 @@
 		"logger" : {
 			"type" : "console",
 			"config" : {
-				"format" : "${this}",
+				"format" : "${JSON:2}",
 				"json" : {
 					"format" : true,
 					"color" : true
@@ -80,7 +81,7 @@
 	},
 
 	"flows" : [
-		{"from":"file", "processors":["timestamp"], "transporters":["syslog"], "mode":"parallel"},
+		{"from":"file", "processors":["timestamp"], "transporters":["syslog"], "mode":"parallel", "disabled":true},
 		{"from":"syslog", "processors":["parser"], "transporters":["logger"], "mode":"parallel"}
 	]
 }

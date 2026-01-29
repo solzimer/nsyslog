@@ -1,0 +1,66 @@
+{
+  "config": {
+    "datadir": "/tmp/nsyslog",
+    "frontend": {
+      "host": "0.0.0.0",
+      "port": 19998,
+      "context": "/",
+      "ssl": {
+        "enabled": false,
+        "key": "./monitor.key",
+        "cert": "./monitor.crt"
+      }
+    },
+    "input": {
+      "buffer": 100
+    }
+  },
+  "inputs": {
+    "lines": {
+      "type": "static",
+      "config": {
+        "loop": true,
+        "lines": [
+          "Evento de auditoría: audit_schema_version:1\nevent_time:2026-01-05 00:02:11.8630321\nsequence_number:1\\naction_id:BAL \\nsucceeded:true\\nis_column_permission:false\\nsession_id:75\\nserver_principal_id:269\\ndatabase_principal_id:1\\ntarget_server_principal_id:0\\ntarget_database_principal_id:0\\nobject_id:5\\nuser_defined_event_id:0\\ntransaction_id:0\\nclass_type:DB\\nduration_milliseconds:0\\nresponse_rows:0\\naffected_rows:0\\nclient_ip:local machine\\npermission_bitmask:00000000000000000000000000000000\\nsequence_group_id:148947C0-0B80-4923-ABFD-0C783C0DB904\\nsession_server_principal_name:FRINSAadmin_backup\\nserver_principal_name:FRINSAadmin_backup\\nserver_principal_sid:0105000000000005150000001525af47e3a0f57f16c0ea323a1f0000\\ndatabase_principal_name:dbo\\ntarget_server_principal_name:\\ntarget_server_principal_sid:\\ntarget_database_principal_name:\\nserver_instance_name:serv-sql\\ndatabase_name:[DASS_NET]\\nschema_name:\\nobject_name:[DASS_NET]\\nstatement:BACKUP LOG @database_name_var TO DISK = N'F:VeeamBackupSqlLogBackup{389f3740-7a77-4f3f-8de8-52260f1ef064}.bak' WITH NAME='Veeam Backup & Replication', DESCRIPTION='Transaction log backup'\\nadditional_information:\\nuser_defined_information:\\napplication_name:Veeam Backup & Replication\\nconnection_id:0673A6F8-D2C4-486C-8669-5EBA3821567F\\ndata_sensitivity_information:\\nhost_name:SERV-SQL\\n."        ]
+      }
+    }
+  },
+  "processors": {
+    "parse": {
+      "type": "properties",
+      "config": {
+        "#set" :  {
+          "props" : "${message.split('\\n').map(l=>l.split(':')).reduce((m,p)=>(m[p[0]]=p.slice(1).join(':'),m),new Object())}"          
+        },
+        "set" :  {
+          "props" : "${originalMessage.split(String.fromCharCode(10))}"          
+        }
+      }
+    }
+  },
+  "transporters": {
+    "console": {
+      "type": "console",
+      "config": {
+        "format": "${JSON:2}",
+        "json": {
+          "format": true,
+          "spaces": 2,
+          "color": true
+        }
+      }
+    },
+    "null": {
+      "type": "null"
+    }
+  },
+  "flows": [
+    {
+      "id": "flow1",
+      "from": "lines",
+      "fork": false,
+      "processors": ["parse"],
+      "transporters": "console"
+    }
+  ]
+}

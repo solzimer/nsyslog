@@ -65,7 +65,7 @@
     "node-forge": "^0.10.0",
     "nools": "^0.4.4",
     "nsyslog-parser": "^0.10.1",
-    "nwinread": "^1.1.0",
+    "nwinread": "^1.2.0",
     "os-utils": "0.0.14",
     "pemtools": "^0.4.7",
     "promise-stream-queue": "^0.4.5",

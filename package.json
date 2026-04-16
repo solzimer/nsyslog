@@ -1,6 +1,6 @@
 {
   "name": "nsyslog",
-  "version": "0.14.1",
+  "version": "0.14.2",
   "description": "Modular new generation log agent. Reads, transform, aggregate, correlate and send logs from sources to destinations",
   "author": "David Gómez Matarrodona <solzimer@gmail.com>",
   "url": "https://github.com/solzimer/nsyslog",
